@@ -2,9 +2,9 @@
 
 //define('DATABASE_HOST', getenv('IP'));
 define('DATABASE_HOST', "localhost");
-define('DATABASE_NAME', 'xbmenph_beplan');
-define('DATABASE_USER', 'xbmenph_beplan');
-define('DATABASE_PASS', '?O=20Qb1#b}x');
+define('DATABASE_NAME', 'beplanDB');
+define('DATABASE_USER', 'root');
+define('DATABASE_PASS', '');
 
 
 $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);

@@ -53,8 +53,8 @@ if(isset($_SESSION["success"])){
                                         <?php
                                             $res = getSupplierData();
                                             //TODO add permissions to Catégories
-                                            // $check_edit =  ($role->hasPerm('edit broker')) ? "":"hide-element";
-                                            // $check_delete = ($role->hasPerm('delete broker')) ? "":"hide-element";
+                                            $check_edit =  ($role->hasPerm('edit broker')) ? "":"hide-element";
+                                            $check_delete = ($role->hasPerm('delete broker')) ? "":"hide-element";
                                             $number = 1;
                                             $html = '';
                                             while($row = mysqli_fetch_assoc($res)){

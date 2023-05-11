@@ -11,10 +11,16 @@ if($devis['status']==strtolower('rejeter')){
     $alert = 'alert-success';
 }else{$alert = 'alert-warning';}
 
-$checkBroker_devis = checkBroker_devis($devis['id']);
-$broker_id = getBroker_devisData($devis['id'])['id_broker'];
-$brokerRow = getBrokerById($broker_id);
-$broker_fullName = ucfirst($brokerRow['prenom']) . ' ' . strtoupper($brokerRow['nom']);
+    $checkBroker_devis = checkBroker_devis($devis['id']);
+    // if devis has broker 
+    if(getBroker_devisData($devis['id']) !=NULL){
+        $broker_id = getBroker_devisData($devis['id'])['id_broker'];
+        $brokerRow = getBrokerById($broker_id);
+        $broker_fullName = ucfirst($brokerRow['prenom']) . ' ' . strtoupper($brokerRow['nom']);
+    }
+   
+    
+
 
 function br2nl($string)
 {

@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.11
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: May 10, 2023 at 04:58 AM
--- Server version: 10.3.38-MariaDB-cll-lve
--- PHP Version: 7.4.33
+-- Host: localhost
+-- Generation Time: May 07, 2023 at 09:13 PM
+-- Server version: 8.0.32-0ubuntu0.22.04.2
+-- PHP Version: 8.2.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,27 +18,27 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `xbmenph_beplan`
+-- Database: `architectdb`
 --
 
 DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `getAllDossierByBroker` (IN `broker_id` INT)   SELECT devis.id AS devis_id,devis.id_client AS client_id,devis.number, devis.objet, detail_devis.service_name,detail_devis.id AS service_id,
+CREATE   PROCEDURE `getAllDossierByBroker` (IN `broker_id` INT)   SELECT devis.id AS devis_id,devis.id_client AS client_id,devis.number, devis.objet, detail_devis.service_name,detail_devis.id AS service_id,
 devis.date_creation, detail_devis.approved
 FROM devis INNER JOIN detail_devis ON devis.id = detail_devis.id_devis INNER JOIN broker_devis ON 
 broker_devis.id_devis = devis.id 
 WHERE broker_devis.id_broker = broker_id AND detail_devis.approved=1$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getAllDossier` ()   SELECT devis.id AS devis_id,devis.id_client AS client_id,devis.number, devis.objet, detail_devis.service_name,dossier.date,detail_devis.id AS service_id
+CREATE   PROCEDURE `sp_getAllDossier` ()   SELECT devis.id AS devis_id,devis.id_client AS client_id,devis.number, devis.objet, detail_devis.service_name,dossier.date,detail_devis.id AS service_id
 FROM devis INNER JOIN detail_devis ON devis.id=detail_devis.id_devis INNER JOIN dossier ON detail_devis.id = dossier.id_service$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getAllUsers` (IN `user_id` INT)   SELECT users.id,users.prenom,users.nom, roles.role_name,users.status,users.last_login
+CREATE   PROCEDURE `sp_getAllUsers` (IN `user_id` INT)   SELECT users.id,users.prenom,users.nom, roles.role_name,users.status,users.last_login
 FROM `users` JOIN `user_role` ON users.id = user_role.user_id JOIN roles on user_role.role_id=roles.id
 WHERE users.id <> 1 AND users.id <> user_id$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevis` ()   SELECT devis.id,client.id AS client_id,devis.number,
+CREATE   PROCEDURE `sp_getDevis` ()   SELECT devis.id,client.id AS client_id,devis.number,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',client_individual.nom)AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT client_entreprise.nom FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -48,7 +47,7 @@ FROM devis INNER JOIN client ON devis.id_client=client.id
 WHERE devis.remove=0
 ORDER BY devis.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevisPayByBroker` (IN `broker_id` INT)   SELECT devis.id,detail_devis.id AS srv_id, devis.number,client.id AS client_id,
+CREATE   PROCEDURE `sp_getDevisPayByBroker` (IN `broker_id` INT)   SELECT devis.id,detail_devis.id AS srv_id, devis.number,client.id AS client_id,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',client_individual.nom)AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT client_entreprise.nom FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -62,7 +61,7 @@ INNER JOIN broker_devis ON devis.id = broker_devis.id_devis
 WHERE devis.remove=0 AND broker_devis.id_broker= broker_id AND detail_devis.paid_srv = 0
 ORDER BY devis.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevisPayByClient` (IN `client_id` INT)   SELECT devis.id,detail_devis.id AS srv_id, devis.number,
+CREATE   PROCEDURE `sp_getDevisPayByClient` (IN `client_id` INT)   SELECT devis.id,detail_devis.id AS srv_id, devis.number,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',client_individual.nom)AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT client_entreprise.nom FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -75,7 +74,7 @@ FROM devis INNER JOIN client ON devis.id_client=client.id INNER JOIN detail_devi
 WHERE devis.remove=0 AND devis.id_client= client_id AND detail_devis.paid_srv = 0
 ORDER BY devis.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevisPaymentInfo` ()   SELECT devis.id,devis_payments.id AS pay_id,
+CREATE   PROCEDURE `sp_getDevisPaymentInfo` ()   SELECT devis.id,devis_payments.id AS pay_id,
 devis_payments.user_id,devis_payments.pay_method, devis.number,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',client_individual.nom)AS Client FROM client_individual WHERE client.id_client=client_individual.id)
@@ -89,7 +88,7 @@ ON detail_devis.id = devis_payments.id_devis
 WHERE devis.remove=0 AND devis_payments.pending = 0
 ORDER BY devis_payments.pay_date DESC$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevisReceipt` (IN `payment_id` INT)   SELECT devis.number,receipt.R_number, devis_payments.pay_method,detail_devis.service_name,
+CREATE   PROCEDURE `sp_getDevisReceipt` (IN `payment_id` INT)   SELECT devis.number,receipt.R_number, devis_payments.pay_method,detail_devis.service_name,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',upper(client_individual.nom))AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT upper(client_entreprise.nom) FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -102,7 +101,7 @@ INNER JOIN receipt ON devis_payments.id = receipt.id_payment
 WHERE devis_payments.id = payment_id 
 ORDER BY devis_payments.pay_date DESC$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevisSituation` (IN `cl_id` INT)   SELECT devis.id, devis.number,devis.remove_tva,detail_devis.ref,detail_devis.service_name,detail_devis.prix,devis.date_creation,
+CREATE   PROCEDURE `sp_getDevisSituation` (IN `cl_id` INT)   SELECT devis.id, devis.number,devis.remove_tva,detail_devis.ref,detail_devis.service_name,detail_devis.prix,devis.date_creation,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',upper(client_individual.nom))AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT upper(client_entreprise.nom) FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -117,7 +116,7 @@ INNER JOIN detail_devis ON devis.id = detail_devis.id_devis
 WHERE devis.remove=0 AND devis.id_client = cl_id 
 ORDER BY devis.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevisSituationBoth` (IN `cl_id` INT, IN `srv_status` INT, IN `srv_name` VARCHAR(100))   SELECT devis.id, devis.number,devis.remove_tva,detail_devis.ref,detail_devis.service_name,detail_devis.prix,devis.date_creation,
+CREATE   PROCEDURE `sp_getDevisSituationBoth` (IN `cl_id` INT, IN `srv_status` INT, IN `srv_name` VARCHAR(100))   SELECT devis.id, devis.number,devis.remove_tva,detail_devis.ref,detail_devis.service_name,detail_devis.prix,devis.date_creation,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',upper(client_individual.nom))AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT upper(client_entreprise.nom) FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -132,7 +131,7 @@ INNER JOIN detail_devis ON devis.id = detail_devis.id_devis
 WHERE devis.remove=0 AND devis.id_client = cl_id AND detail_devis.service_name = srv_name AND detail_devis.paid_srv = srv_status
 ORDER BY devis.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevisSituationSrv` (IN `cl_id` INT, IN `srv_name` VARCHAR(100))   SELECT devis.id, devis.number,devis.remove_tva,detail_devis.ref,detail_devis.service_name,detail_devis.prix,devis.date_creation,
+CREATE   PROCEDURE `sp_getDevisSituationSrv` (IN `cl_id` INT, IN `srv_name` VARCHAR(100))   SELECT devis.id, devis.number,devis.remove_tva,detail_devis.ref,detail_devis.service_name,detail_devis.prix,devis.date_creation,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',upper(client_individual.nom))AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT upper(client_entreprise.nom) FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -147,7 +146,7 @@ INNER JOIN detail_devis ON devis.id = detail_devis.id_devis
 WHERE devis.remove=0 AND devis.id_client = cl_id AND detail_devis.service_name = srv_name
 ORDER BY devis.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDevisSituationStatus` (IN `cl_id` INT, IN `srv_status` INT)   SELECT devis.id, devis.number,devis.remove_tva,detail_devis.ref,detail_devis.service_name,detail_devis.prix,devis.date_creation,
+CREATE   PROCEDURE `sp_getDevisSituationStatus` (IN `cl_id` INT, IN `srv_status` INT)   SELECT devis.id, devis.number,devis.remove_tva,detail_devis.ref,detail_devis.service_name,detail_devis.prix,devis.date_creation,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',upper(client_individual.nom))AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT upper(client_entreprise.nom) FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -162,12 +161,12 @@ INNER JOIN detail_devis ON devis.id = detail_devis.id_devis
 WHERE devis.remove=0 AND devis.id_client = cl_id AND detail_devis.paid_srv = srv_status
 ORDER BY devis.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getDossierDetail` (IN `detailDevis_id` INT)   SELECT detail_devis.id,detail_devis.ref,detail_devis.service_name, detail_devis.prix,
+CREATE   PROCEDURE `sp_getDossierDetail` (IN `detailDevis_id` INT)   SELECT detail_devis.id,detail_devis.ref,detail_devis.service_name, detail_devis.prix,
 devis.objet
 FROM detail_devis INNER JOIN devis ON detail_devis.id_devis=devis.id
 WHERE detail_devis.id = detailDevis_id$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getInvoice` ()   SELECT invoice.id,client.id AS client_id,invoice.F_number,
+CREATE   PROCEDURE `sp_getInvoice` ()   SELECT invoice.id,client.id AS client_id,invoice.F_number,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',client_individual.nom)AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT client_entreprise.nom FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -180,12 +179,12 @@ FROM invoice INNER JOIN client ON invoice.id_client=client.id
 WHERE invoice.remove=0 
 ORDER BY invoice.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getInvoiceNotifications` ()   SELECT DISTINCT user_invoice.id_user, invoice.id AS id_invoice,invoice.id_client,invoice.F_number,invoice.date_creation
+CREATE   PROCEDURE `sp_getInvoiceNotifications` ()   SELECT DISTINCT user_invoice.id_user, invoice.id AS id_invoice,invoice.id_client,invoice.F_number,invoice.date_creation
 FROM invoice JOIN user_invoice ON invoice.id = user_invoice.id_invoice
 WHERE invoice.remove = 0 AND invoice.type = 'encours'
 ORDER BY invoice.date_creation DESC$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getInvPayByClient` (IN `client_id` INT)   SELECT invoice.id, invoice.F_number,
+CREATE   PROCEDURE `sp_getInvPayByClient` (IN `client_id` INT)   SELECT invoice.id, invoice.F_number,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',client_individual.nom)AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT client_entreprise.nom FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -197,12 +196,12 @@ FROM invoice INNER JOIN client ON invoice.id_client=client.id
 WHERE invoice.remove=0 AND invoice.paid_inv=0 AND invoice.id_client= client_id AND invoice.type="Approved"
 ORDER BY invoice.date_creation$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getNotifications` ()   SELECT DISTINCT user_devis.id_user, devis.id AS id_devis,devis.id_client,devis.number,devis.date_creation
+CREATE   PROCEDURE `sp_getNotifications` ()   SELECT DISTINCT user_devis.id_user, devis.id AS id_devis,devis.id_client,devis.number,devis.date_creation
 FROM devis JOIN user_devis ON devis.id = user_devis.id_devis
 WHERE devis.remove = false AND devis.type = 'encours'
 ORDER BY devis.date_creation DESC$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getPaymentInfo` ()   SELECT invoice.id,invoice_payments.id AS pay_id,
+CREATE   PROCEDURE `sp_getPaymentInfo` ()   SELECT invoice.id,invoice_payments.id AS pay_id,
 invoice_payments.user_id,invoice_payments.pay_method, invoice.F_number,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',client_individual.nom)AS Client FROM client_individual WHERE client.id_client=client_individual.id)
@@ -215,13 +214,13 @@ ON invoice.id = invoice_payments.id_invoice
 WHERE invoice.remove=0  AND invoice.type="Approved" AND invoice_payments.pending = 0
 ORDER BY invoice_payments.pay_date DESC$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getPaymentNotification` ()   SELECT devis_payments.id AS pay_id, devis_payments.user_id, devis.id AS id_devis,
+CREATE   PROCEDURE `sp_getPaymentNotification` ()   SELECT devis_payments.id AS pay_id, devis_payments.user_id, devis.id AS id_devis,
 devis.id_client,devis.number,devis_payments.pay_date,detail_devis.id AS detail_id
 FROM devis INNER JOIN detail_devis ON devis.id = detail_devis.id_devis
 INNER JOIN devis_payments ON detail_devis.id= devis_payments.id_devis
 WHERE devis.remove=0 AND devis_payments.pending= 1$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getReceipt` (IN `payment_id` INT)   SELECT invoice.F_number,receipt.R_number, invoice_payments.pay_method,
+CREATE   PROCEDURE `sp_getReceipt` (IN `payment_id` INT)   SELECT invoice.F_number,receipt.R_number, invoice_payments.pay_method,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',upper(client_individual.nom))AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT upper(client_entreprise.nom) FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -233,12 +232,12 @@ INNER JOIN receipt ON invoice_payments.id = receipt.id_payment
 WHERE invoice_payments.id = payment_id
 ORDER BY invoice_payments.pay_date DESC$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getSelectedDossier` (IN `service_id` INT)   SELECT detail_devis.ref, dossier.N_dossier,devis.objet, detail_devis.service_name,detail_devis.prix
+CREATE   PROCEDURE `sp_getSelectedDossier` (IN `service_id` INT)   SELECT detail_devis.ref, dossier.N_dossier,devis.objet, detail_devis.service_name,detail_devis.prix
 FROM devis INNER JOIN detail_devis ON devis.id=detail_devis.id_devis INNER JOIN 
 dossier ON detail_devis.id = dossier.id_service
 WHERE detail_devis.id = service_id$$
 
-CREATE DEFINER=`cpses_xbc76jdqk5`@`localhost` PROCEDURE `sp_getSituation` (IN `cl_id` INT)   SELECT invoice.id, invoice.F_number,
+CREATE   PROCEDURE `sp_getSituation` (IN `cl_id` INT)   SELECT invoice.id, invoice.F_number,
 CASE
 	WHEN client.type="individual" THEN (SELECT CONCAT(client_individual.prenom,' ',upper(client_individual.nom))AS Client FROM client_individual WHERE client.id_client=client_individual.id)
     WHEN client.type="entreprise" THEN ((SELECT upper(client_entreprise.nom) FROM client_entreprise WHERE client.id_client=client_entreprise.id))
@@ -262,12 +261,12 @@ DELIMITER ;
 --
 
 CREATE TABLE `broker` (
-  `id` int(11) NOT NULL,
-  `nom` varchar(100) NOT NULL,
-  `prenom` varchar(100) NOT NULL,
-  `phone` varchar(15) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `sold` decimal(10,2) NOT NULL DEFAULT 0.00
+  `id` int NOT NULL,
+  `nom` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `prenom` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `sold` decimal(10,2) NOT NULL DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -275,7 +274,7 @@ CREATE TABLE `broker` (
 --
 
 INSERT INTO `broker` (`id`, `nom`, `prenom`, `phone`, `address`, `sold`) VALUES
-(1, 'madani', 'said', '02912011111', 'agadir', '240.00');
+(1, 'madani', 'said', '02912011111', 'agadir', 240.00);
 
 -- --------------------------------------------------------
 
@@ -284,9 +283,9 @@ INSERT INTO `broker` (`id`, `nom`, `prenom`, `phone`, `address`, `sold`) VALUES
 --
 
 CREATE TABLE `broker_devis` (
-  `id` int(11) NOT NULL,
-  `id_broker` int(11) NOT NULL,
-  `id_devis` int(11) NOT NULL
+  `id` int NOT NULL,
+  `id_broker` int NOT NULL,
+  `id_devis` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -305,11 +304,11 @@ INSERT INTO `broker_devis` (`id`, `id_broker`, `id_devis`) VALUES
 --
 
 CREATE TABLE `client` (
-  `id` int(11) NOT NULL,
-  `id_client` int(11) NOT NULL,
-  `remove` tinyint(1) NOT NULL DEFAULT 0,
+  `id` int NOT NULL,
+  `id_client` int NOT NULL,
+  `remove` tinyint(1) NOT NULL DEFAULT '0',
   `date` datetime NOT NULL,
-  `type` varchar(50) NOT NULL
+  `type` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -335,14 +334,14 @@ INSERT INTO `client` (`id`, `id_client`, `remove`, `date`, `type`) VALUES
 --
 
 CREATE TABLE `client_entreprise` (
-  `id` int(11) NOT NULL,
-  `nom` varchar(50) NOT NULL,
-  `ICE` varchar(100) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `tel` varchar(15) NOT NULL,
-  `address` varchar(255) NOT NULL,
+  `id` int NOT NULL,
+  `nom` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `ICE` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `tel` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `solde` decimal(10,0) NOT NULL,
-  `delete_status` tinyint(1) NOT NULL DEFAULT 0
+  `delete_status` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -350,10 +349,10 @@ CREATE TABLE `client_entreprise` (
 --
 
 INSERT INTO `client_entreprise` (`id`, `nom`, `ICE`, `email`, `tel`, `address`, `solde`, `delete_status`) VALUES
-(3, 'dsf', ' 2334EZ', 'sdf@sf.comqsd', '2342424', ' sdf12qsd', '0', 0),
-(4, 'SARL XXX', ' 23197202783', 'XXX@test.com', '0928227837', ' adressXXXXXX', '0', 0),
-(5, 'agency', ' 6546946484', 'rth@fg.com', '65464646', ' 12 sdfs sg', '0', 0),
-(6, 'ADMDI', ' 45678676', 'tst@fgh.dtz', '546464111', ' 12 fzf agadir', '0', 0);
+(3, 'dsf', ' 2334EZ', 'sdf@sf.comqsd', '2342424', ' sdf12qsd', 0, 0),
+(4, 'SARL XXX', ' 23197202783', 'XXX@test.com', '0928227837', ' adressXXXXXX', 0, 0),
+(5, 'agency', ' 6546946484', 'rth@fg.com', '65464646', ' 12 sdfs sg', 0, 0),
+(6, 'ADMDI', ' 45678676', 'tst@fgh.dtz', '546464111', ' 12 fzf agadir', 0, 0);
 
 --
 -- Triggers `client_entreprise`
@@ -382,14 +381,14 @@ DELIMITER ;
 --
 
 CREATE TABLE `client_individual` (
-  `id` int(11) NOT NULL,
-  `prenom` varchar(50) NOT NULL,
-  `nom` varchar(50) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `tel` varchar(15) NOT NULL,
-  `address` varchar(255) NOT NULL,
+  `id` int NOT NULL,
+  `prenom` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `nom` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `tel` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `solde` decimal(10,0) NOT NULL,
-  `delete_status` tinyint(1) NOT NULL DEFAULT 0
+  `delete_status` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -397,12 +396,12 @@ CREATE TABLE `client_individual` (
 --
 
 INSERT INTO `client_individual` (`id`, `prenom`, `nom`, `email`, `tel`, `address`, `solde`, `delete_status`) VALUES
-(6, 'aze', 'qsd', 'sdf@sf.com', '0992829', '123qdqsd', '0', 0),
-(7, 'client', 'last', 'email@test.com', '0019823', 'agadir inzegan', '0', 0),
-(8, 'jhon', 'doe', 'jhonDoe@email.com', '0656875429', 'jhon doe address', '0', 0),
-(9, 'kkkk', 'kkoo', 'test@dgjd.ckfz', '050255', 'dghfsj', '0', 0),
-(10, 'brahim', 'ben', 'fhsfn@dhd.com', '12121212', 'agadir', '0', 0),
-(11, 'mouad', 'ab', 'test@test.test', '02121212', ' 45 test test', '0', 0);
+(6, 'aze', 'qsd', 'sdf@sf.com', '0992829', '123qdqsd', 0, 0),
+(7, 'client', 'last', 'email@test.com', '0019823', 'agadir inzegan', 0, 0),
+(8, 'jhon', 'doe', 'jhonDoe@email.com', '0656875429', 'jhon doe address', 0, 0),
+(9, 'kkkk', 'kkoo', 'test@dgjd.ckfz', '050255', 'dghfsj', 0, 0),
+(10, 'brahim', 'ben', 'fhsfn@dhd.com', '12121212', 'agadir', 0, 0),
+(11, 'mouad', 'ab', 'test@test.test', '02121212', ' 45 test test', 0, 0);
 
 --
 -- Triggers `client_individual`
@@ -431,8 +430,8 @@ DELIMITER ;
 --
 
 CREATE TABLE `detail_broker_devis` (
-  `id` int(11) NOT NULL,
-  `id_broker_devis` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `id_broker_devis` int NOT NULL,
   `prix` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -441,10 +440,10 @@ CREATE TABLE `detail_broker_devis` (
 --
 
 INSERT INTO `detail_broker_devis` (`id`, `id_broker_devis`, `prix`) VALUES
-(3, 4, '199.99'),
-(4, 4, '1000.00'),
-(5, 5, '100.00'),
-(6, 5, '300.00');
+(3, 4, 199.99),
+(4, 4, 1000.00),
+(5, 5, 100.00),
+(6, 5, 300.00);
 
 -- --------------------------------------------------------
 
@@ -453,20 +452,20 @@ INSERT INTO `detail_broker_devis` (`id`, `id_broker_devis`, `prix`) VALUES
 --
 
 CREATE TABLE `detail_devis` (
-  `id` int(11) NOT NULL,
-  `id_devis` int(11) NOT NULL,
-  `service_name` varchar(255) NOT NULL,
+  `id` int NOT NULL,
+  `id_devis` int NOT NULL,
+  `service_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `prix` decimal(10,2) NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `quantity` int NOT NULL,
   `discount` decimal(10,2) NOT NULL,
-  `unit` varchar(100) NOT NULL,
-  `ref` varchar(100) NOT NULL,
-  `approved` tinyint(1) NOT NULL DEFAULT 0,
-  `confirmed` tinyint(1) NOT NULL DEFAULT 0,
-  `paid_srv` tinyint(1) NOT NULL DEFAULT 0,
-  `srv_avance` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `payment_made` tinyint(1) NOT NULL DEFAULT 0,
-  `srv_notif` tinyint(1) NOT NULL DEFAULT 0
+  `unit` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `ref` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `approved` tinyint(1) NOT NULL DEFAULT '0',
+  `confirmed` tinyint(1) NOT NULL DEFAULT '0',
+  `paid_srv` tinyint(1) NOT NULL DEFAULT '0',
+  `srv_avance` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `payment_made` tinyint(1) NOT NULL DEFAULT '0',
+  `srv_notif` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -474,60 +473,60 @@ CREATE TABLE `detail_devis` (
 --
 
 INSERT INTO `detail_devis` (`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`, `unit`, `ref`, `approved`, `confirmed`, `paid_srv`, `srv_avance`, `payment_made`, `srv_notif`) VALUES
-(12, 44, 'service1', '100.00', 1, '0.00', 'u', 'sv1', 0, 0, 0, '0.00', 0, 0),
-(13, 44, 'service2', '199.99', 1, '0.00', 'm', 'sv2', 0, 0, 0, '0.00', 0, 0),
-(14, 44, 'srev3', '10.00', 1, '10.00', 'u', 'sv3', 0, 0, 0, '0.00', 0, 0),
-(52, 50, 'some service', '1000.00', 1, '0.00', 'u', 'ssrv1', 0, 0, 1, '0.00', 0, 0),
-(53, 51, 'serv1', '1231.00', 1, '0.00', 'u', 's1', 0, 0, 0, '0.00', 1, 0),
-(54, 51, 'serv2', '234.00', 1, '0.00', 'm', 's2', 0, 0, 0, '80.00', 1, 0),
-(55, 51, 'serv3', '1234.00', 1, '0.00', 'm²', 's3', 0, 0, 0, '0.00', 0, 0),
-(56, 51, 'ser4', '1242.00', 1, '0.00', 'u', 's4', 0, 0, 0, '0.00', 0, 0),
-(57, 51, 'serv5', '1242.00', 1, '0.00', 'u', 's5', 0, 0, 0, '0.00', 0, 0),
-(58, 52, 'service1', '100.00', 1, '10.00', 'u', 'sv1', 0, 0, 0, '0.00', 0, 0),
-(60, 54, 'service2', '199.99', 1, '0.00', 'm', 'sv2', 0, 0, 0, '0.00', 0, 0),
-(73, 1, 'service2', '199.99', 1, '0.00', 'u', 'sv2', 0, 0, 0, '0.00', 0, 0),
-(74, 1, 'service1', '100.00', 1, '10.00', 'u', 'sv1', 0, 0, 0, '0.00', 0, 0),
-(75, 1, 'serv3', '20.00', 2, '0.00', 'u', 's3', 0, 0, 0, '0.00', 0, 0),
-(78, 55, 'service1', '100.00', 1, '0.00', 'u', 'sv1', 0, 0, 0, '0.00', 0, 0),
-(81, 58, 'service1', '100.00', 1, '0.00', 'u', 'sv1', 0, 0, 0, '0.00', 0, 0),
-(82, 58, 'service2', '199.99', 1, '0.00', 'u', 'sv2', 0, 0, 0, '0.00', 0, 0),
-(85, 60, 'service1', '100.00', 1, '0.00', 'u', 'sv1', 0, 0, 0, '0.00', 0, 0),
-(86, 60, 'service2', '199.99', 1, '0.00', 'u', 'sv2', 0, 0, 0, '0.00', 0, 0),
-(87, 61, 'service1', '100.00', 1, '0.00', 'u', 'sv1', 0, 0, 1, '0.00', 1, 0),
-(88, 61, 'serv4', '2000.00', 1, '0.00', 'u', 's4', 0, 0, 1, '0.00', 0, 0),
-(121, 62, 'serv1', '1200.00', 1, '0.00', 'U', 's1', 1, 0, 1, '0.00', 0, 0),
-(122, 62, 'serv2', '2013.00', 1, '0.00', 'U', 's2', 0, 0, 1, '0.00', 0, 0),
-(123, 62, 'serv3', '1234.00', 1, '0.00', 'F', 's3', 0, 0, 0, '0.00', 0, 0),
-(124, 62, 'serv4', '3234.00', 1, '0.00', 'U', 's4', 0, 0, 0, '0.00', 0, 0),
-(125, 62, 'serv5', '873.00', 1, '0.00', 'm', 's5', 0, 0, 0, '0.00', 0, 0),
-(126, 62, 'serv6', '912.00', 1, '0.00', 'F', 's6', 0, 0, 0, '0.00', 0, 0),
-(127, 62, 'serv7', '1002.00', 1, '0.00', 'U', 's7', 0, 0, 0, '0.00', 0, 0),
-(128, 62, 'serv8', '130.00', 1, '0.00', 'F', 's8', 0, 0, 0, '0.00', 0, 0),
-(129, 62, 'serv9', '200.00', 1, '0.00', 'm', 's9', 0, 0, 0, '0.00', 0, 0),
-(130, 62, 'serv10', '300.00', 1, '0.00', 'U', 's10', 0, 0, 0, '0.00', 0, 0),
-(131, 62, 'serv11', '500.00', 1, '0.00', 'F', 's11', 0, 0, 0, '0.00', 0, 0),
-(132, 62, 'serv12', '123.00', 1, '0.00', 'U', 's12', 0, 0, 0, '0.00', 0, 0),
-(133, 62, 'serv13', '244.00', 1, '0.00', 'F', 's13', 0, 0, 0, '0.00', 0, 0),
-(134, 62, 'serv14', '124.00', 1, '0.00', 'U', 's14', 0, 0, 0, '0.00', 0, 0),
-(135, 62, 'serv15', '1245.00', 1, '0.00', 'F', 's15', 0, 0, 0, '0.00', 0, 0),
-(136, 62, 'serv16', '762.00', 1, '0.00', 'F', 's16', 0, 0, 0, '0.00', 0, 0),
-(137, 62, 'serv17', '234.00', 1, '0.00', 'U', 's17', 0, 0, 0, '0.00', 0, 0),
-(138, 62, 'serv18', '125.00', 1, '0.00', 'm', 's18', 0, 0, 0, '0.00', 0, 0),
-(139, 62, 'serv19', '126.00', 1, '0.00', 'U', 's19', 0, 0, 0, '0.00', 0, 0),
-(140, 62, 'serv20', '1235.00', 1, '0.00', 'F', 's20', 0, 0, 0, '0.00', 0, 0),
-(141, 62, 'serv21', '728.00', 1, '0.00', 'm', 's21', 0, 0, 0, '0.00', 0, 0),
-(142, 62, 'serv22', '1253.00', 1, '0.00', 'U', 's22', 0, 0, 0, '0.00', 0, 0),
-(144, 49, 'qsd', '12.00', 1, '0.00', 'u', 'q1', 0, 0, 0, '0.00', 0, 0),
-(145, 63, 'service2', '199.99', 1, '0.00', 'U', 'sv2', 0, 0, 0, '0.00', 0, 0),
-(146, 64, 'service', '200.00', 1, '0.00', 'u', 's0', 1, 0, 0, '0.00', 0, 0),
-(147, 64, 'test service', '1000.00', 1, '0.00', 'u', 'tstS0', 0, 0, 0, '0.00', 0, 0),
-(148, 65, 'service 3', '200.00', 1, '0.00', 'u', 'sv3', 1, 1, 1, '0.00', 0, 0),
-(149, 65, 'service 4', '200.00', 1, '0.00', 'm', 'sv4', 0, 0, 1, '0.00', 0, 0),
-(150, 50, 'creation plan 3d', '300.00', 1, '0.00', 'f', 'cp3d', 0, 0, 0, '0.00', 0, 0),
-(161, 73, 'service2', '199.99', 1, '0.00', 'X', 'sv2', 0, 0, 1, '0.00', 0, 0),
-(162, 73, 'service 10', '1000.00', 1, '0.00', 'Y', 's10', 0, 0, 1, '0.00', 0, 0),
-(163, 74, 'service1', '200.00', 1, '0.00', 'D', 'sv1', 0, 0, 1, '0.00', 0, 0),
-(164, 74, 'service 4', '400.00', 1, '0.00', 'Q', 'sv4', 0, 0, 1, '0.00', 0, 0);
+(12, 44, 'service1', 100.00, 1, 0.00, 'u', 'sv1', 0, 0, 0, 0.00, 0, 0),
+(13, 44, 'service2', 199.99, 1, 0.00, 'm', 'sv2', 0, 0, 0, 0.00, 0, 0),
+(14, 44, 'srev3', 10.00, 1, 10.00, 'u', 'sv3', 0, 0, 0, 0.00, 0, 0),
+(52, 50, 'some service', 1000.00, 1, 0.00, 'u', 'ssrv1', 0, 0, 1, 0.00, 0, 0),
+(53, 51, 'serv1', 1231.00, 1, 0.00, 'u', 's1', 0, 0, 0, 0.00, 1, 0),
+(54, 51, 'serv2', 234.00, 1, 0.00, 'm', 's2', 0, 0, 0, 80.00, 1, 0),
+(55, 51, 'serv3', 1234.00, 1, 0.00, 'm²', 's3', 0, 0, 0, 0.00, 0, 0),
+(56, 51, 'ser4', 1242.00, 1, 0.00, 'u', 's4', 0, 0, 0, 0.00, 0, 0),
+(57, 51, 'serv5', 1242.00, 1, 0.00, 'u', 's5', 0, 0, 0, 0.00, 0, 0),
+(58, 52, 'service1', 100.00, 1, 10.00, 'u', 'sv1', 0, 0, 0, 0.00, 0, 0),
+(60, 54, 'service2', 199.99, 1, 0.00, 'm', 'sv2', 0, 0, 0, 0.00, 0, 0),
+(73, 1, 'service2', 199.99, 1, 0.00, 'u', 'sv2', 0, 0, 0, 0.00, 0, 0),
+(74, 1, 'service1', 100.00, 1, 10.00, 'u', 'sv1', 0, 0, 0, 0.00, 0, 0),
+(75, 1, 'serv3', 20.00, 2, 0.00, 'u', 's3', 0, 0, 0, 0.00, 0, 0),
+(78, 55, 'service1', 100.00, 1, 0.00, 'u', 'sv1', 0, 0, 0, 0.00, 0, 0),
+(81, 58, 'service1', 100.00, 1, 0.00, 'u', 'sv1', 0, 0, 0, 0.00, 0, 0),
+(82, 58, 'service2', 199.99, 1, 0.00, 'u', 'sv2', 0, 0, 0, 0.00, 0, 0),
+(85, 60, 'service1', 100.00, 1, 0.00, 'u', 'sv1', 0, 0, 0, 0.00, 0, 0),
+(86, 60, 'service2', 199.99, 1, 0.00, 'u', 'sv2', 0, 0, 0, 0.00, 0, 0),
+(87, 61, 'service1', 100.00, 1, 0.00, 'u', 'sv1', 0, 0, 1, 0.00, 1, 0),
+(88, 61, 'serv4', 2000.00, 1, 0.00, 'u', 's4', 0, 0, 1, 0.00, 0, 0),
+(121, 62, 'serv1', 1200.00, 1, 0.00, 'U', 's1', 1, 0, 1, 0.00, 0, 0),
+(122, 62, 'serv2', 2013.00, 1, 0.00, 'U', 's2', 0, 0, 1, 0.00, 0, 0),
+(123, 62, 'serv3', 1234.00, 1, 0.00, 'F', 's3', 0, 0, 0, 0.00, 0, 0),
+(124, 62, 'serv4', 3234.00, 1, 0.00, 'U', 's4', 0, 0, 0, 0.00, 0, 0),
+(125, 62, 'serv5', 873.00, 1, 0.00, 'm', 's5', 0, 0, 0, 0.00, 0, 0),
+(126, 62, 'serv6', 912.00, 1, 0.00, 'F', 's6', 0, 0, 0, 0.00, 0, 0),
+(127, 62, 'serv7', 1002.00, 1, 0.00, 'U', 's7', 0, 0, 0, 0.00, 0, 0),
+(128, 62, 'serv8', 130.00, 1, 0.00, 'F', 's8', 0, 0, 0, 0.00, 0, 0),
+(129, 62, 'serv9', 200.00, 1, 0.00, 'm', 's9', 0, 0, 0, 0.00, 0, 0),
+(130, 62, 'serv10', 300.00, 1, 0.00, 'U', 's10', 0, 0, 0, 0.00, 0, 0),
+(131, 62, 'serv11', 500.00, 1, 0.00, 'F', 's11', 0, 0, 0, 0.00, 0, 0),
+(132, 62, 'serv12', 123.00, 1, 0.00, 'U', 's12', 0, 0, 0, 0.00, 0, 0),
+(133, 62, 'serv13', 244.00, 1, 0.00, 'F', 's13', 0, 0, 0, 0.00, 0, 0),
+(134, 62, 'serv14', 124.00, 1, 0.00, 'U', 's14', 0, 0, 0, 0.00, 0, 0),
+(135, 62, 'serv15', 1245.00, 1, 0.00, 'F', 's15', 0, 0, 0, 0.00, 0, 0),
+(136, 62, 'serv16', 762.00, 1, 0.00, 'F', 's16', 0, 0, 0, 0.00, 0, 0),
+(137, 62, 'serv17', 234.00, 1, 0.00, 'U', 's17', 0, 0, 0, 0.00, 0, 0),
+(138, 62, 'serv18', 125.00, 1, 0.00, 'm', 's18', 0, 0, 0, 0.00, 0, 0),
+(139, 62, 'serv19', 126.00, 1, 0.00, 'U', 's19', 0, 0, 0, 0.00, 0, 0),
+(140, 62, 'serv20', 1235.00, 1, 0.00, 'F', 's20', 0, 0, 0, 0.00, 0, 0),
+(141, 62, 'serv21', 728.00, 1, 0.00, 'm', 's21', 0, 0, 0, 0.00, 0, 0),
+(142, 62, 'serv22', 1253.00, 1, 0.00, 'U', 's22', 0, 0, 0, 0.00, 0, 0),
+(144, 49, 'qsd', 12.00, 1, 0.00, 'u', 'q1', 0, 0, 0, 0.00, 0, 0),
+(145, 63, 'service2', 199.99, 1, 0.00, 'U', 'sv2', 0, 0, 0, 0.00, 0, 0),
+(146, 64, 'service', 200.00, 1, 0.00, 'u', 's0', 1, 0, 0, 0.00, 0, 0),
+(147, 64, 'test service', 1000.00, 1, 0.00, 'u', 'tstS0', 0, 0, 0, 0.00, 0, 0),
+(148, 65, 'service 3', 200.00, 1, 0.00, 'u', 'sv3', 1, 1, 1, 0.00, 0, 0),
+(149, 65, 'service 4', 200.00, 1, 0.00, 'm', 'sv4', 0, 0, 1, 0.00, 0, 0),
+(150, 50, 'creation plan 3d', 300.00, 1, 0.00, 'f', 'cp3d', 0, 0, 0, 0.00, 0, 0),
+(161, 73, 'service2', 199.99, 1, 0.00, 'X', 'sv2', 0, 0, 1, 0.00, 0, 0),
+(162, 73, 'service 10', 1000.00, 1, 0.00, 'Y', 's10', 0, 0, 1, 0.00, 0, 0),
+(163, 74, 'service1', 200.00, 1, 0.00, 'D', 'sv1', 0, 0, 1, 0.00, 0, 0),
+(164, 74, 'service 4', 400.00, 1, 0.00, 'Q', 'sv4', 0, 0, 1, 0.00, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -536,14 +535,14 @@ INSERT INTO `detail_devis` (`id`, `id_devis`, `service_name`, `prix`, `quantity`
 --
 
 CREATE TABLE `detail_invoice` (
-  `id` int(11) NOT NULL,
-  `id_invoice` int(11) NOT NULL,
-  `service_name` varchar(255) NOT NULL,
+  `id` int NOT NULL,
+  `id_invoice` int NOT NULL,
+  `service_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `prix` decimal(10,2) NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `quantity` int NOT NULL,
   `discount` decimal(10,2) NOT NULL,
-  `unit` varchar(100) NOT NULL,
-  `ref` varchar(100) NOT NULL
+  `unit` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `ref` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -551,32 +550,32 @@ CREATE TABLE `detail_invoice` (
 --
 
 INSERT INTO `detail_invoice` (`id`, `id_invoice`, `service_name`, `prix`, `quantity`, `discount`, `unit`, `ref`) VALUES
-(1, 2, 'service1', '100.00', 1, '0.00', 'u', 'sv1'),
-(2, 1, 'service2', '199.99', 1, '0.00', 'u', 'sv2'),
-(3, 3, 'service1', '100.00', 1, '0.00', 'm', 'sv1'),
-(4, 4, 'serv3', '124.00', 1, '0.00', 'u', 'sv3'),
-(5, 4, 'ser4', '1000.00', 1, '0.00', 'm²', 's4'),
-(6, 5, 'serv5', '1500.00', 1, '0.00', 'u', 'sv5'),
-(7, 6, 'service1', '100.00', 1, '0.00', 'm', 'sv1'),
-(8, 7, 'service1', '100.00', 1, '0.00', 'u', 'sv1'),
-(9, 7, 'serv3', '2000.00', 1, '0.00', 'm²', 'sv3'),
-(10, 8, 'serv5', '2500.00', 1, '0.00', 'u', 'sv5'),
-(11, 9, 'service1', '10023.00', 1, '0.00', 'm', 'sv1'),
-(12, 10, 'liljlio', '1200.00', 1, '0.00', 'u', 'l1'),
-(17, 12, 'serv5', '2000.00', 1, '0.00', 'm²', 'sv5'),
-(18, 12, 'serv6', '3000.00', 1, '0.00', 'm²', 'sv6'),
-(19, 12, 'serv7', '200.00', 1, '0.00', 'm²', 'sv7'),
-(20, 13, 'service1', '100.00', 1, '0.00', 'm²', 'sv1'),
-(21, 13, 'serv4', '1234.00', 1, '0.00', 'u', 'sv4'),
-(22, 14, 'service1', '100.00', 1, '0.00', 'm²', 'sv1'),
-(23, 14, 'ser4', '1243.00', 1, '0.00', 'm', 's4'),
-(24, 15, 'service2', '199.99', 1, '0.00', 'm²', 'sv2'),
-(25, 15, 'serv3', '321.00', 1, '0.00', 'm²', 'sv3'),
-(26, 16, 'serv10', '1000.00', 1, '0.00', 'm', 'sv10'),
-(27, 16, 'serv11', '300.00', 2, '0.00', 'u', 'sv11'),
-(28, 17, 'service1', '100.00', 1, '0.00', 'u', 'sv1'),
-(29, 17, 'setrtss', '100.00', 1, '0.00', 'kg', 'setr1'),
-(35, 22, 'service 3', '200.00', 1, '0.00', 'u', 'sv3');
+(1, 2, 'service1', 100.00, 1, 0.00, 'u', 'sv1'),
+(2, 1, 'service2', 199.99, 1, 0.00, 'u', 'sv2'),
+(3, 3, 'service1', 100.00, 1, 0.00, 'm', 'sv1'),
+(4, 4, 'serv3', 124.00, 1, 0.00, 'u', 'sv3'),
+(5, 4, 'ser4', 1000.00, 1, 0.00, 'm²', 's4'),
+(6, 5, 'serv5', 1500.00, 1, 0.00, 'u', 'sv5'),
+(7, 6, 'service1', 100.00, 1, 0.00, 'm', 'sv1'),
+(8, 7, 'service1', 100.00, 1, 0.00, 'u', 'sv1'),
+(9, 7, 'serv3', 2000.00, 1, 0.00, 'm²', 'sv3'),
+(10, 8, 'serv5', 2500.00, 1, 0.00, 'u', 'sv5'),
+(11, 9, 'service1', 10023.00, 1, 0.00, 'm', 'sv1'),
+(12, 10, 'liljlio', 1200.00, 1, 0.00, 'u', 'l1'),
+(17, 12, 'serv5', 2000.00, 1, 0.00, 'm²', 'sv5'),
+(18, 12, 'serv6', 3000.00, 1, 0.00, 'm²', 'sv6'),
+(19, 12, 'serv7', 200.00, 1, 0.00, 'm²', 'sv7'),
+(20, 13, 'service1', 100.00, 1, 0.00, 'm²', 'sv1'),
+(21, 13, 'serv4', 1234.00, 1, 0.00, 'u', 'sv4'),
+(22, 14, 'service1', 100.00, 1, 0.00, 'm²', 'sv1'),
+(23, 14, 'ser4', 1243.00, 1, 0.00, 'm', 's4'),
+(24, 15, 'service2', 199.99, 1, 0.00, 'm²', 'sv2'),
+(25, 15, 'serv3', 321.00, 1, 0.00, 'm²', 'sv3'),
+(26, 16, 'serv10', 1000.00, 1, 0.00, 'm', 'sv10'),
+(27, 16, 'serv11', 300.00, 2, 0.00, 'u', 'sv11'),
+(28, 17, 'service1', 100.00, 1, 0.00, 'u', 'sv1'),
+(29, 17, 'setrtss', 100.00, 1, 0.00, 'kg', 'setr1'),
+(35, 22, 'service 3', 200.00, 1, 0.00, 'u', 'sv3');
 
 -- --------------------------------------------------------
 
@@ -585,22 +584,22 @@ INSERT INTO `detail_invoice` (`id`, `id_invoice`, `service_name`, `prix`, `quant
 --
 
 CREATE TABLE `devis` (
-  `id` int(11) NOT NULL,
-  `number` varchar(255) NOT NULL,
-  `id_client` int(11) NOT NULL,
-  `type` varchar(50) NOT NULL,
-  `date_creation` datetime NOT NULL DEFAULT current_timestamp(),
-  `date_validation` datetime NOT NULL DEFAULT current_timestamp(),
+  `id` int NOT NULL,
+  `number` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_client` int NOT NULL,
+  `type` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `date_creation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_validation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `sub_total` decimal(10,2) NOT NULL,
   `discount` decimal(10,2) NOT NULL,
   `net_total` decimal(10,2) NOT NULL,
-  `remove` tinyint(1) NOT NULL DEFAULT 0,
-  `status` varchar(50) NOT NULL,
-  `remove_tva` tinyint(1) NOT NULL DEFAULT 0,
-  `client_approve` tinyint(1) NOT NULL DEFAULT 0,
-  `comment` text NOT NULL,
-  `objet` text NOT NULL,
-  `located` text NOT NULL
+  `remove` tinyint(1) NOT NULL DEFAULT '0',
+  `status` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `remove_tva` tinyint(1) NOT NULL DEFAULT '0',
+  `client_approve` tinyint(1) NOT NULL DEFAULT '0',
+  `comment` text COLLATE utf8mb4_general_ci NOT NULL,
+  `objet` text COLLATE utf8mb4_general_ci NOT NULL,
+  `located` text COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -608,23 +607,23 @@ CREATE TABLE `devis` (
 --
 
 INSERT INTO `devis` (`id`, `number`, `id_client`, `type`, `date_creation`, `date_validation`, `sub_total`, `discount`, `net_total`, `remove`, `status`, `remove_tva`, `client_approve`, `comment`, `objet`, `located`) VALUES
-(1, '001/2022', 1, 'encours', '2022-11-16 18:29:24', '2022-11-16 18:29:24', '329.99', '10.00', '395.99', 0, 'encours', 0, 0, 'something', '', ''),
-(44, '009/2022', 2, 'encours', '2022-11-20 20:23:04', '2022-11-20 20:23:04', '308.99', '1.00', '370.79', 0, 'encours', 0, 0, '', '', ''),
-(49, '028/2022', 2, 'Approved', '2022-11-22 21:03:17', '2023-01-12 16:06:01', '12.00', '0.00', '14.40', 0, 'accepter', 0, 1, '', 'objetobjet...', ''),
-(50, '031/2022', 3, 'Approved', '2022-11-22 21:27:25', '2023-04-19 18:44:10', '1300.00', '0.00', '1560.00', 0, 'accepter', 0, 0, '', 'szsz', 'dededed'),
-(51, '032/2022', 3, 'Approved', '2022-11-22 22:09:42', '2022-12-19 15:00:49', '5183.00', '0.00', '6219.60', 0, 'accepter', 0, 1, '', '', ''),
-(52, '033/2022', 3, 'encours', '2022-11-23 13:58:44', '2022-11-23 13:58:44', '90.00', '10.00', '108.00', 0, 'encours', 0, 0, '', '', ''),
-(54, '027/2022', 3, 'Approved', '2022-11-23 21:22:05', '2023-04-19 15:36:56', '399.99', '0.00', '399.99', 0, 'accepter', 1, 0, '', 'test', ''),
-(55, '029/2022', 3, 'Approved', '2022-11-28 19:08:32', '2022-11-28 21:28:57', '100.00', '0.00', '120.00', 0, 'accepter', 0, 1, '', '', ''),
-(58, '034/2022', 3, 'Declined', '2022-11-28 20:39:20', '2022-11-28 21:34:42', '299.99', '0.00', '359.99', 0, 'rejeter', 0, 0, '', '', ''),
-(60, '035/2022', 3, 'Approved', '2022-11-29 14:03:56', '2022-12-07 23:40:09', '299.99', '0.00', '359.99', 0, 'accepter', 0, 1, '', '', ''),
-(61, '036/2022', 4, 'Approved', '2022-12-16 19:59:29', '2022-12-16 20:06:24', '2100.00', '0.00', '2520.00', 0, 'accepter', 0, 0, '', 'complex project', ''),
-(62, '001/2023', 4, 'Approved', '2023-01-11 14:40:04', '2023-01-12 15:28:18', '17797.00', '0.00', '21356.40', 0, 'accepter', 0, 0, '', 'test height', ''),
-(63, '002/2023', 3, 'Approved', '2023-01-18 16:23:07', '2023-01-18 16:23:31', '199.99', '0.00', '239.99', 0, 'accepter', 0, 0, '', 'tester', ''),
-(64, '003/2023', 8, 'Approved', '2023-02-01 16:40:09', '2023-02-01 16:40:21', '1200.00', '0.00', '1440.00', 0, 'accepter', 0, 0, '', 'test test', ''),
-(65, '004/2023', 10, 'Approved', '2023-02-23 17:00:33', '2023-02-23 17:00:39', '400.00', '0.00', '480.00', 0, 'accepter', 0, 0, '', 'test broker', ''),
-(73, '005/2023', 7, 'Approved', '2023-04-28 21:26:17', '2023-04-28 20:27:05', '1199.99', '0.00', '1439.99', 0, 'accepter', 0, 0, '', 'lala', 'malaa'),
-(74, '006/2023', 9, 'Approved', '2023-04-29 14:13:55', '2023-04-29 13:14:23', '600.00', '0.00', '720.00', 0, 'accepter', 0, 0, '', 'xxaxa', 'xaxaxa');
+(1, '001/2022', 1, 'encours', '2022-11-16 18:29:24', '2022-11-16 18:29:24', 329.99, 10.00, 395.99, 0, 'encours', 0, 0, 'something', '', ''),
+(44, '009/2022', 2, 'encours', '2022-11-20 20:23:04', '2022-11-20 20:23:04', 308.99, 1.00, 370.79, 0, 'encours', 0, 0, '', '', ''),
+(49, '028/2022', 2, 'Approved', '2022-11-22 21:03:17', '2023-01-12 16:06:01', 12.00, 0.00, 14.40, 0, 'accepter', 0, 1, '', 'objetobjet...', ''),
+(50, '031/2022', 3, 'Approved', '2022-11-22 21:27:25', '2023-04-19 18:44:10', 1300.00, 0.00, 1560.00, 0, 'accepter', 0, 0, '', 'szsz', 'dededed'),
+(51, '032/2022', 3, 'Approved', '2022-11-22 22:09:42', '2022-12-19 15:00:49', 5183.00, 0.00, 6219.60, 0, 'accepter', 0, 1, '', '', ''),
+(52, '033/2022', 3, 'encours', '2022-11-23 13:58:44', '2022-11-23 13:58:44', 90.00, 10.00, 108.00, 0, 'encours', 0, 0, '', '', ''),
+(54, '027/2022', 3, 'Approved', '2022-11-23 21:22:05', '2023-04-19 15:36:56', 399.99, 0.00, 399.99, 0, 'accepter', 1, 0, '', 'test', ''),
+(55, '029/2022', 3, 'Approved', '2022-11-28 19:08:32', '2022-11-28 21:28:57', 100.00, 0.00, 120.00, 0, 'accepter', 0, 1, '', '', ''),
+(58, '034/2022', 3, 'Declined', '2022-11-28 20:39:20', '2022-11-28 21:34:42', 299.99, 0.00, 359.99, 0, 'rejeter', 0, 0, '', '', ''),
+(60, '035/2022', 3, 'Approved', '2022-11-29 14:03:56', '2022-12-07 23:40:09', 299.99, 0.00, 359.99, 0, 'accepter', 0, 1, '', '', ''),
+(61, '036/2022', 4, 'Approved', '2022-12-16 19:59:29', '2022-12-16 20:06:24', 2100.00, 0.00, 2520.00, 0, 'accepter', 0, 0, '', 'complex project', ''),
+(62, '001/2023', 4, 'Approved', '2023-01-11 14:40:04', '2023-01-12 15:28:18', 17797.00, 0.00, 21356.40, 0, 'accepter', 0, 0, '', 'test height', ''),
+(63, '002/2023', 3, 'Approved', '2023-01-18 16:23:07', '2023-01-18 16:23:31', 199.99, 0.00, 239.99, 0, 'accepter', 0, 0, '', 'tester', ''),
+(64, '003/2023', 8, 'Approved', '2023-02-01 16:40:09', '2023-02-01 16:40:21', 1200.00, 0.00, 1440.00, 0, 'accepter', 0, 0, '', 'test test', ''),
+(65, '004/2023', 10, 'Approved', '2023-02-23 17:00:33', '2023-02-23 17:00:39', 400.00, 0.00, 480.00, 0, 'accepter', 0, 0, '', 'test broker', ''),
+(73, '005/2023', 7, 'Approved', '2023-04-28 21:26:17', '2023-04-28 20:27:05', 1199.99, 0.00, 1439.99, 0, 'accepter', 0, 0, '', 'lala', 'malaa'),
+(74, '006/2023', 9, 'Approved', '2023-04-29 14:13:55', '2023-04-29 13:14:23', 600.00, 0.00, 720.00, 0, 'accepter', 0, 0, '', 'xxaxa', 'xaxaxa');
 
 -- --------------------------------------------------------
 
@@ -633,13 +632,13 @@ INSERT INTO `devis` (`id`, `number`, `id_client`, `type`, `date_creation`, `date
 --
 
 CREATE TABLE `devis_payments` (
-  `id` int(11) NOT NULL,
-  `id_devis` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `id_devis` int NOT NULL,
   `prix` decimal(10,2) NOT NULL,
-  `pay_method` varchar(100) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `pay_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `pending` tinyint(1) NOT NULL DEFAULT 1
+  `pay_method` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` int NOT NULL,
+  `pay_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `pending` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -647,24 +646,24 @@ CREATE TABLE `devis_payments` (
 --
 
 INSERT INTO `devis_payments` (`id`, `id_devis`, `prix`, `pay_method`, `user_id`, `pay_date`, `pending`) VALUES
-(42, 87, '120.00', 'Espéce', 1, '2023-04-19 18:04:06', 0),
-(43, 88, '400.00', 'Espéce', 1, '2023-04-19 18:04:06', 0),
-(535, 88, '2000.00', 'Espéce', 1, '2023-04-19 21:36:43', 0),
-(536, 121, '1000.00', 'Espéce', 1, '2023-04-19 21:36:43', 0),
-(537, 121, '440.00', 'Espéce', 1, '2023-04-19 21:39:41', 0),
-(538, 122, '2415.60', 'Espéce', 1, '2023-04-19 21:39:42', 0),
-(539, 123, '880.00', 'Espéce', 1, '2023-04-19 21:39:42', 0),
-(541, 148, '240.00', 'Espéce', 1, '2023-04-29 13:31:46', 0),
-(542, 149, '240.00', 'Espéce', 1, '2023-04-29 13:31:47', 0),
-(719, 161, '239.99', 'Espéce', 1, '2023-04-29 14:11:04', 0),
-(720, 162, '1200.00', 'Espéce', 1, '2023-04-29 14:11:05', 0),
-(733, 163, '240.00', 'Espéce', 1, '2023-04-29 15:05:32', 0),
-(734, 164, '480.00', 'Espéce', 1, '2023-04-29 15:05:33', 0),
-(735, 52, '200.00', 'Espéce', 1, '2023-05-07 21:53:39', 0),
-(736, 52, '200.00', 'Espéce', 1, '2023-05-07 21:56:28', 0),
-(737, 52, '100.00', 'Espéce', 1, '2023-05-07 22:05:40', 0),
-(738, 52, '100.00', 'Espéce', 1, '2023-05-07 22:06:14', 0),
-(739, 52, '600.00', 'Espéce', 1, '2023-05-07 22:07:41', 0);
+(42, 87, 120.00, 'Espéce', 1, '2023-04-19 18:04:06', 0),
+(43, 88, 400.00, 'Espéce', 1, '2023-04-19 18:04:06', 0),
+(535, 88, 2000.00, 'Espéce', 1, '2023-04-19 21:36:43', 0),
+(536, 121, 1000.00, 'Espéce', 1, '2023-04-19 21:36:43', 0),
+(537, 121, 440.00, 'Espéce', 1, '2023-04-19 21:39:41', 0),
+(538, 122, 2415.60, 'Espéce', 1, '2023-04-19 21:39:42', 0),
+(539, 123, 880.00, 'Espéce', 1, '2023-04-19 21:39:42', 0),
+(541, 148, 240.00, 'Espéce', 1, '2023-04-29 13:31:46', 0),
+(542, 149, 240.00, 'Espéce', 1, '2023-04-29 13:31:47', 0),
+(719, 161, 239.99, 'Espéce', 1, '2023-04-29 14:11:04', 0),
+(720, 162, 1200.00, 'Espéce', 1, '2023-04-29 14:11:05', 0),
+(733, 163, 240.00, 'Espéce', 1, '2023-04-29 15:05:32', 0),
+(734, 164, 480.00, 'Espéce', 1, '2023-04-29 15:05:33', 0),
+(735, 52, 200.00, 'Espéce', 1, '2023-05-07 21:53:39', 0),
+(736, 52, 200.00, 'Espéce', 1, '2023-05-07 21:56:28', 0),
+(737, 52, 100.00, 'Espéce', 1, '2023-05-07 22:05:40', 0),
+(738, 52, 100.00, 'Espéce', 1, '2023-05-07 22:06:14', 0),
+(739, 52, 600.00, 'Espéce', 1, '2023-05-07 22:07:41', 0);
 
 -- --------------------------------------------------------
 
@@ -673,8 +672,8 @@ INSERT INTO `devis_payments` (`id`, `id_devis`, `prix`, `pay_method`, `user_id`,
 --
 
 CREATE TABLE `devis_to_service` (
-  `id_devis` int(11) NOT NULL,
-  `id_service` int(11) NOT NULL
+  `id_devis` int NOT NULL,
+  `id_service` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -684,10 +683,10 @@ CREATE TABLE `devis_to_service` (
 --
 
 CREATE TABLE `dossier` (
-  `id` int(11) NOT NULL,
-  `id_service` int(11) NOT NULL,
-  `N_dossier` varchar(255) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `id` int NOT NULL,
+  `id_service` int NOT NULL,
+  `N_dossier` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -706,23 +705,23 @@ INSERT INTO `dossier` (`id`, `id_service`, `N_dossier`, `date`) VALUES
 --
 
 CREATE TABLE `invoice` (
-  `id` int(11) NOT NULL,
-  `F_number` varchar(255) NOT NULL,
-  `id_client` int(11) NOT NULL,
-  `type` varchar(50) NOT NULL,
-  `date_creation` datetime NOT NULL DEFAULT current_timestamp(),
-  `due_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `date_validation` datetime NOT NULL DEFAULT current_timestamp(),
+  `id` int NOT NULL,
+  `F_number` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_client` int NOT NULL,
+  `type` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `date_creation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `due_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_validation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `sub_total` decimal(10,2) NOT NULL,
   `discount` decimal(10,2) NOT NULL,
   `net_total` decimal(10,2) NOT NULL,
-  `remove` tinyint(1) NOT NULL DEFAULT 0,
-  `status` varchar(50) NOT NULL,
-  `remove_tva` tinyint(1) NOT NULL DEFAULT 0,
-  `paid_inv` tinyint(1) NOT NULL DEFAULT 0,
-  `comment` text NOT NULL,
-  `objet` text NOT NULL,
-  `located` text NOT NULL
+  `remove` tinyint(1) NOT NULL DEFAULT '0',
+  `status` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `remove_tva` tinyint(1) NOT NULL DEFAULT '0',
+  `paid_inv` tinyint(1) NOT NULL DEFAULT '0',
+  `comment` text COLLATE utf8mb4_general_ci NOT NULL,
+  `objet` text COLLATE utf8mb4_general_ci NOT NULL,
+  `located` text COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -730,24 +729,24 @@ CREATE TABLE `invoice` (
 --
 
 INSERT INTO `invoice` (`id`, `F_number`, `id_client`, `type`, `date_creation`, `due_date`, `date_validation`, `sub_total`, `discount`, `net_total`, `remove`, `status`, `remove_tva`, `paid_inv`, `comment`, `objet`, `located`) VALUES
-(1, '001/2022', 1, 'encours', '2022-11-30 17:04:19', '2022-12-14 00:00:00', '2022-11-30 17:04:19', '199.99', '0.00', '239.99', 0, 'encours', 0, 0, '', '', ''),
-(2, '002/2022', 3, 'encours', '2022-12-06 00:14:48', '2022-12-08 00:00:00', '2022-12-06 00:14:48', '100.00', '0.00', '120.00', 0, 'encours', 0, 0, '', '', ''),
-(3, '003/2022', 3, 'Approved', '2022-12-07 21:51:07', '2022-12-22 00:00:00', '2022-12-07 23:51:58', '100.00', '0.00', '120.00', 0, 'accepter', 0, 1, '', '', ''),
-(4, '004/2022', 3, 'Approved', '2022-12-07 23:30:45', '2022-12-31 00:00:00', '2022-12-08 00:09:02', '1124.00', '0.00', '1348.80', 0, 'accepter', 0, 0, '', '', ''),
-(5, '005/2022', 3, 'Approved', '2022-12-10 13:45:12', '2022-12-30 00:00:00', '2022-12-12 00:24:51', '1500.00', '0.00', '1800.00', 0, 'accepter', 0, 0, '', '', ''),
-(6, '006/2022', 3, 'Approved', '2022-12-14 19:44:14', '2022-12-14 00:00:00', '2022-12-14 19:44:34', '100.00', '0.00', '120.00', 0, 'accepter', 0, 1, '', 'objet de cette facture', ''),
-(7, '007/2022', 4, 'Approved', '2022-12-16 21:35:18', '2022-12-16 00:00:00', '2022-12-16 21:47:07', '2100.00', '0.00', '2520.00', 0, 'accepter', 0, 1, '', 'complex project', ''),
-(8, '008/2022', 4, 'Approved', '2022-12-18 22:35:14', '2022-12-18 00:00:00', '2022-12-18 22:40:08', '2500.00', '0.00', '3000.00', 0, 'accepter', 0, 0, '', 'some objet', ''),
-(9, '009/2022', 4, 'Approved', '2022-12-28 18:20:01', '2022-12-28 00:00:00', '2022-12-28 18:20:23', '10023.00', '0.00', '12027.60', 0, 'accepter', 0, 1, '', 'lakjazlk', ''),
-(10, '010/2022', 4, 'Approved', '2022-12-28 18:24:06', '2022-12-28 00:00:00', '2022-12-28 18:24:46', '1200.00', '0.00', '1200.00', 0, 'accepter', 1, 0, '', 'jkhkjhjk', ''),
-(12, '001/2023', 3, 'Approved', '2023-01-01 21:31:56', '2023-01-01 00:00:00', '2023-01-01 21:32:46', '5200.00', '0.00', '6240.00', 0, 'accepter', 0, 1, '', 'test payment_test', ''),
-(13, '002/2023', 4, 'Approved', '2023-01-02 19:53:06', '2023-01-02 00:00:00', '2023-01-02 19:53:46', '1334.00', '0.00', '1600.80', 0, 'accepter', 0, 0, '', 'test test', ''),
-(14, '003/2023', 5, 'Approved', '2023-01-05 20:09:10', '2023-01-05 00:00:00', '2023-01-05 20:09:44', '1343.00', '0.00', '1611.60', 0, 'accepter', 0, 0, '', 'Dash test', ''),
-(15, '004/2023', 4, 'Approved', '2023-01-05 20:12:09', '2023-01-05 00:00:00', '2023-01-05 20:12:23', '520.99', '0.00', '625.19', 0, 'accepter', 0, 0, '', 'objet test4', ''),
-(16, '005/2023', 5, 'Approved', '2023-01-09 20:29:29', '2023-01-09 00:00:00', '2023-01-09 20:40:12', '1600.00', '0.00', '1920.00', 0, 'accepter', 0, 1, '', 'test test test', ''),
-(17, '006/2023', 7, 'Approved', '2023-02-01 16:42:05', '2023-02-01 00:00:00', '2023-02-01 16:42:21', '200.00', '0.00', '240.00', 0, 'accepter', 0, 0, '', 'test test', ''),
-(22, '007/2023', 10, 'Approved', '2023-04-20 03:54:25', '2023-04-20 00:00:00', '2023-04-20 03:54:36', '400.00', '0.00', '480.00', 0, 'accepter', 0, 0, '', 'test broker', ''),
-(23, '008/2023', 9, 'Approved', '2023-05-02 14:41:59', '2023-05-02 00:00:00', '2023-05-02 14:43:50', '1200.00', '0.00', '1440.00', 0, 'accepter', 0, 0, '', 'szsz', 'ccxcxc');
+(1, '001/2022', 1, 'encours', '2022-11-30 17:04:19', '2022-12-14 00:00:00', '2022-11-30 17:04:19', 199.99, 0.00, 239.99, 0, 'encours', 0, 0, '', '', ''),
+(2, '002/2022', 3, 'encours', '2022-12-06 00:14:48', '2022-12-08 00:00:00', '2022-12-06 00:14:48', 100.00, 0.00, 120.00, 0, 'encours', 0, 0, '', '', ''),
+(3, '003/2022', 3, 'Approved', '2022-12-07 21:51:07', '2022-12-22 00:00:00', '2022-12-07 23:51:58', 100.00, 0.00, 120.00, 0, 'accepter', 0, 1, '', '', ''),
+(4, '004/2022', 3, 'Approved', '2022-12-07 23:30:45', '2022-12-31 00:00:00', '2022-12-08 00:09:02', 1124.00, 0.00, 1348.80, 0, 'accepter', 0, 0, '', '', ''),
+(5, '005/2022', 3, 'Approved', '2022-12-10 13:45:12', '2022-12-30 00:00:00', '2022-12-12 00:24:51', 1500.00, 0.00, 1800.00, 0, 'accepter', 0, 0, '', '', ''),
+(6, '006/2022', 3, 'Approved', '2022-12-14 19:44:14', '2022-12-14 00:00:00', '2022-12-14 19:44:34', 100.00, 0.00, 120.00, 0, 'accepter', 0, 1, '', 'objet de cette facture', ''),
+(7, '007/2022', 4, 'Approved', '2022-12-16 21:35:18', '2022-12-16 00:00:00', '2022-12-16 21:47:07', 2100.00, 0.00, 2520.00, 0, 'accepter', 0, 1, '', 'complex project', ''),
+(8, '008/2022', 4, 'Approved', '2022-12-18 22:35:14', '2022-12-18 00:00:00', '2022-12-18 22:40:08', 2500.00, 0.00, 3000.00, 0, 'accepter', 0, 0, '', 'some objet', ''),
+(9, '009/2022', 4, 'Approved', '2022-12-28 18:20:01', '2022-12-28 00:00:00', '2022-12-28 18:20:23', 10023.00, 0.00, 12027.60, 0, 'accepter', 0, 1, '', 'lakjazlk', ''),
+(10, '010/2022', 4, 'Approved', '2022-12-28 18:24:06', '2022-12-28 00:00:00', '2022-12-28 18:24:46', 1200.00, 0.00, 1200.00, 0, 'accepter', 1, 0, '', 'jkhkjhjk', ''),
+(12, '001/2023', 3, 'Approved', '2023-01-01 21:31:56', '2023-01-01 00:00:00', '2023-01-01 21:32:46', 5200.00, 0.00, 6240.00, 0, 'accepter', 0, 1, '', 'test payment_test', ''),
+(13, '002/2023', 4, 'Approved', '2023-01-02 19:53:06', '2023-01-02 00:00:00', '2023-01-02 19:53:46', 1334.00, 0.00, 1600.80, 0, 'accepter', 0, 0, '', 'test test', ''),
+(14, '003/2023', 5, 'Approved', '2023-01-05 20:09:10', '2023-01-05 00:00:00', '2023-01-05 20:09:44', 1343.00, 0.00, 1611.60, 0, 'accepter', 0, 0, '', 'Dash test', ''),
+(15, '004/2023', 4, 'Approved', '2023-01-05 20:12:09', '2023-01-05 00:00:00', '2023-01-05 20:12:23', 520.99, 0.00, 625.19, 0, 'accepter', 0, 0, '', 'objet test4', ''),
+(16, '005/2023', 5, 'Approved', '2023-01-09 20:29:29', '2023-01-09 00:00:00', '2023-01-09 20:40:12', 1600.00, 0.00, 1920.00, 0, 'accepter', 0, 1, '', 'test test test', ''),
+(17, '006/2023', 7, 'Approved', '2023-02-01 16:42:05', '2023-02-01 00:00:00', '2023-02-01 16:42:21', 200.00, 0.00, 240.00, 0, 'accepter', 0, 0, '', 'test test', ''),
+(22, '007/2023', 10, 'Approved', '2023-04-20 03:54:25', '2023-04-20 00:00:00', '2023-04-20 03:54:36', 400.00, 0.00, 480.00, 0, 'accepter', 0, 0, '', 'test broker', ''),
+(23, '008/2023', 9, 'Approved', '2023-05-02 14:41:59', '2023-05-02 00:00:00', '2023-05-02 14:43:50', 1200.00, 0.00, 1440.00, 0, 'accepter', 0, 0, '', 'szsz', 'ccxcxc');
 
 -- --------------------------------------------------------
 
@@ -756,13 +755,13 @@ INSERT INTO `invoice` (`id`, `F_number`, `id_client`, `type`, `date_creation`, `
 --
 
 CREATE TABLE `invoice_payments` (
-  `id` int(11) NOT NULL,
-  `id_invoice` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `id_invoice` int NOT NULL,
   `prix` decimal(10,2) NOT NULL,
-  `pay_method` varchar(100) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `pay_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `pending` tinyint(1) NOT NULL DEFAULT 1
+  `pay_method` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` int NOT NULL,
+  `pay_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `pending` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -770,21 +769,21 @@ CREATE TABLE `invoice_payments` (
 --
 
 INSERT INTO `invoice_payments` (`id`, `id_invoice`, `prix`, `pay_method`, `user_id`, `pay_date`, `pending`) VALUES
-(25, 3, '120.00', 'Espéce', 1, '2022-12-13 17:55:57', 0),
-(31, 6, '120.00', 'Espéce', 1, '2022-12-14 19:44:15', 0),
-(32, 8, '500.00', 'Espéce', 1, '2022-12-18 22:35:14', 0),
-(33, 9, '12027.60', 'Espéce', 1, '2022-12-28 18:20:02', 0),
-(34, 10, '600.00', 'Check', 1, '2022-12-28 18:24:06', 0),
-(35, 7, '2000.00', 'Check', 1, '2022-12-28 18:25:55', 0),
-(38, 7, '520.00', 'Espéce', 1, '2023-01-01 18:16:51', 0),
-(39, 8, '420.00', 'Espéce', 1, '2023-01-01 18:16:52', 0),
-(40, 12, '6240.00', 'Espéce', 1, '2023-01-01 21:31:57', 0),
-(41, 13, '600.00', 'Espéce', 1, '2023-01-02 20:03:18', 0),
-(42, 16, '920.00', 'Espéce', 1, '2023-01-09 20:29:30', 0),
-(43, 14, '1000.00', 'Espéce', 2, '2023-02-01 16:29:12', 0),
-(44, 16, '1000.00', 'Check', 4, '2023-02-01 16:43:21', 0),
-(45, 15, '300.00', 'Espéce', 2, '2023-02-01 16:47:41', 0),
-(46, 5, '1000.00', 'Espéce', 4, '2023-02-01 16:49:00', 0);
+(25, 3, 120.00, 'Espéce', 1, '2022-12-13 17:55:57', 0),
+(31, 6, 120.00, 'Espéce', 1, '2022-12-14 19:44:15', 0),
+(32, 8, 500.00, 'Espéce', 1, '2022-12-18 22:35:14', 0),
+(33, 9, 12027.60, 'Espéce', 1, '2022-12-28 18:20:02', 0),
+(34, 10, 600.00, 'Check', 1, '2022-12-28 18:24:06', 0),
+(35, 7, 2000.00, 'Check', 1, '2022-12-28 18:25:55', 0),
+(38, 7, 520.00, 'Espéce', 1, '2023-01-01 18:16:51', 0),
+(39, 8, 420.00, 'Espéce', 1, '2023-01-01 18:16:52', 0),
+(40, 12, 6240.00, 'Espéce', 1, '2023-01-01 21:31:57', 0),
+(41, 13, 600.00, 'Espéce', 1, '2023-01-02 20:03:18', 0),
+(42, 16, 920.00, 'Espéce', 1, '2023-01-09 20:29:30', 0),
+(43, 14, 1000.00, 'Espéce', 2, '2023-02-01 16:29:12', 0),
+(44, 16, 1000.00, 'Check', 4, '2023-02-01 16:43:21', 0),
+(45, 15, 300.00, 'Espéce', 2, '2023-02-01 16:47:41', 0),
+(46, 5, 1000.00, 'Espéce', 4, '2023-02-01 16:49:00', 0);
 
 --
 -- Triggers `invoice_payments`
@@ -810,10 +809,10 @@ DELIMITER ;
 --
 
 CREATE TABLE `notifications` (
-  `id` int(11) NOT NULL,
-  `id_document` int(11) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp(),
-  `active` tinyint(1) NOT NULL DEFAULT 1
+  `id` int NOT NULL,
+  `id_document` int NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -878,8 +877,8 @@ INSERT INTO `notifications` (`id`, `id_document`, `date`, `active`) VALUES
 --
 
 CREATE TABLE `permissions` (
-  `id` int(11) NOT NULL,
-  `perm_desc` varchar(100) NOT NULL
+  `id` int NOT NULL,
+  `perm_desc` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -935,13 +934,13 @@ INSERT INTO `permissions` (`id`, `perm_desc`) VALUES
 --
 
 CREATE TABLE `purchase` (
-  `id` int(11) NOT NULL,
-  `P_number` varchar(100) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` int NOT NULL,
+  `P_number` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `note` text NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp(),
-  `remove` tinyint(1) NOT NULL DEFAULT 0
+  `note` text COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `remove` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -949,8 +948,8 @@ CREATE TABLE `purchase` (
 --
 
 INSERT INTO `purchase` (`id`, `P_number`, `name`, `price`, `note`, `date`, `remove`) VALUES
-(1, '001/2022', 'achat1', '1234.00', 'something got updated......', '2022-12-14 13:57:30', 0),
-(2, '001/2023', 'fatima', '300.00', 'femme de minage', '2023-02-01 18:57:58', 0);
+(1, '001/2022', 'achat1', 1234.00, 'something got updated......', '2022-12-14 13:57:30', 0),
+(2, '001/2023', 'fatima', 300.00, 'femme de minage', '2023-02-01 18:57:58', 0);
 
 -- --------------------------------------------------------
 
@@ -959,11 +958,11 @@ INSERT INTO `purchase` (`id`, `P_number`, `name`, `price`, `note`, `date`, `remo
 --
 
 CREATE TABLE `receipt` (
-  `id` int(11) NOT NULL,
-  `R_number` varchar(100) NOT NULL,
-  `id_payment` int(11) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp(),
-  `pay_giver` varchar(100) NOT NULL
+  `id` int NOT NULL,
+  `R_number` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_payment` int NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `pay_giver` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -997,8 +996,8 @@ INSERT INTO `receipt` (`id`, `R_number`, `id_payment`, `date`, `pay_giver`) VALU
 --
 
 CREATE TABLE `roles` (
-  `id` int(11) NOT NULL,
-  `role_name` varchar(255) NOT NULL
+  `id` int NOT NULL,
+  `role_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1017,8 +1016,8 @@ INSERT INTO `roles` (`id`, `role_name`) VALUES
 --
 
 CREATE TABLE `role_perm` (
-  `role_id` int(11) NOT NULL,
-  `perm_id` int(11) NOT NULL
+  `role_id` int NOT NULL,
+  `perm_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1126,10 +1125,10 @@ INSERT INTO `role_perm` (`role_id`, `perm_id`) VALUES
 --
 
 CREATE TABLE `service` (
-  `id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `ref` varchar(100) NOT NULL,
-  `prix` decimal(10,2) NOT NULL DEFAULT 0.00
+  `id` int NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ref` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `prix` decimal(10,2) NOT NULL DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1137,13 +1136,13 @@ CREATE TABLE `service` (
 --
 
 INSERT INTO `service` (`id`, `title`, `ref`, `prix`) VALUES
-(2, 'service1', 'sv1', '100.00'),
-(3, 'service2', 'sv2', '199.99'),
-(4, 'service 3', 'sv3', '200.00'),
-(5, 'service 4', 'sv4', '200.00'),
-(6, 'creation plan 3d', 'cp3d', '300.00'),
-(15, 'test', 'tst1', '21.00'),
-(18, 'service 10', 's10', '1000.00');
+(2, 'service1', 'sv1', 100.00),
+(3, 'service2', 'sv2', 199.99),
+(4, 'service 3', 'sv3', 200.00),
+(5, 'service 4', 'sv4', 200.00),
+(6, 'creation plan 3d', 'cp3d', 300.00),
+(15, 'test', 'tst1', 21.00),
+(18, 'service 10', 's10', 1000.00);
 
 -- --------------------------------------------------------
 
@@ -1152,9 +1151,9 @@ INSERT INTO `service` (`id`, `title`, `ref`, `prix`) VALUES
 --
 
 CREATE TABLE `situation` (
-  `id` int(11) NOT NULL,
-  `id_client` int(11) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `id` int NOT NULL,
+  `id_client` int NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1235,12 +1234,12 @@ INSERT INTO `situation` (`id`, `id_client`, `date`) VALUES
 --
 
 CREATE TABLE `supplier` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `full_name` varchar(255) NOT NULL,
-  `address` varchar(255) DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `phone` varchar(15) NOT NULL,
-  `sold` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `cat_id` int(11) NOT NULL
+  `sold` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `cat_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1248,8 +1247,8 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`id`, `full_name`, `address`, `phone`, `sold`, `cat_id`) VALUES
-(1, 'Fourn1', 'Agadir', '1212121233', '0.00', 1),
-(3, 'Fourni2', 'xxxx', '112121212121', '300.00', 4);
+(1, 'Fourn1', 'Agadir', '1212121233', 0.00, 1),
+(3, 'Fourni2', 'xxxx', '112121212121', 300.00, 4);
 
 -- --------------------------------------------------------
 
@@ -1258,7 +1257,7 @@ INSERT INTO `supplier` (`id`, `full_name`, `address`, `phone`, `sold`, `cat_id`)
 --
 
 CREATE TABLE `supp_category` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1278,16 +1277,16 @@ INSERT INTO `supp_category` (`id`, `title`, `type`) VALUES
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `prenom` varchar(50) NOT NULL,
-  `nom` varchar(50) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `tel` varchar(15) DEFAULT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `id` int NOT NULL,
+  `prenom` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `nom` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tel` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_login` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1295,7 +1294,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `prenom`, `nom`, `email`, `tel`, `username`, `password`, `date`, `last_login`, `status`) VALUES
-(1, 'user1', 'user1', 'user1@test.com', '06176726', 'owner', 'admin123', '2022-11-05 03:17:09', '2023-05-09 22:47:09', 1),
+(1, 'user1', 'user1', 'user1@test.com', '06176726', 'owner', 'admin123', '2022-11-05 03:17:09', '2023-05-07 19:38:56', 1),
 (2, 'test', 'test', 'test@test.test', '0909090909', 'admin2', 'admin123', '2022-11-26 01:55:54', '2023-05-02 12:03:41', 1),
 (4, 'assistant', 'test', 'test@test.test', '12121212', 'assist', 'admin123', '2023-02-01 16:38:04', '2023-02-01 18:23:17', 1);
 
@@ -1306,10 +1305,10 @@ INSERT INTO `users` (`id`, `prenom`, `nom`, `email`, `tel`, `username`, `passwor
 --
 
 CREATE TABLE `user_broker` (
-  `id_user` int(11) NOT NULL,
-  `broker` varchar(100) NOT NULL,
-  `action` varchar(100) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `id_user` int NOT NULL,
+  `broker` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `action` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1339,11 +1338,11 @@ INSERT INTO `user_broker` (`id_user`, `broker`, `action`, `date`) VALUES
 --
 
 CREATE TABLE `user_client` (
-  `id_user` int(11) NOT NULL,
-  `id_client` int(11) NOT NULL,
-  `cl_type` varchar(100) NOT NULL,
-  `action` varchar(100) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `id_user` int NOT NULL,
+  `id_client` int NOT NULL,
+  `cl_type` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `action` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1367,10 +1366,10 @@ INSERT INTO `user_client` (`id_user`, `id_client`, `cl_type`, `action`, `date`) 
 --
 
 CREATE TABLE `user_devis` (
-  `id_user` int(11) NOT NULL,
-  `id_devis` int(11) NOT NULL,
-  `action` varchar(50) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `id_user` int NOT NULL,
+  `id_devis` int NOT NULL,
+  `action` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1737,10 +1736,10 @@ INSERT INTO `user_devis` (`id_user`, `id_devis`, `action`, `date`) VALUES
 --
 
 CREATE TABLE `user_invoice` (
-  `id_user` int(11) NOT NULL,
-  `id_invoice` int(11) NOT NULL,
-  `action` varchar(100) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `id_user` int NOT NULL,
+  `id_invoice` int NOT NULL,
+  `action` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1787,10 +1786,10 @@ INSERT INTO `user_invoice` (`id_user`, `id_invoice`, `action`, `date`) VALUES
 --
 
 CREATE TABLE `user_purchase` (
-  `id_user` int(11) NOT NULL,
-  `id_purchase` int(11) NOT NULL,
-  `action` varchar(100) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `id_user` int NOT NULL,
+  `id_purchase` int NOT NULL,
+  `action` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1807,8 +1806,8 @@ INSERT INTO `user_purchase` (`id_user`, `id_purchase`, `action`, `date`) VALUES
 --
 
 CREATE TABLE `user_role` (
-  `user_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL
+  `user_id` int NOT NULL,
+  `role_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1827,10 +1826,10 @@ INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 --
 
 CREATE TABLE `user_service` (
-  `id_user` int(11) NOT NULL,
-  `service` varchar(100) NOT NULL,
-  `action` varchar(100) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `id_user` int NOT NULL,
+  `service` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `action` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -2089,139 +2088,139 @@ ALTER TABLE `user_service`
 -- AUTO_INCREMENT for table `broker`
 --
 ALTER TABLE `broker`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `broker_devis`
 --
 ALTER TABLE `broker_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `client`
 --
 ALTER TABLE `client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `client_entreprise`
 --
 ALTER TABLE `client_entreprise`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `client_individual`
 --
 ALTER TABLE `client_individual`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `detail_broker_devis`
 --
 ALTER TABLE `detail_broker_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `detail_devis`
 --
 ALTER TABLE `detail_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT for table `detail_invoice`
 --
 ALTER TABLE `detail_invoice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `devis`
 --
 ALTER TABLE `devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `devis_payments`
 --
 ALTER TABLE `devis_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=740;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=740;
 
 --
 -- AUTO_INCREMENT for table `dossier`
 --
 ALTER TABLE `dossier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `invoice`
 --
 ALTER TABLE `invoice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `invoice_payments`
 --
 ALTER TABLE `invoice_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `purchase`
 --
 ALTER TABLE `purchase`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `receipt`
 --
 ALTER TABLE `receipt`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=757;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=757;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `service`
 --
 ALTER TABLE `service`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `situation`
 --
 ALTER TABLE `situation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `supp_category`
 --
 ALTER TABLE `supp_category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
