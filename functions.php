@@ -1856,7 +1856,7 @@ function getApprovedDevisDetails($devis_id){
         exit();
     }
 
-    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `approved`='1'";
+    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `confirmed`='1'";
     $res = mysqli_query($cnx,$query);
     $rows = mysqli_fetch_all($res);
     return $rows;

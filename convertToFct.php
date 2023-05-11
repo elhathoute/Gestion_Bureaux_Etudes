@@ -2,10 +2,13 @@
     include 'includes/config.php';
     include 'functions.php';
 
+    if($_POST){
+
     $devis_id = $_POST['devis_id'];
     $devis = getDevisById($devis_id);
-
+    
     $details_devis = getApprovedDevisDetails($devis_id);
+   
     
     if(count($details_devis)>0){
 
@@ -55,3 +58,4 @@
         $data = array('status'=>'emptyDevis');
         echo json_encode($data);
     }
+}

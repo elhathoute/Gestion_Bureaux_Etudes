@@ -7,7 +7,7 @@
         $detail_devis_id = $_POST['doc_id'];
 
         // $clientApprove = getDevisById($devis_id)['client_approve'];
-        $query = "SELECT * FROM `detail_devis` WHERE `id`='$id'";
+        $query = "SELECT * FROM `detail_devis` WHERE `id`='$detail_devis_id'";
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_assoc($res);
         $service_approve = $row['confirmed'];

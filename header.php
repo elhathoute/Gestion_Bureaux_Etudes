@@ -112,7 +112,7 @@ if ($exist) {
                 <a class="nav-link nav-icon <?= ($role->hasPerm('show notifications')) ? "" : "hide-element" ?>" href="notifications.php" title="Notification">
                     <i class="bi bi-bell-fill"></i>
                     <!-- <i class="bi bi-megaphone-fill"></i> -->
-                  
+                    <span class="badge bg-danger badge-number <?= (getNotifCount() == "0") ? "hide-element" : ''; ?> "><?= getNotifCount() ?></span>
                 </a>
                 <!-- End Notification Icon -->
 
