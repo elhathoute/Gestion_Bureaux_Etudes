@@ -786,6 +786,12 @@ $(document).ready(function () {
         $("#selectedBrkName").val('Intermédiaire');
             // make selected broker false
             selectedDevisBroker=false;
+            // remove this icon of remove broker
+            $(this).removeClass('d-block');
+            $(this).addClass('d-none');
+         
+
+          
         
 
     })

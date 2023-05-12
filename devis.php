@@ -98,13 +98,13 @@ include 'header.php';
                             <!-- show broker (intermidiare) -->
 
                                 <div class="text-center py-1">
-                               <div class="d-flex align-items-center justify-content-around">
+                               <div class="d-flex align-items-center justify-content-center">
 
                                 <fieldset class="border-dashed">
                                 <input type="text"  class="form-control-plaintext fw-bold fs-6 py-0" placeholder="Intermédiaire" name="selectedBrkName" id="selectedBrkName" disabled>
                                
                                 </fieldset>
-                               <a href="#" title="Annuler Intermédiaire" id="removeBkr" class="text-danger d-none"><i class="bi bi-person-x"></i></a>
+                               <a href="#" title="Annuler Intermédiaire" id="removeBkr" class="text-danger d-none mx-2"><i class="bi bi-person-x"></i></a>
                                </div>
                             <div class="text-center py-1">
                             <a href="javascript:void(0)" id="devisAddBrkBtn_2" class="devisAddBrkBtn" title="Sélectionner Intermédiaire"><i class="bi bi-box-arrow-up-right" style="font-size:12px"></i> Select Intermédiaire</a>
