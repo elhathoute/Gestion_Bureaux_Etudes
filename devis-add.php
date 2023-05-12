@@ -15,8 +15,9 @@
         $tva_checked = $_POST['tva_checked']=='true'?1:0;
         $objet_name = $_POST['objet_name'];
         $located_txt = $_POST['located_txt'];
-        
-        $brkId = $_POST['brkId'];
+        if(isset($_POST['brkId'])){
+            $brkId = $_POST['brkId'];
+        }
 
 
         $query = "INSERT INTO `devis`(`id`, `number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`) VALUES (null,'$devis_number','$client_id','$label_subTotal','$label_discount','$label_netTotal','encours','encours','$tva_checked','$devis_comment','$objet_name','$located_txt')";

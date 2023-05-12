@@ -761,13 +761,34 @@ $(document).ready(function () {
     //     }
     // }
 
-    let selectedDevisBroker=false;
+    var selectedDevisBroker=false;
     $(document).on('click',".selectDevisBrkBtn",function(){
+         // show icon to remove Broker
+         $("#removeBkr").removeClass("d-none");
+         $("#removeBkr").addClass("d-block");
+    
+        //  end
         let brkId = $(this).data('id');
+        let brkName = $(this).data('nom');
         $("#selectedBrkId").val(brkId);
+        // add name of broker selected
+        $("#selectedBrkName").val(brkName);
+
+
         selectedDevisBroker=true;
         $("#devisBrokerModal").modal("hide");
     });
+    // remove Broker selected in Devis
+    $(document).on('click',"#removeBkr",function(){
+        // empty input of idBroker
+        $("#selectedBrkId").val('');
+        // empty input of NameBroker
+        $("#selectedBrkName").val('Intermédiaire');
+            // make selected broker false
+            selectedDevisBroker=false;
+        
+
+    })
 
     let dBrk_id = '';
 
@@ -825,16 +846,23 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,client_type:client_type,devis_number:devis_number,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,tva_checked:tva_checked,objet_name:objet_name,located_txt:located_txt,brkId:brkId},
                 success:function(data){
-                    // alert(data);
+                    // if(status == 'success')
+                    // {
+                    //     alert(data);
+                    // }
                     // alert("all good");
                     // location.href = "devis.php";
                     var json = JSON.parse(data);
+                    // alert(json.status +'brk is'+selectedDevisBroker)
                     var status = json.status;
+
                     //TODO use this id in add those prices to DB
                     //devis id from the devis_add 
                     dBrk_id = json.dBrk_id;
+                  
                     //set condition if broker empty or not
                     if(status == 'success' && selectedDevisBroker){
+                      
                     // if(selectedDevisBroker){
                         //hide table rows && all the labels to prevent the rowTotal function runing on client devis
                         $("#devisSrvTbl tbody tr").remove();
@@ -878,9 +906,14 @@ $(document).ready(function () {
                         rowTotal();
                         
 
-                    }else{
+                    }
+                    else if(status=='success' && selectedDevisBroker==false){
+                   
                         location.href='devis-view.php?sc=sucadd';
                     }
+                },
+                errro:function(err){
+                    console.log(err);
                 }
             });
             if(selectedDevisBroker){
@@ -2423,8 +2456,10 @@ $(document).ready(function () {
     });
 
     //devis Broker button click
-    $(document).on('click',"#devisAddBrkBtn",function(){
+    $(document).on('click',".devisAddBrkBtn",function(){
         $("#devisBrokerModal").modal("show");
+        
+       
     });
 
 
