@@ -17,8 +17,6 @@ include 'header.php';
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Information du client</h5>
-
-
                         <!-- Tabs navs -->
                         <ul class="nav nav-tabs mb-3" id="client" role="tablist">
 
@@ -64,7 +62,7 @@ include 'header.php';
                                             <div class="form-check" style="display:none">
                                                 <input class="form-check-input" type="radio" name="client-type" id="indivRadioBtn" value="individual" checked  >
                                                 <label class="form-check-label" for="indivRadioBtn">
-                                                 Individuel  
+                                                Individuel  
                                                 </label>
                                             </div>
                                             <div class="form-check" style="display:none">

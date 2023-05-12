@@ -10,8 +10,8 @@
         if($client_type == "individual"){
             $type = "individual";
             // add to individual table
-            $firstName = mysqli_real_escape_string($cnx,$prenom);
-            $lastName = mysqli_real_escape_string($cnx,$nom);
+            $firstName = trim(mysqli_real_escape_string($cnx,$prenom));
+            $lastName =trim(mysqli_real_escape_string($cnx,$nom));
             $phone = mysqli_real_escape_string($cnx,$phone);
             $email = mysqli_real_escape_string($cnx,$email);
             $adr = mysqli_real_escape_string($cnx,$address);
@@ -22,7 +22,7 @@
         }else{
             $type = "entreprise";
             // add to entreprise table 
-            $ent_nom = mysqli_real_escape_string($cnx,$entNom);
+            $ent_nom = trim(mysqli_real_escape_string($cnx,$entNom));
             $ice = mysqli_real_escape_string($cnx,$ICE);
             $ent_phone = mysqli_real_escape_string($cnx,$entPhone);
             $ent_email = mysqli_real_escape_string($cnx,$entEmail);

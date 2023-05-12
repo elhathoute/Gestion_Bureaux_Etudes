@@ -656,7 +656,6 @@ include 'header.php';
                                 </div>
                             </div>
                         </div>
-                       
                     </form>
                 </section>
 
@@ -684,13 +683,22 @@ include 'header.php';
             html += '<tr>';
             html += '<td><i class="bi bi-trash fs-5 deleteRowBtn" title="Supprimer la ligne"></i></td>';
             html += '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList" autocomplete="off" class="form-control serviceDropdown" aria-describedby="srvRT" placeholder="Service name"><datalist id="servicesList"><?php echo fill_service_dropDown(); ?></datalist></td>';
-            html += '<td><input type="text" name="" class="form-control py-1 serviceUnit"  placeholder="Unité" required></td>';
+            html += '<td><input type="text" name="" class="form-control py-1 serviceUnit" placeholder="Unité" required></td>';
             html += '<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte" value="1" placeholder="Quantité"></td>';
             html += '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice" placeholder="0.00"></td>';
-            html += '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number" min="0" name="" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
+            html += '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number" min="0" max="100" name="" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             html += '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
             html += '</tr>';
             $('.servicesTable tbody').append(html);
         });
+
+        $(document).on('input', '.serviceDiscount',function() {
+                var value = parseInt($(this).val(), 10);
+                if (value < 0 || value > 100) {
+                $(this).addClass('border-danger');
+                } else {
+                $(this).removeClass('border-danger');
+                }
+            });
     });
 </script>
