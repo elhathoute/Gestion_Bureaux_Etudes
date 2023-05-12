@@ -1,9 +1,12 @@
 <?php
     include 'includes/config.php';
     include 'functions.php';
+    
 
     if(isset($_POST["btn-approve-notif"])){
+       
         if($_POST['doc_type']=="devis"){
+           
 
             $current_date = date('Y-m-d H:i:s');
             $devis_id = $_POST['devis_id'];
@@ -36,7 +39,6 @@
     }
     if(isset($_POST["btn-decline-notif"])){
         if($_POST['doc_type']=="devis"){
-
             $current_date = date('Y-m-d H:i:s');
             $devis_id = $_POST['devis_id'];
             $query = "UPDATE `devis` SET `type`='Declined',`date_validation`='$current_date',`status`='rejeter' WHERE `id`='$devis_id'";

@@ -706,13 +706,18 @@ function devisNotificationData(){
         $html .= '<td>'.$row['number'].'</td>';
         $html .= '<td>Devis</td>';
         $html .= '<td>'.$row['date_creation'].'</td>';
-        $html .= '<td><a target="_blank" href="devis_export.php?id='.$row['id_devis'].'&client_id='.$row['id_client'].'" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
+        $html .= '
+        <form action="notification-action.php" id="notificationForm" method="POST">
+
+        <td><a target="_blank" href="devis_export.php?id='.$row['id_devis'].'&client_id='.$row['id_client'].'" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
                     <a href="devis-edit.php?id='.$row['id_devis'].'&client_id='.$row['id_client'].'" data-id="'.$row['id_devis'].'" class="btn btn-primary btn-sm editDevisBtn"><span><i class="bi bi-pencil-square"></i></span></a>
                     &nbsp;
-                    <input type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
-                    <input type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
+                   
+                    <input title="Accepter" type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
+                    <input title="Annuler" type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
                     <input type="hidden" name="devis_id" value="'.$row['id_devis'].'">
                     <input type="hidden" name="doc_type" value="devis">
+                    </form>
                 </td>';
         $html .= '</tr>';
     }

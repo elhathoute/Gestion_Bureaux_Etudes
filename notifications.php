@@ -5,7 +5,6 @@
 </div>
 
 <section class="section">
-    <form action="notification-action.php" id="notificationForm" method="POST">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -54,7 +53,7 @@
                 </div>
             </div>
         </div>
-    </form>
+    
 </section>
 
 
