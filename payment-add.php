@@ -4,6 +4,7 @@
 
 
     if($_POST){
+      
             // print_r($_POST);
             if(!empty($_POST["clientId"])){
                 
@@ -20,6 +21,7 @@
                     $payment = floatval($_POST["paymentClientPrice"]); // The given amount
                     $payment_method = $_POST["payment-method"];
                     $payment_giver = mysqli_real_escape_string($cnx,$_POST['payment_giver']);
+                    //fourniss
                     $filter_type = $_POST['filter_type'];
 
                     /**
@@ -131,6 +133,9 @@
     
                 $user_id = $_SESSION['user_id'];
     
+
+
+                
                 if(isset($_POST['ids'])){
                     $checked_ids = $_POST['ids'];
                     

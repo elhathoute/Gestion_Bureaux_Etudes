@@ -16,7 +16,7 @@ $clientRes = mysqli_query($cnx, $query);
 
 <section class="section">
     <div class="row">
-        <form action="payment-add.php" id="invoicePaymentClient" method="POST">
+        <form action="payment-add.php" id="invoicePaymentClient" method="POST" >
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -157,7 +157,7 @@ $clientRes = mysqli_query($cnx, $query);
     
                                     <div class="mb-3">
                                         <label for="paymentSupplier" class="form-label">Prix</label>
-                                        <input type="number" step="0.01" class="form-control" name="paymentSupplier" id="paymentSupplier" placeholder="Prix" required>
+                                        <input type="number" step="0.01" class="form-control" name="paymentSupplier" id="paymentSupplier" placeholder="Prix"  >
                                     </div>
                                 </div>
 
