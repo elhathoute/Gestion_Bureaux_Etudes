@@ -44,7 +44,7 @@ include 'header.php';
                 </div>
             </div>
         </div> -->
-        <a href="javascript:void(0);" id="devisAddBrkBtn" class="btn btn-outline-dark float-end"><i class="bi bi-person-lines-fill"></i>&nbsp; Ajouter intermédiaire</a>
+        <a href="javascript:void(0);" id="devisAddBrkBtn_1" class="btn btn-outline-dark float-end devisAddBrkBtn"><i class="bi bi-person-lines-fill"></i>&nbsp; Ajouter intermédiaire</a>
     </div>
 </div>
 <section class="section">
@@ -95,7 +95,25 @@ include 'header.php';
                                 <div class="text-center py-1">
                                     <a href="javascript:void(0)" id="selectClientModal" class="" title="Sélectionner Client"><i class="bi bi-box-arrow-up-right" style="font-size:12px"></i> Select client</a>
                                 </div>
+                            <!-- show broker (intermidiare) -->
+
+                                <div class="text-center py-1">
+                               <div class="d-flex align-items-center justify-content-around">
+
+                                <fieldset class="border-dashed">
+                                <input type="text"  class="form-control-plaintext fw-bold fs-6 py-0" placeholder="Intermédiaire" name="selectedBrkName" id="selectedBrkName" disabled>
+                               
+                                </fieldset>
+                               <a href="#" title="Annuler Intermédiaire" id="removeBkr" class="text-danger d-none"><i class="bi bi-person-x"></i></a>
+                               </div>
+                            <div class="text-center py-1">
+                            <a href="javascript:void(0)" id="devisAddBrkBtn_2" class="devisAddBrkBtn" title="Sélectionner Intermédiaire"><i class="bi bi-box-arrow-up-right" style="font-size:12px"></i> Select Intermédiaire</a>
+
                             </div>
+
+                                </div>
+                            </div>
+                        
                             <div class="col-md-4">
                                 <div class="row my-1">
                                     <label for="" class="col-sm-8 col-form-label fw-bold">N° de devis</label>
@@ -466,7 +484,7 @@ include 'header.php';
                                         $html .= '<td>' . $brkNumber . '</td>';
                                         $html .= '<td>' . ucfirst($row["nom"]) . ' ' . ucfirst($row["prenom"]) . '</td>';
                                         $html .= '  <td>
-                                                                <a href="javascript:void(0);" data-id="' . $row['id'] . '" class="btn btn-primary btn-sm selectDevisBrkBtn" title="Sélectionner un intermédiaire"><span>Select</span></a>
+                                                                <a href="javascript:void(0);" data-nom="'.$row['nom'].' '.$row['prenom'].'" data-id="' . $row['id'] . '" class="btn btn-primary btn-sm selectDevisBrkBtn" title="Sélectionner un intermédiaire"><span>Select</span></a>
                                                             </td>';
                                         $html .= '</tr>';
                                         $brkNumber++;
