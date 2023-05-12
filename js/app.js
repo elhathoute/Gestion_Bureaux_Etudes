@@ -2486,12 +2486,12 @@ $(document).ready(function () {
 
                         json.forEach(row => {
                             
-                            html += `<tr title="Double-cliquez pour voir les détails" data-id="${row[5]}">`;
+                            html += `<tr title="Double-cliquez pour voir les détails" data-id="${row[6]}">`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td class="text-center">${row[4]}</td>`;
+                            html += `<td class="text-center">${row[4]}${row[5]}</td>`;
                             html += `</tr>`;
                         });
                     }else{
@@ -2506,10 +2506,10 @@ $(document).ready(function () {
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
     });
 
-    //on dossier table tr double click
-    $(document).on("dblclick","#dossierClTable tbody tr",function(){
+    //on dossier table tr double click    //when i double click on the row of the table 
+    $(document).on("click","#dossierClTable tbody tr button",function(){
         
-        const devisId = $(this).data('id');
+        const devisId = $(this).closest('tr').data('id');
         if(devisId != undefined || devisId != null){
             lunchLoader();
 

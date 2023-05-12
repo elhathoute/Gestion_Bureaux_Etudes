@@ -17,7 +17,8 @@ while($row=mysqli_fetch_assoc($res)){
     $subarray[] = $row['number'];
     $subarray[] = $row['objet'];
     $subarray[] = $row['date_creation'];
-    $subarray[] = '<a target="_blank" href="devis_export.php?id='.$row['id'].'&client_id='.$clientId.'" class="btn btn-secondary btn-sm" title="Afficher Devis" ><span><i class="bi bi-eye"></i></span></a>';
+    $subarray[] = '<button  class="btn btn-primary btn-sm" id="dossierShowServ"><span><i class="bi bi-plus-circle"></i></span></button>';
+    $subarray[] = '<a target="_blank" href="devis_export.php?id='.$row['id'].'&client_id='.$clientId.'" class="btn btn-secondary ms-1 btn-sm" title="Afficher Devis" ><span><i class="bi bi-eye"></i></span></a>';
     $subarray[] = $row['id'];
     $data[] = $subarray;
     $number++;
