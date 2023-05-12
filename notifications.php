@@ -5,11 +5,14 @@
 </div>
 
 <section class="section">
+    
         <div class="row">
+
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title">Demandes</h3>
+                      
                         <div class="tab-content" id="notification-content">
                             <!-- table User -->
                             <div class="overflow-auto">
@@ -32,6 +35,7 @@
                                                 
                                                 <th>
                                                     <a href="#">Action</a>
+                                                  
                                                 </th>
                                             </tr>
                                         </thead>

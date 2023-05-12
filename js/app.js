@@ -1,4 +1,7 @@
 $(document).ready(function () {
+      // approve all notifications
+   
+    
     /**
      * changing required property for add client inputs
      */
@@ -1214,6 +1217,8 @@ $(document).ready(function () {
             lunchLoader();
         }
     });
+  
+    
 
     //notifications table
     $('#notificationTable').DataTable({
