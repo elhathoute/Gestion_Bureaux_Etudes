@@ -7,6 +7,7 @@ define('DATABASE_USER', 'root');
 define('DATABASE_PASS', '');
 
 
+
 $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
 
 if(session_status()=== PHP_SESSION_NONE){
