@@ -713,10 +713,12 @@ include 'header.php';
         $(document).on('input', '.serviceDiscount',function() {
                 var value = parseInt($(this).val(), 10);
                 if (value < 0 || value > 100) {
-                $(this).addClass('border-danger');
+                // $(this).addClass('border-danger');
+                $(this).parent().find('.input-group-text').addClass('bg-danger text-white' );
                 } else {
-                $(this).removeClass('border-danger');
+                // $(this).removeClass('border-danger');
+                $(this).parent().find('.input-group-text').removeClass('bg-danger text-white');
                 }
-            });
+            });                   
     });
 </script>
