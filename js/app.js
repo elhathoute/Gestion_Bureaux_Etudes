@@ -1423,7 +1423,18 @@ $(document).ready(function () {
             labelDiscount = $('#labelDiscount').text(),
             labelDevisTotal = $('#labelDevisTotal').text(),
             due_date = $("#due_date").val(),
-            invoiceStatus = $('#invoiceStatusDropdown').val(),
+            // admin or not
+           admin= $('#invoice_id').data('admin');
+          if(admin==1){
+            invoiceStatus = $('#invoiceStatusDropdown').val();
+
+
+          }else{
+            invoiceStatus = $('.invoiceStatusDropdown').val();
+
+          }
+            console.log('status'+invoiceStatus)
+            console.log('inv_id'+invoice_id)
             objet_name = $("#objet_name").val(),
             located_txt = $("#sisTxt").val();
             // console.log(1);
@@ -1435,6 +1446,7 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,invoice_comment:invoice_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,invoiceStatus:invoiceStatus,invoice_id:invoice_id,due_date:due_date,objet_name:objet_name,located_txt:located_txt},
                 success:function(data){
+                    // alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
 
