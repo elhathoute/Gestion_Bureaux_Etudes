@@ -14,6 +14,8 @@ while($row=mysqli_fetch_assoc($res)){
     $subarray = array();
     $subarray[] = ucfirst($row['service_name']);
     $subarray[] = $row['prix'];
+    // $subarray[] = '<button class="dsServiceItem btn btn-primary"><i class="bi bi-plus-circle"></i><button>';
+    $subarray[] = '<span><i class="bi bi-plus-circle"></i></span>';
     $subarray[] = $row['id'];
     $data[] = $subarray;
     $number++;

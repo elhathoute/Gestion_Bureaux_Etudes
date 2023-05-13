@@ -2491,7 +2491,7 @@ $(document).ready(function () {
 
                         json.forEach(row => {
                             
-                            html += `<tr title="Double-cliquez pour voir les détails" data-id="${row[6]}">`;
+                            html += `<tr data-id="${row[6]}">`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
@@ -2529,12 +2529,15 @@ $(document).ready(function () {
 
                         json.forEach(row => {
                             
-                            html += `<a href="#" class="list-group-item list-group-item-action dsServiceItem"  data-bs-toggle="list" data-d_id="${row[2]}">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1 fw-bolder">${row[0]}</h5>
-                                </div>
-                                <small class="ps-2">${row[1]} DH</small>
-                            </a>`;
+                            html += `<div href="#" class="list-group-item list-group-item-action d-flex justify-content-between"  data-bs-toggle="list" data-d_id="${row[3]}">
+                                        <div>
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1 fw-bolder">${row[0]}</h5>
+                                            </div>
+                                            <small class="ps-2">${row[1]} DH</small>
+                                        </div>
+                                        <button class="dsServiceItem btn btn-primary my-2">${row[2]}</button>
+                                    </div>`;
                         });
                     }else{
                         html += `<tr><td colspan="7" class="text-center"><strong>No Data Available</strong></td></tr>`;
@@ -2549,8 +2552,8 @@ $(document).ready(function () {
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
     });
 
-    $(document).on("dblclick",".dsServiceItem",function(){
-        const d_devis_id = $(this).data('d_id');
+    $(document).on("click",".dsServiceItem",function(){
+        const d_devis_id = $(this).closest('div').data('d_id');
         $("#dossierClientSelect").prop("disabled",true);
         if(d_devis_id != ""){
             $("#showDvSrvDs").modal("hide");
