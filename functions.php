@@ -749,7 +749,7 @@ function invoiceNotificationData(){
                     <input type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
                     <input type="hidden" name="invoice_id" value="' . $row['id_invoice'] . '">
                     <input type="hidden" name="doc_type" value="invoice">
-               </form>
+                </form>
                     </td>';
         $html .= '</tr>';
     }
