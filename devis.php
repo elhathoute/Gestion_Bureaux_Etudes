@@ -632,7 +632,7 @@ include 'header.php';
                                                             <label class="fw-bold">Total partiel:</label>
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <label class="labelSubTotal">0.00 DH</label>
+                                                            <label class="labelSubTotal labelBrkSubTotal">0.00 DH</label>
                                                         </div>
                                                     </div>
                                                     <div class="row my-2">
@@ -640,7 +640,7 @@ include 'header.php';
                                                             <label class="fw-bold">Remise:</label>
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <label class="labelDiscount">0.00 DH</label>
+                                                            <label class="labelDiscount labelBrkDiscount">0.00 DH</label>
                                                         </div>
                                                     </div>
                                                     <div class="row my-2">
@@ -648,7 +648,7 @@ include 'header.php';
                                                             <label class="fw-bold">TVA:</label>
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <label class="labelTva">0.00 DH</label>
+                                                            <label class="labelTva labelBrkTva">0.00 DH</label>
                                                         </div>
                                                     </div>
                                                     <div class="row my-2">
@@ -663,7 +663,7 @@ include 'header.php';
                                                             <label class="fw-bold">Total:</label>
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <label class="labelDevisTotal">0.00 DH</label>
+                                                            <label class="labelDevisTotal labelBrkDevisTotal">0.00 DH</label>
                                                         </div>
                                                     </div>
 
