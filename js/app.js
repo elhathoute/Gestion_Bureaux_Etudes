@@ -1342,6 +1342,7 @@ $(document).ready(function () {
                 success:function(data){
                     // location.href="invoice-add.php";
                     // alert(data);
+                    location.href='invoice-list.php?sc=sucadd'; 
                     var json = JSON.parse(data);
                     var status = json.status;
                     if(status == 'success'){
