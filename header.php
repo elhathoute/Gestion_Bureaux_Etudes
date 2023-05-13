@@ -433,7 +433,7 @@ if ($exist) {
 
             <!-- Role -->
             <li class="nav-item">
-                <a class="nav-link collapsed <?= $page == 'role-list.php' || $page == 'role-create.php' ? 'active' : '' ?> <?= ($role->hasPerm('show all')) ? "" : "hide-element" ?>" href="role-list.php">
+                <a class="nav-link collapsed <?= $page == 'role-list.php' || $page == 'role-create.php' ? 'active' : '' ?> <?= ($role->hasPerm('show role')) ? "" : "hide-element" ?>" href="role-list.php">
                     <i class="bi bi-diagram-3"></i>
                     <span>Role</span>
                 </a>
