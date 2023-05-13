@@ -61,6 +61,7 @@
         // }
 
         //  adding to user_invoice for history...
+        $user_id = $_SESSION['user_id'];
         userInvoice_history($user_id,$last_id,"Add");
 
         //adding to notifications
