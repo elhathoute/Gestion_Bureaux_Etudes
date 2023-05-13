@@ -4,7 +4,6 @@
 
     
     if($_POST){
-  
         $invoice_number = $_POST["invoice_number"];
         $client_id = getClientId($_POST["client_id"],$_POST["client_type"]);
         $invoice_comment = $_POST['invoice_comment'];
