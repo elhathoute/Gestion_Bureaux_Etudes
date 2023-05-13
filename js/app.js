@@ -1342,13 +1342,18 @@ $(document).ready(function () {
                 url:'invoice-add.php',
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,client_type:client_type,invoice_number:invoice_number,invoice_comment:invoice_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelInvoiceTotal:labelInvoiceTotal,tva_checked:tva_checked,invoice_payment:invoice_payment,payment_method:payment_method,invoice_pay_giver:invoice_pay_giver,due_date:due_date,objet_name:objet_name,located_txt:located_txt},
-                success:function(data){
-                    // location.href="invoice-add.php";
+                success:function(data){ 
+                  
+                    location.href='invoice-list.php?sc=sucadd';
+
                     // alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
                     if(status == 'success'){
+                    
+                        
                         location.href='invoice-list.php?sc=sucadd';
+                        
                     }
                 }
             });
@@ -1433,6 +1438,7 @@ $(document).ready(function () {
                 success:function(data){
                     var json = JSON.parse(data);
                     var status = json.status;
+
                     if(status == 'success'){
                         location.href='invoice-list.php?sc=sucupd';
                     }

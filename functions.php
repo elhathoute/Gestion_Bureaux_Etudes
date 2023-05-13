@@ -739,14 +739,18 @@ function invoiceNotificationData(){
         $html .= '<td>' . $row['F_number'] . '</td>';
         $html .= '<td>Facture</td>';
         $html .= '<td>' . $row['date_creation'] . '</td>';
-        $html .= '<td><a target="_blank" href="invoice_export.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
+        $html .= '
+        <form action="notification-action.php" id="notificationForm" method="POST">
+
+        <td><a target="_blank" href="invoice_export.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
                     <a href="invoice-edit.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" data-id="' . $row['id_invoice'] . '" class="btn btn-primary btn-sm editInvoiceBtn"><span><i class="bi bi-pencil-square"></i></span></a>
                     &nbsp;
                     <input type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
                     <input type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
                     <input type="hidden" name="invoice_id" value="' . $row['id_invoice'] . '">
                     <input type="hidden" name="doc_type" value="invoice">
-                </td>';
+               </form>
+                    </td>';
         $html .= '</tr>';
     }
     return $html;
@@ -1023,14 +1027,18 @@ function paymentNotificationData(){
         $html .= '<td>' . $row['number'] . '</td>';
         $html .= '<td>Paiement</td>';
         $html .= '<td>' . $row['pay_date'] . '</td>';
-        $html .= '<td><a target="_blank" href="receipt_export.php?id='.$row["pay_id"].'" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
+        $html .= '<td>
+        <form action="notification-action.php" id="notificationForm" method="POST">
+
+        <a target="_blank" href="receipt_export.php?id='.$row["pay_id"].'" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
                     &nbsp;
                     <input type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
                     <input type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
                     <input type="hidden" name="id_devis" value="' . $row['id_devis'] . '">
                     <input type="hidden" name="id_detail" value="' . $row['detail_id'] . '">
                     <input type="hidden" name="doc_type" value="payment">
-                </td>';
+              </form>
+                    </td>';
         $html .= '</tr>';
     }
     return $html;

@@ -52,7 +52,8 @@
 
 
     }else{
-        header("location:invoice-list.php");exit();
+        header("location:invoice-list.php");
+        exit();
     }
     
 

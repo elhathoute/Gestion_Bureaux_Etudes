@@ -4,6 +4,7 @@
 
     
     if($_POST){
+  
         $invoice_number = $_POST["invoice_number"];
         $client_id = getClientId($_POST["client_id"],$_POST["client_type"]);
         $invoice_comment = $_POST['invoice_comment'];
@@ -15,10 +16,12 @@
         $tva_checked = $_POST['tva_checked']=='true'?1:0;
         $objet_name = $_POST['objet_name'];
         $located_txt = $_POST['located_txt'];
+      
         // echo $label_netTotal;
         $query = "INSERT INTO `invoice`(`id`, `F_number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`) VALUES (null,'$invoice_number','$client_id','$label_subTotal','$label_discount','$label_netTotal','encours','encours','$tva_checked','$invoice_comment','$objet_name','$located_txt')";
         $res = mysqli_query($cnx,$query);
         $last_id;
+        
         if($res){
             $last_id = mysqli_insert_id($cnx);
         }
@@ -65,17 +68,19 @@
         $res = mysqli_query($cnx,$query);
 
         if($res){
+          
             $data = array('status'=>'success');
             echo json_encode($data);
-        }else{
+            
+        }
+        else{
+           
+
             $data = array('status'=>'failed');
             echo json_encode($data);
         }
-
-        
-        
-
-    }else{
+    }
+    else{
         header("location:invoice-list.php");
         exit();
     }
