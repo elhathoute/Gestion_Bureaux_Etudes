@@ -4,6 +4,7 @@
 
     
     if($_POST){
+        
         //declaring Vars
         $devis_number = $_POST["devis_number"];
         $client_id = getClientId($_POST["client_id"],$_POST["client_type"]);
