@@ -13,14 +13,26 @@ function br2nl($string)
     <div class="pagetitle col-md-8">
         <h1>Modifier Facture</h1>
     </div>
-    <!-- <div class="col-md-4">
-        <select class="form-select float-end my-1" name="" id="invoiceStatusDropdown">
-            <option value="encours" <?php if(strtolower($invoice['status'])=='encours'){echo 'selected';} ?>>Encours</option>
-            <option value="accepter" <?php if(strtolower($invoice['status'])=='accepter'){echo 'selected';} ?> >Accepter</option>
-            <option value="rejeter" <?php if(strtolower($invoice['status'])=='rejeter'){echo 'selected';} ?> >Rejeter</option>
+<!-- check role of user -->
+<?php if($role->hasPerm('show notifications')){
+    $admin=1;
+    ?>
+    <div class="col-md-4">
+    
+        <select class="form-select float-end my-1" name="" class="invoiceStatusDropdown" id="invoiceStatusDropdown">
+            <option value="encours"   <?php if(strtolower($invoice['status'])=='encours'){echo 'selected';} ?>>Encours</option>
+            <option value="accepter"  <?php if(strtolower($invoice['status'])=='accepter'){echo 'selected';} ?> >Accepter</option>
+            <option value="rejeter"  <?php if(strtolower($invoice['status'])=='rejeter'){echo 'selected';} ?> >Rejeter</option>
         </select>
-    </div> -->
-    <input type="hidden" name="" id="invoice_id" value='<?php echo $invoice['id'];?>'>
+    </div>
+    <?php }
+     else{
+        $admin=0;
+        ?>
+
+    <input type="hidden" class="invoiceStatusDropdown"  value="<?= "encours" ?>">
+   <?php }?>
+    <input type="hidden" data-admin="<?= $admin?>" name="" id="invoice_id" value='<?php echo $invoice['id'];?>'>
 </div>
 <section class="section">
     <form action="invoice-list.php" id="invoiceEditForm" method="POST">
