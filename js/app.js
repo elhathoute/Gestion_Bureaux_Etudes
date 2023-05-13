@@ -1296,8 +1296,6 @@ $(document).ready(function () {
     // send data to invoice-add on create Facture button click
     $(document).on('submit','#invoiceForm',function(e){
         // e.preventDefault();
-    
-        
         var tableData = new Array();
         var row =0;
         $('.servicesTable tbody tr').each(function(){
@@ -1335,7 +1333,6 @@ $(document).ready(function () {
             objet_name = $("#objet_name").val(),
             located_txt = $("#sisTxt").val();
             
-
             lunchLoader();
             
             $.ajax({
@@ -2963,9 +2960,9 @@ $(document).ready(function () {
      */
     var supplier_deleted_id, supplier_deleted_row_id;
     $(document).on('click','.deleteSupplierBtn',function(event){
-         $("#deleteSupplierModal").modal('show');
-         supplier_deleted_id = $(this).data('id');
-         supplier_deleted_row_id = $(this).parent().closest('tr').attr("id");
+        $("#deleteSupplierModal").modal('show');
+        supplier_deleted_id = $(this).data('id');
+        supplier_deleted_row_id = $(this).parent().closest('tr').attr("id");
     });
     
     $(document).on('click','.deleteSupplierModalBtn',function(){
