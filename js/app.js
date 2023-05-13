@@ -812,20 +812,23 @@ $(document).ready(function () {
         var tableData = new Array();
         var row =0;
         $('.servicesTable tbody tr').each(function(){
-            var service_name = $(".serviceDropdown",this).val(),
-            srvRef = $(".servRefTxt",this).val(),
-            qte = $('.rowServiceQte',this).val(),
-            price = $('.servicePrice',this).val(),
-            discount = $(".serviceDiscount",this).val(),
+            var service_name = $(".serviceDropdown",this).val();
+            srvRef = $(".servRefTxt",this).val();
+            qte = $('.rowServiceQte',this).val();
+            price = $('.servicePrice',this).val();
+            discount = $(".serviceDiscount",this).val();
             unit = $(".serviceUnit",this).val();
-            
+            montant=$(".rowServiceTotal",this).val();
             tableData[row] = {
                 "serviceName":service_name,
                 "quantity":qte,
                 "price":price,
                 "discount":discount,
                 "unit":unit,
-                "srvRef":srvRef
+                "srvRef":srvRef,
+                "montant":montant
+
+             
             }
             row++;
         });
@@ -890,20 +893,28 @@ $(document).ready(function () {
                         $("#BrkObjet_name").val($("#objet_name").val());
                         $("#brkSisTxt").val($("#sisTxt").val());
                         $("#brkDevis_comment").val($("#devis_comment").val());
+                        // total partiel
+                   
+                        // $(".labelSubTotal_broker");
+                        // console.log($(".labelSubTotal_broker").text())
+                        
+                       
+
                         //insert data in service table
                         let html = ``;
                         let devisTableData = JSON.parse(tableData);
+                        // console.log(devisTableData);
                         for (let i = 0; i < devisTableData.length; i++) {
                             if(devisTableData[i]["srvRef"] != ""){
-
+                                // console.log(devisTableData[i]["unit"]);
                                 html += `<tr>`;
                                 html += `<td></td>`;
                                 html += `<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="${devisTableData[i]["srvRef"]}" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover" disabled><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="${devisTableData[i]["serviceName"]}" class="form-control serviceDropdown" aria-describedby="srvRT" disabled><datalist id="servicesList"></datalist></td>`;
-                                html += `<td><input type="text" name="" class="form-control py-1 serviceUnit" value="${devisTableData[i]["unit"]}"  placeholder="Unité" disabled></td>`;
-                                html += `<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte"  value="${devisTableData[i]["quantity"]}" placeholder="Quantité" disabled></td>`;
-                                html += `<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice"  value="${devisTableData[i]["price"]}" placeholder="0.00" ></td>`;
-                                html += `<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="${devisTableData[i]["discount"]}" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)" disabled></div></td>`;
-                                html += `<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0" disabled></td>`;
+                                html += `<td><input style="width: 50px;" type="text" name="" class="form-control py-1 serviceUnit" value="${devisTableData[i]["unit"]}"  placeholder="Unité" disabled></td>`;
+                                html += `<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte rowBrkServiceQte"  value="${devisTableData[i]["quantity"]}" placeholder="Quantité" disabled></td>`;
+                                html += `<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice serviceBrkPrice"  value="${devisTableData[i]["price"]}" placeholder="0.00" disabled ></td>`;
+                                html += `<td><div class="input-group"><span style="width: 30px;" class="input-group-text py-1"><i class="bi bi-percent"></i></span><input style="width: 38px;" type="number"  min="0" name="" value="${devisTableData[i]["discount"]}" class="form-control py-1 serviceDiscount serviceBrkDiscount" placeholder="Enter % (ex: 10%)" disabled></div></td>`;
+                                html += `<td><input type="text" name="" class="form-control py-1 rowServiceTotal rowServiceBrkTotal" value="${devisTableData[i]["montant"]}" disabled placeholder="0" disabled></td>`;
                                 html += `</tr>`;
                             }
                             
@@ -913,6 +924,7 @@ $(document).ready(function () {
                             $("#BrkTvaCheckbox").prop("checked",true);
                         }
                         rowTotal();
+                        brkRowTotal();
                         
 
                     }
@@ -3062,9 +3074,10 @@ function rowTotal(){
 }
 
 function brkRowTotal(){
+  
     var grand_total = 0,
     disc = 0;
-    $('.brkServicesTable tbody tr').each(function(){
+    $('#devisBrkShowTable tbody tr').each(function(){
         var rowQte = $('.rowBrkServiceQte',this).val(),
         rowPrice = $('.serviceBrkPrice',this).val(),
         rowDiscount = $('.serviceBrkDiscount',this).val(),
@@ -3073,6 +3086,7 @@ function brkRowTotal(){
         var originalPrice = parseFloat(rowQte)*parseFloat(rowPrice);
         var res = isNaN(originalPrice)? 0 : (originalPrice - (originalPrice*discount)).toFixed(2);
         rowMontant.val(res);
+
 
         grand_total += parseFloat(rowMontant.val());
         disc += originalPrice - res;
@@ -3094,3 +3108,4 @@ function brkRowTotal(){
     }
     // saveInvoicePayment();
 }
+// brkRowTotal();
