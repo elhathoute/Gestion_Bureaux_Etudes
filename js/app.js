@@ -2529,7 +2529,7 @@ $(document).ready(function () {
 
                         json.forEach(row => {
                             
-                            html += `<div href="#" class="list-group-item list-group-item-action d-flex justify-content-between"  data-bs-toggle="list" data-d_id="${row[3]}">
+                            html += `<div class="list-group-item list-group-item-action d-flex justify-content-between"  data-bs-toggle="list" data-d_id="${row[3]}">
                                         <div>
                                             <div class="d-flex w-100 justify-content-between">
                                                 <h5 class="mb-1 fw-bolder">${row[0]}</h5>
@@ -2755,7 +2755,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Il n\'y a pas de services approuvés dans ce devis',
-                  })
+                })
             }
         }),
         function errorHandler(){
