@@ -549,6 +549,21 @@ function getUser($user_id){
     $row = mysqli_fetch_assoc($res);
     return $row;
 }
+// get role of user
+function getUserRole($user_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    $query = "SELECT roles.role_name,users.id FROM `users`
+    INNER JOIN user_role on users.id=user_role.user_id
+    INNER JOIN roles on roles.id=user_role.role_id WHERE users.id='$user_id';";
+    $res = mysqli_query($cnx, $query);
+    $row = mysqli_fetch_assoc($res);
+    return $row;
+}
 //get notifications number
 function getNotifCount(){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);

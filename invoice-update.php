@@ -4,7 +4,7 @@
 
     
     if($_POST){
-       
+    //    die(var_dump($_SESSION['user_id']));
         
         $invoice_id= $_POST['invoice_id'];
         

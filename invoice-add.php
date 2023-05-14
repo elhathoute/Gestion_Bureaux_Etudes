@@ -18,8 +18,12 @@
         $located_txt = $_POST['located_txt'];
       
         // echo $label_netTotal;
+        // die(var_dump(getUserRole($_SESSION['user_id'])));
+       $user_role=getUserRole($_SESSION['user_id']);
+    ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
+      
         $query = "INSERT INTO `invoice`(`id`, `F_number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`)
-                             VALUES (null,'$invoice_number','$client_id','$label_subTotal','$label_discount','$label_netTotal','encours','encours','$tva_checked','$invoice_comment','$objet_name','$located_txt')";
+                             VALUES (null,'$invoice_number','$client_id','$label_subTotal','$label_discount','$label_netTotal','$type','encours','$tva_checked','$invoice_comment','$objet_name','$located_txt')";
         $res = mysqli_query($cnx,$query);
         $last_id;
         
