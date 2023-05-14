@@ -9,17 +9,17 @@ function br2nl($string)
 }
 ?>
 
-<div class="row">
-    <div class="pagetitle col-md-8">
+<div class="row my-2">
+    <div class="pagetitle col-md-9">
         <h1>Modifier Facture</h1>
     </div>
 <!-- check role of user -->
 <?php if($role->hasPerm('show notifications')){
     $admin=1;
     ?>
-    <div class="col-md-4">
+    <div class="pagetitle col-md-3 ">
     
-        <select class="form-select float-end my-1" name="" class="invoiceStatusDropdown" id="invoiceStatusDropdown">
+        <select class="form-select float-end my-1 bg-light text-dark border border-dark fw-bold" name="" class="invoiceStatusDropdown" id="invoiceStatusDropdown">
             <option value="encours"   <?php if(strtolower($invoice['status'])=='encours'){echo 'selected';} ?>>Encours</option>
             <option value="accepter"  <?php if(strtolower($invoice['status'])=='accepter'){echo 'selected';} ?> >Accepter</option>
             <option value="rejeter"  <?php if(strtolower($invoice['status'])=='rejeter'){echo 'selected';} ?> >Rejeter</option>
