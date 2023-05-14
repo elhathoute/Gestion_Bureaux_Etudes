@@ -4,6 +4,7 @@
 
     
     if($_POST){
+       
         
         $invoice_id= $_POST['invoice_id'];
         
@@ -34,8 +35,11 @@
         $tableData = json_decode($tableData,TRUE);
         // $res='';
         foreach ($tableData as $val) {
-            $discount = $val['discount']==""?0:$val['discount'];
-            $query = "INSERT INTO `detail_invoice`(`id`, `id_invoice`, `service_name`, `prix`, `quantity`, `discount`,`unit`,`ref`) VALUES (null,'$invoice_id','".$val["serviceName"]."','".$val["price"]."','".$val["quantity"]."', '$discount','".$val["unit"]."',,'".$val["srvRef"]."')";
+        //  die(var_dump($val));
+            
+            $discount = $val['discount']=="" ? 0 : $val['discount'];
+            $query = "INSERT INTO `detail_invoice`(`id`, `id_invoice`, `service_name`, `prix`, `quantity`, `discount`,`unit`,`ref`) 
+            VALUES (null, '$invoice_id', '{$val["serviceName"]}', '{$val["price"]}', '{$val["quantity"]}', '$discount', '{$val["unit"]}', '{$val["srvRef"]}')";   
             $res = mysqli_query($cnx,$query);
             
         }
