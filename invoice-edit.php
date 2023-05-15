@@ -29,7 +29,6 @@ function br2nl($string)
      else{
         $admin=0;
         ?>
-
     <input type="hidden" class="invoiceStatusDropdown"  value="<?= "encours" ?>">
    <?php }?>
     <input type="hidden" data-admin="<?= $admin?>" name="" id="invoice_id" value='<?php echo $invoice['id'];?>'>
