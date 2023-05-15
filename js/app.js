@@ -1959,6 +1959,7 @@ $(document).ready(function () {
                 data : {clientID:clientID},
                 type:"POST",
                 success:function(data){
+                    
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     let services = [];
@@ -1972,15 +1973,13 @@ $(document).ready(function () {
                         //     row[6] == '2' ? '<span class="badge avance-color">Avance</span>' :
                         //     row[6] == '0' ? '<span class="badge bg-danger">Non Payé</span>' :
                         //     '';
+                        var status;
                         if(price.toFixed(2)==row[5]){
-                            
-                           var status= '<span class="badge text-bg-success">Payé</span>'
+                            status= '<span class="badge text-bg-success">Payé</span>'
                         }else if(price.toFixed(2) !=row[5] && row[5]!=0.00){
-                            
-                            var status='<span class="badge avance-color">Avance</span>';
-                        }else{
-                            
-                            var status='<span class="badge bg-danger">Non Payé</span>';
+                             status='<span class="badge avance-color">Avance</span>';
+                        }else if(row[5]==0.00){ 
+                             status='<span class="badge bg-danger">Non Payé</span>';
                         }
 
                             html += `<tr>`;
@@ -1990,7 +1989,7 @@ $(document).ready(function () {
                             html += `<td>${row[3]}</td>`;
                             html += `<td>${price.toFixed(2)} DH</td>`;
                             html += `<td>${row[5]} DH</td>`;
-                            html += `<td>${status}</td>`;
+                            html += `<td>${status} </td>`;
                             html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
                             services.push(row[3]);
@@ -2013,7 +2012,8 @@ $(document).ready(function () {
                                 <option value="" selected disabled></option>
                                 <option value="0">Non Payé</option>
                                 <option value="1">Payé</option>
-                                <option value="2">Avance</option>
+                                
+                               
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -2049,6 +2049,7 @@ $(document).ready(function () {
     $(document).on('change','.statusFilter',function(){
         const clientID = $("#situationSelect").val();
         const paid_status = $(this).val();
+        console.log('statu'+paid_status);
         let srv_name = "";
         let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
         let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
@@ -2083,8 +2084,16 @@ $(document).ready(function () {
                     if(json.length != 0){
 
                         json.forEach(row => {
-                            var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge avance-color">Avance</span>' ;
+                           
                             let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
+                            var status;
+                            if(price.toFixed(2)==row[5]){
+                                status= '<span class="badge text-bg-success">Payé</span>'
+                            }else if(price.toFixed(2) !=row[5] && row[5]!=0.00){
+                                 status='<span class="badge avance-color">Avance</span>';
+                            }else if(row[5]==0.00){ 
+                                 status='<span class="badge bg-danger">Non Payé</span>';
+                            }
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
@@ -2114,7 +2123,8 @@ $(document).ready(function () {
                                 <option value="" selected disabled></option>
                                 <option value="0">Non Payé</option>
                                 <option value="1">Payé</option>
-                                <option value="2">Avance</option>
+                               
+                              
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
