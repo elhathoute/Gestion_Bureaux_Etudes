@@ -20,8 +20,9 @@
             $brkId = $_POST['brkId'];
         }
 
-
-        $query = "INSERT INTO `devis`(`id`, `number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`) VALUES (null,'$devis_number','$client_id','$label_subTotal','$label_discount','$label_netTotal','encours','encours','$tva_checked','$devis_comment','$objet_name','$located_txt')";
+        $user_role=getUserRole($_SESSION['user_id']);
+        ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
+        $query = "INSERT INTO `devis`(`id`, `number`, `id_client`, `sub_total`, `discount`, `net_total`, `$type`, `status`,`remove_tva`, `comment`,`objet`,`located`) VALUES (null,'$devis_number','$client_id','$label_subTotal','$label_discount','$label_netTotal','encours','encours','$tva_checked','$devis_comment','$objet_name','$located_txt')";
         $res = mysqli_query($cnx,$query);
         $last_id;
         if($res){
