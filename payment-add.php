@@ -5,7 +5,8 @@
 
     if($_POST){
       
-            // print_r($_POST);
+            // die(print_r($_POST));
+
             if(!empty($_POST["clientId"])){
                 
                 function pay($ids_array){
