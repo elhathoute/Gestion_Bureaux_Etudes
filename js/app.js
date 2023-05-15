@@ -1970,13 +1970,10 @@ $(document).ready(function () {
                         //     row[6] == '0' ? '<span class="badge bg-danger">Non Payé</span>' :
                         //     '';
                         if(price.toFixed(2)==row[5]){
-                            
-                           var status= '<span class="badge text-bg-success">Payé</span>'
+                            var status= '<span class="badge text-bg-success">Payé</span>'
                         }else if(price.toFixed(2) !=row[5] && row[5]!=0.00){
-                            
                             var status='<span class="badge avance-color">Avance</span>';
                         }else{
-                            
                             var status='<span class="badge bg-danger">Non Payé</span>';
                         }
 
