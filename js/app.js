@@ -928,10 +928,10 @@ $(document).ready(function () {
                         
 
                     }
-                    else if(status=='success' && selectedDevisBroker==false){
+                    // else if(status=='success' && selectedDevisBroker==false){
                    
                         location.href='devis-view.php?sc=sucadd';
-                    }
+                    // }
                 },
                 errro:function(err){
                     console.log(err);
@@ -1966,8 +1966,23 @@ $(document).ready(function () {
                     if(json.length != 0){
 
                         json.forEach(row => {
-                            var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge text-bg-danger">Non Payé</span>' ;
                             let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
+
+                        //   var status = row[6] == '1' ? '<span class="badge text-bg-success">Payé</span>' :
+                        //     row[6] == '2' ? '<span class="badge avance-color">Avance</span>' :
+                        //     row[6] == '0' ? '<span class="badge bg-danger">Non Payé</span>' :
+                        //     '';
+                        if(price.toFixed(2)==row[5]){
+                            
+                           var status= '<span class="badge text-bg-success">Payé</span>'
+                        }else if(price.toFixed(2) !=row[5] && row[5]!=0.00){
+                            
+                            var status='<span class="badge avance-color">Avance</span>';
+                        }else{
+                            
+                            var status='<span class="badge bg-danger">Non Payé</span>';
+                        }
+
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
@@ -1996,8 +2011,9 @@ $(document).ready(function () {
                             </select>
                             <select name="" id="" class="form-select mx-2 statusFilter">
                                 <option value="" selected disabled></option>
-                                <option value="1">Payé</option>
                                 <option value="0">Non Payé</option>
+                                <option value="1">Payé</option>
+                                <option value="2">Avance</option>
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -2067,7 +2083,7 @@ $(document).ready(function () {
                     if(json.length != 0){
 
                         json.forEach(row => {
-                            var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge text-bg-danger">Non Payé</span>' ;
+                            var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge avance-color">Avance</span>' ;
                             let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
@@ -2096,8 +2112,9 @@ $(document).ready(function () {
                             </select>
                             <select name="" id="" class="form-select mx-2 statusFilter">
                                 <option value="" selected disabled></option>
-                                <option value="1">Payé</option>
                                 <option value="0">Non Payé</option>
+                                <option value="1">Payé</option>
+                                <option value="2">Avance</option>
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -2164,7 +2181,7 @@ $(document).ready(function () {
                     if(json.length != 0){
 
                         json.forEach(row => {
-                            var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge text-bg-danger">Non Payé</span>' ;
+                            var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge avance-color">Avance</span>' ;
                             let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
@@ -2193,8 +2210,9 @@ $(document).ready(function () {
                             </select>
                             <select name="" id="" class="form-select mx-2 statusFilter">
                                 <option value="" selected disabled></option>
-                                <option value="1">Payé</option>
                                 <option value="0">Non Payé</option>
+                                <option value="1">Payé</option>
+                                <option value="2">Avance</option>
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

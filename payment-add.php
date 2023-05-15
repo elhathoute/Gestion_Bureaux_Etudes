@@ -89,6 +89,7 @@
                                     // if($inv_total == getSumDevisPrices($devisRow['id'])){
                                     if($detail_price == getSumDevisPrices($devis_detail_id_arr[$i])){
                                         // updateInvoicePaidStatus($devisRow['id']);
+                                        // die('paye');
                                         updateServicePaidStatus($devis_detail_id_arr[$i]);
                                         // updateDetailAvance($devis_detail_id_arr[$i],0);
                                     }

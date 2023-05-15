@@ -17,7 +17,7 @@ $brokerRes = getBrokerData();
                 <div class="card-body">
                     <div class="card-title py-2">Choisir un intermédiaire: </div>
                     <div class="row">
-                        <div class="col-md-11 my-1">
+                        <div class="col-md-10 my-1">
                             <select class="form-select" id="brokerSelect">
                                 <option value="" selected disabled>Veuillez choisir un intermédiaire </option>
                                 <?php
@@ -28,7 +28,7 @@ $brokerRes = getBrokerData();
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-1 my-1">
+                        <div class="col-md-2 my-1">
                             <button id="dsResetBtn" class="btn btn-primary">Réinitialiser</button>
                         </div>
                     </div>

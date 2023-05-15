@@ -35,6 +35,11 @@ h5,
 h6 {
     font-family: "Nunito", sans-serif;
 }
+/* abdelaziz */
+.avance-color{
+    opacity: 1;
+    background-color: #6ff0b4 !important;
+}
 
 /*--------------------------------------------------------------
 # Main
