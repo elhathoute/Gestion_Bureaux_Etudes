@@ -138,6 +138,8 @@
 
                 
                 if(isset($_POST['ids'])){
+            // die(print_r('checked'.var_dump($_POST['ids'])));
+
                     $checked_ids = $_POST['ids'];
                     
                     // pay($checked_ids);
@@ -157,6 +159,7 @@
                         $supplier_id = $_POST['supplier'];
                         $supplier = getSupplierById($supplier_id);
                         $category = getSuppCatById($supplier['cat_id']);
+                        // die($category['type']);
                         if($category['type'] == 'Bureau de controle'){
                             $amount = $_POST['paymentSupplier'] + $supplier['sold'];
                             updateSupplierSold($supplier_id,$amount);
@@ -244,6 +247,8 @@
                     </div>';
     
                 }else{
+            // die(print_r('not checked'.var_dump($_POST["invoiceId"])));
+
                     //that means check boxs not checked
                     $devis_id = $_POST["invoiceId"];//array of all the ids in table
                     

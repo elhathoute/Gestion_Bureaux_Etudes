@@ -32,7 +32,9 @@
                                                 <th>
                                                     <a href="#">Date</a>
                                                 </th>
-                                                
+                                                <th>
+                                                    <a href="#">Action</a>
+                                                </th>
                                                 <th>
                                                     <a href="#">Action</a>
                                                   

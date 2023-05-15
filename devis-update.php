@@ -6,6 +6,7 @@
 
 
     if($_POST){
+        // die($_POST['devisStatus']);
         // $devis_number = $_POST["devis_number"];
         // $client_id = $_POST["client_id"];
         $devis_id= $_POST['devis_id'];
@@ -26,7 +27,10 @@
         $label_netTotal = floatval(trim(str_replace('DH',"",$_POST['labelDevisTotal'])));
         // echo "azeddine";
         // echo $label_netTotal;
-        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='encours', `status`='$devisStatus', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located' WHERE id='$devis_id'";
+        $user_role=getUserRole($_SESSION['user_id']);
+        ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
+
+        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='$type', `status`='$devisStatus', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located' WHERE id='$devis_id'";
         $res = mysqli_query($cnx,$query);
         
         //adding to user_devis for history...

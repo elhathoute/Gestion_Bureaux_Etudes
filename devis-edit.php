@@ -10,17 +10,28 @@ function br2nl($string)
 ?>
 
 <div class="row">
-    <div class="pagetitle col-md-8">
+    <div class="pagetitle col-md-9">
         <h1>Modifier Devis</h1>
     </div>
-    <div class="col-md-4">
-        <select class="form-select float-end my-1" name="" id="devisStatusDropdown">
-            <option value="encours" <?php if(strtolower($devis['status'])=='encours'){echo 'selected';} ?>>Encours</option>
-            <option value="accepter" <?php if(strtolower($devis['status'])=='accepter'){echo 'selected';} ?> >Accepter</option>
-            <option value="rejeter" <?php if(strtolower($devis['status'])=='rejeter'){echo 'selected';} ?> >Rejeter</option>
+  <!-- check role of user -->
+<?php if($role->hasPerm('show notifications')){
+    $admin=1;
+    ?>
+    <div class="pagetitle col-md-3 ">
+    
+        <select class="form-select float-end my-1 bg-light text-dark border border-dark fw-bold" name="" class="devisDropdown" id="devisStatusDropdown">
+            <option value="encours"   <?php if(strtolower($devis['status'])=='encours'){echo 'selected';} ?>>Encours</option>
+            <option value="accepter"  <?php if(strtolower($devis['status'])=='accepter'){echo 'selected';} ?> >Accepter</option>
+            <option value="rejeter"  <?php if(strtolower($devis['status'])=='rejeter'){echo 'selected';} ?> >Rejeter</option>
         </select>
     </div>
-    <input type="hidden" name="" id="devis_id" value='<?php echo $devis['id'];?>'>
+    <?php }
+     else{
+        $admin=0;
+        ?>
+    <input type="hidden" class="devisStatusDropdown"  value="<?= "encours" ?>">
+   <?php }?>
+    <input type="hidden" data-admin="<?= $admin?>" name="" id="devis_id" value='<?php echo $devis['id'];?>'>
 </div>
 <section class="section">
     <form action="devis-view.php" id="devisEditForm" method="POST">
