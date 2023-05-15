@@ -720,7 +720,8 @@ function devisNotificationData(){
         $html .= '<td>'.ucfirst($user['prenom'])." ".ucfirst($user['nom']) .'</td>';
         $html .= '<td>'.$row['number'].'</td>';
         $html .= '<td>Devis</td>';
-        $html .= '<td>'.$row['date_creation'].'</td>';
+        $html .= '<td>'.$row['date'].'</td>';
+        $html .= '<td>'.$row['action'].'</td>';
         $html .= '
         <form action="notification-action.php" id="notificationForm" method="POST">
 
@@ -753,7 +754,9 @@ function invoiceNotificationData(){
         $html .= '<td>' . ucfirst($user['prenom']) . " " . ucfirst($user['nom']) . '</td>';
         $html .= '<td>' . $row['F_number'] . '</td>';
         $html .= '<td>Facture</td>';
-        $html .= '<td>' . $row['date_creation'] . '</td>';
+        $html .= '<td>' . $row['date'] . '</td>';
+        $html .= '<td>'.$row['action'].'</td>';
+
         $html .= '
         <form action="notification-action.php" id="notificationForm" method="POST">
 
@@ -1041,7 +1044,9 @@ function paymentNotificationData(){
         $html .= '<td>' . ucfirst($user['prenom']) . " " . ucfirst($user['nom']) . '</td>';
         $html .= '<td>' . $row['number'] . '</td>';
         $html .= '<td>Paiement</td>';
-        $html .= '<td>' . $row['pay_date'] . '</td>';
+        $html .= '<td>' . $row['date'] . '</td>';
+        $html .= '<td>'.$row['action'].'</td>';
+
         $html .= '<td>
         <form action="notification-action.php" id="notificationForm" method="POST">
 

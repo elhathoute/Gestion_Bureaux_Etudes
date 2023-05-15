@@ -1069,13 +1069,25 @@ $(document).ready(function () {
             labelSubTotal = $('#labelSubTotal').text(),
             labelDiscount = $('#labelDiscount').text(),
             labelDevisTotal = $('#labelDevisTotal').text(),
-            devisStatus = $('#devisStatusDropdown').val(),
+            // devisStatus = $('#devisStatusDropdown').val(),
+            
             objet_name = $("#objet_name").val(),
             located_txt = $("#sisTxt").val();
             // alert(located_txt);
             // console.log(1);
             // alert(1);
             lunchLoader();
+                  // admin or not
+           admin= $('#devis_id').data('admin');
+           if(admin==1){
+            devisStatus = $('#devisStatusDropdown').val();
+ 
+ 
+           }else{
+            devisStatus = $('.devisStatusDropdown').val();
+ 
+           }
+        //    console.log(devisStatus);
 
             $.ajax({
                 url:'devis-update.php',

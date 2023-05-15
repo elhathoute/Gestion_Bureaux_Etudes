@@ -22,9 +22,11 @@
         $remove_tva = $devis['remove_tva'];
         $objet_name = $devis['objet'];
         $located = $devis['located'];
-    
+        $user_role=getUserRole($_SESSION['user_id']);
+        ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
+        ($user_role['role_name']=="assistant") ?  $status="encours" : $status="accepter";
         //insert to invoice
-        $query = "INSERT INTO `invoice`(`id`, `F_number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`) VALUES (null,'$invoice_number','$client_id','$sub_total','$devis_discount','$net_total','encours','encours','$remove_tva','$invoice_comment','$objet_name','$located')";
+        $query = "INSERT INTO `invoice`(`id`, `F_number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`) VALUES (null,'$invoice_number','$client_id','$sub_total','$devis_discount','$net_total','$type','$status','$remove_tva','$invoice_comment','$objet_name','$located')";
         $res = mysqli_query($cnx,$query);
         $last_id;
         if($res){
