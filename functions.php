@@ -760,7 +760,7 @@ function invoiceNotificationData(){
         $html .= '
         <form action="notification-action.php" id="notificationForm" method="POST">
 
-        <td><a target="_blank" href="invoice_export.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
+        <td><a target="_blank" href="invoice_export.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" class="btn btn-secondary btn-sm"><span><i class="bi bi-eye"></i></span></a>
                     <a href="invoice-edit.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" data-id="' . $row['id_invoice'] . '" class="btn btn-primary btn-sm editInvoiceBtn"><span><i class="bi bi-pencil-square"></i></span></a>
                     &nbsp;
                     <input type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
@@ -1044,8 +1044,8 @@ function paymentNotificationData(){
         $html .= '<td>' . ucfirst($user['prenom']) . " " . ucfirst($user['nom']) . '</td>';
         $html .= '<td>' . $row['number'] . '</td>';
         $html .= '<td>Paiement</td>';
-        $html .= '<td>' . $row['date'] . '</td>';
-        $html .= '<td>'.$row['action'].'</td>';
+        $html .= '<td>' . $row['pay_date'] . '</td>';
+        $html .= '<td>Paiement</td>';
 
         $html .= '<td>
         <form action="notification-action.php" id="notificationForm" method="POST">

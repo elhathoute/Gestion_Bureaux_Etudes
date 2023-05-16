@@ -1893,7 +1893,6 @@ $(document).ready(function () {
     /**
      * History Tables
     */
-       
     //Client His Table
     $('#cusHistoryTable').DataTable({
         'info':false,
