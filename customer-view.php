@@ -51,10 +51,10 @@ if(isset($_SESSION["success"])){
                                                     <a href="#">Nom</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#">Email</a>
+                                                    <a href="#">Téléphone</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#">Téléphone</a>
+                                                    <a href="#">Email</a>
                                                 </th>
                                                 <th>
                                                     <a href="#">Address</a>
@@ -76,8 +76,8 @@ if(isset($_SESSION["success"])){
                                                     $html .= '<td>'.$number.'</td>';
                                                     $html .= '<td>'.$row['prenom'].'</td>';
                                                     $html .= '<td>'.$row['nom'].'</td>';
-                                                    $html .= '<td>'.$row['email'].'</td>';
                                                     $html .= '<td>'.$row['tel'].'</td>';
+                                                    $html .= '<td>'.$row['email'].'</td>';
                                                     $html .= '<td>'.$row['address'].'</td>';
                                                     
                                                     $html .= '  <td>
@@ -114,10 +114,10 @@ if(isset($_SESSION["success"])){
                                                     <a href="#">ICE</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#">Email</a>
+                                                    <a href="#">Téléphone</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#">Téléphone</a>
+                                                    <a href="#">Email</a>
                                                 </th>
                                                 <th>
                                                     <a href="#">Address</a>
@@ -139,8 +139,8 @@ if(isset($_SESSION["success"])){
                                                     $html .= '<td>'.$number.'</td>';
                                                     $html .= '<td>'.$row['nom'].'</td>';
                                                     $html .= '<td>'.$row['ICE'].'</td>';
-                                                    $html .= '<td>'.$row['email'].'</td>';
                                                     $html .= '<td>'.$row['tel'].'</td>';
+                                                    $html .= '<td>'.$row['email'].'</td>';
                                                     $html .= '<td>'.$row['address'].'</td>';
                                                     
                                                     $html .= '  <td>

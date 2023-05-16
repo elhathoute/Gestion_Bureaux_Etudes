@@ -5,18 +5,27 @@ $(document).ready(function () {
     /**
      * changing required property for add client inputs
      */
-    $(document).on('click','#indiv-tab',function(){
-        $("#indivRadioBtn").click();
-        $('#indiv-tabs input').prop('required',true);
-        $('#entrep-tabs input').prop('required',false);
+    // $(document).on('click','#indiv-tab',function(){
+    //     $("#indivRadioBtn").click();
+    //     $('#indiv-tabs input').prop('required',true);
+    //     $('#entrep-tabs input').prop('required',false);
         
-    });
-    $(document).on('click','#entrep-tab',function(){
-        $("#entrepRadioBtn").click();
-        $('#entrep-tabs input').prop('required',true);
-        $('#indiv-tabs input').prop('required',false);
-    });
-
+    // });
+    // $(document).on('click','#entrep-tab',function(){
+    //     $("#entrepRadioBtn").click();
+    //     $('#entrep-tabs input').prop('required',true);
+    //     $('#indiv-tabs input').prop('required',false);
+    // });
+//-------------------------------------------------------------------------------
+//to display the broker select in create client 
+        // $('#brokerCheckBox').change(function() {
+        // if ($(this).is(':checked')) {
+        //     $('#broker_div').show();
+        // } else {
+        //     $('#broker_div').hide();
+        // }
+        // });
+//-------------------------------------------------------------------------------
     // var el = [];
     $(".hide-element").each(function(node){
         // el.push($(this));
@@ -1352,11 +1361,8 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,client_type:client_type,invoice_number:invoice_number,invoice_comment:invoice_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelInvoiceTotal:labelInvoiceTotal,tva_checked:tva_checked,invoice_payment:invoice_payment,payment_method:payment_method,invoice_pay_giver:invoice_pay_giver,due_date:due_date,objet_name:objet_name,located_txt:located_txt},
                 success:function(data){ 
-                    // alert(data);
-                  
-                   
+                    console.log(data);                  
                     location.href='invoice-list.php?sc=sucadd'; 
-
                     // alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
@@ -1896,7 +1902,6 @@ $(document).ready(function () {
     /**
      * History Tables
     */
-       
     //Client His Table
     $('#cusHistoryTable').DataTable({
         'info':false,

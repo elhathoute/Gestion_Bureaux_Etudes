@@ -19,7 +19,7 @@
             $query = "INSERT INTO `client_individual`(`prenom`, `nom`, `email`, `tel`, `address`, `solde`) VALUES ('$firstName','$lastName','$email','$phone','$adr','0')";
             // add some sort of success alert
             // ...
-        }else{
+        }else if($client_type == "entreprise"){
             $type = "entreprise";
             // add to entreprise table 
             $ent_nom = trim(mysqli_real_escape_string($cnx,$entNom));

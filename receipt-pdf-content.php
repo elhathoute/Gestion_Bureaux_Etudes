@@ -70,7 +70,6 @@
             $pay_id = $_GET['id'];
             $receiptInfo = getReceipt($pay_id);
             
-        
     
     
     ?>
