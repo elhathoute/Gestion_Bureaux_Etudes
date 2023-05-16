@@ -5,18 +5,27 @@ $(document).ready(function () {
     /**
      * changing required property for add client inputs
      */
-    $(document).on('click','#indiv-tab',function(){
-        $("#indivRadioBtn").click();
-        $('#indiv-tabs input').prop('required',true);
-        $('#entrep-tabs input').prop('required',false);
+    // $(document).on('click','#indiv-tab',function(){
+    //     $("#indivRadioBtn").click();
+    //     $('#indiv-tabs input').prop('required',true);
+    //     $('#entrep-tabs input').prop('required',false);
         
-    });
-    $(document).on('click','#entrep-tab',function(){
-        $("#entrepRadioBtn").click();
-        $('#entrep-tabs input').prop('required',true);
-        $('#indiv-tabs input').prop('required',false);
-    });
-
+    // });
+    // $(document).on('click','#entrep-tab',function(){
+    //     $("#entrepRadioBtn").click();
+    //     $('#entrep-tabs input').prop('required',true);
+    //     $('#indiv-tabs input').prop('required',false);
+    // });
+//-------------------------------------------------------------------------------
+//to display the broker select in create client 
+        // $('#brokerCheckBox').change(function() {
+        // if ($(this).is(':checked')) {
+        //     $('#broker_div').show();
+        // } else {
+        //     $('#broker_div').hide();
+        // }
+        // });
+//-------------------------------------------------------------------------------
     // var el = [];
     $(".hide-element").each(function(node){
         // el.push($(this));
