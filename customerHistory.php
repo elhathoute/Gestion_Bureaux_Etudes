@@ -6,7 +6,7 @@ include 'header.php';
 
 <div class="row my-3">
     <div class="pagetitle">
-        <h1>Registre des clients</h1>
+        <h1>Registre des Maitres d'ouvrage</h1>
     </div>
 </div>
 <section class="section">

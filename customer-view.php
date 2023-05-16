@@ -11,23 +11,23 @@ if(isset($_SESSION["success"])){
 
 
 <div class="pagetitle">
-    <h1>Liste des clients</h1>
+    <h1>Liste des Maîtres d'ouvrage </h1>
 </div>
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Informations des clients</h3>
+                    <h3 class="card-title">Informations des Maîtres d'ouvrage </h3>
                     <!-- Tabs navs -->
                     <ul class="nav nav-tabs mb-3" id="client" role="tablist">
 
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="indiv-tab" data-bs-toggle="tab" data-bs-target="#indiv-tabs" type="button" role="tab" aria-controls="indiv-tabs" aria-selected="true">Individual List</button>
+                            <button class="nav-link active" id="indiv-tab" data-bs-toggle="tab" data-bs-target="#indiv-tabs" type="button" role="tab" aria-controls="indiv-tabs" aria-selected="true">liste des individuelles</button>
                         </li>
 
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link " id="entrep-tab" data-bs-toggle="tab" data-bs-target="#entrep-tabs" type="button" role="tab" aria-controls="entrep-tabs" aria-selected="false">Entreprise List</button>
+                            <button class="nav-link " id="entrep-tab" data-bs-toggle="tab" data-bs-target="#entrep-tabs" type="button" role="tab" aria-controls="entrep-tabs" aria-selected="false">liste d'entreprises</button>
                         </li>
 
                     </ul>
