@@ -12,7 +12,6 @@
         $res = mysqli_query($cnx,$query);
     
         $invoiceStatus = $_POST['invoiceStatus'];
-        
         $invoice_comment = $_POST['invoice_comment'];
         $objet_name = $_POST["objet_name"];
         // $date = date_create($_POST["due_date"]);

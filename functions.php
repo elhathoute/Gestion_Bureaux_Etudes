@@ -760,14 +760,14 @@ function invoiceNotificationData(){
         $html .= '
         <form action="notification-action.php" id="notificationForm" method="POST">
 
-        <td><a target="_blank" href="invoice_export.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
+        <td><a target="_blank" href="invoice_export.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" class="btn btn-secondary btn-sm"><span><i class="bi bi-eye"></i></span></a>
                     <a href="invoice-edit.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" data-id="' . $row['id_invoice'] . '" class="btn btn-primary btn-sm editInvoiceBtn"><span><i class="bi bi-pencil-square"></i></span></a>
                     &nbsp;
                     <input type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
                     <input type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
                     <input type="hidden" name="invoice_id" value="' . $row['id_invoice'] . '">
                     <input type="hidden" name="doc_type" value="invoice">
-               </form>
+                </form>
                     </td>';
         $html .= '</tr>';
     }
