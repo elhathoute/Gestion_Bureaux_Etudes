@@ -127,7 +127,7 @@ $period = array($curDate,$weekAgo);
 
                         <div class="card-body">
                             <!-- <h5 class="card-title">Customers <span id="cusPeriodTxt">| This Year</span></h5> -->
-                            <h5 class="card-title">Clients <span>| </span></h5>
+                            <h5 class="card-title">Maitres d'ouvrage <span>| </span></h5>
 
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">

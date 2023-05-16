@@ -31,6 +31,7 @@
                             if(isset($_SESSION["error"])){
                                 echo $_SESSION["error"];
                                 unset($_SESSION["error"]);
+                                
                             }
                         ?>
                         <form action="login.php" method="POST">
@@ -38,20 +39,20 @@
                                 <div class="input-group-text">
                                     <i class="fa-solid fa-user"></i>
                                 </div>
-                                <input type="text" name="username" class="form-control required" placeholder="Enter Username" required >
+                                <input type="text" name="username" class="form-control required" placeholder="Enter nom d'utilisateur" required  value="<?php (isset($_COOKIE['logged_in']) ) ? ($_COOKIE['logged_in'])  : ''?>" >
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-text">
                                     <i class="fa-solid fa-lock"></i>
                                 </div>
-                                <input type="password" name="password" class="form-control required" placeholder="Enter Password" required>
+                                <input type="password" name="password" class="form-control required" placeholder="Enter mot de passe" required value="dsd">
                                 <!-- <div class="invalid-feedback">Please fill out this field</div> -->
                             </div>
                             <div class="mb-3 form-check">
                                 <input type="checkbox" name="remember-me" id="remember-me" class="form-check-input">
                                 <label for="remember-me" class="form-check-">Remember me</label>
                             </div>
-                            <button type="submit" name="submit" class="btn btn-primary col-12" style="background-color:#7B7DE5;border-color: #7B7DE5;">Login</button>
+                            <button type="submit" name="submit" class="btn btn-primary col-12" style="background-color:#7B7DE5;border-color: #7B7DE5;">connexion</button>
                         </form>
                     </div>
                 </div>

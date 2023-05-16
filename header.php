@@ -230,17 +230,17 @@ if ($exist) {
 
             <li class="nav-item <?= ($role->hasPerm('show client') || $role->hasPerm('create client')) ? "" : "hide-element" ?> ">
                 <a class="nav-link collapsed <?= $page == 'customer-add.php' || $page == 'customer-view.php' ? 'active' : '' ?> " data-bs-target="#customers-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-people"></i><span>Clients</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-people"></i><span>Maitre d'ouvrage </span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="customers-nav" class="nav-content collapse <?= $page == 'customer-add.php' || $page == 'customer-view.php' ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="customer-add.php" class="<?= $page == 'customer-add.php' ? 'active' : '' ?> <?= ($role->hasPerm('create client')) ? "" : "hide-element" ?>">
-                            <i class="bi bi-person-plus"></i><span>Ajouter un client</span>
+                            <i class="bi bi-person-plus"></i><span>Créer un Maître d'ouvrage </span>
                         </a>
                     </li>
                     <li>
                         <a href="customer-view.php" class="<?= $page == 'customer-view.php' ? 'active' : '' ?> <?= ($role->hasPerm('show client')) ? "" : "hide-element" ?>">
-                            <i class="bi bi-gear"></i><span>Gérer les clients</span>
+                            <i class="bi bi-gear"></i><span>Gérer les Maîtres d'ouvrage</span>
                         </a>
                     </li>
 
@@ -256,7 +256,7 @@ if ($exist) {
                 <ul id="services-nav" class="nav-content collapse <?= $page == 'services.php' || $page == 'services-view.php' ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="services.php" class="<?= $page == 'services.php' ? 'active' : '' ?> <?= ($role->hasPerm('create service')) ? "" : "hide-element" ?>">
-                            <i class="bi bi-plus-lg"></i><span>Ajouter un service</span>
+                            <i class="bi bi-plus-lg"></i><span>Créer un service</span>
                         </a>
                     </li>
                     <li>
@@ -275,7 +275,7 @@ if ($exist) {
                 <ul id="broker-nav" class="nav-content collapse <?= $page == 'broker.php' || $page == 'broker-view.php' ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="broker.php" class="<?= $page == 'broker.php' ? 'active' : '' ?> <?= ($role->hasPerm('create broker')) ? "" : "hide-element" ?>">
-                            <i class="bi bi-plus-lg"></i><span>Ajouter un intermédiaire</span>
+                            <i class="bi bi-plus-lg"></i><span>Créer un intermédiaire</span>
                         </a>
                     </li>
                     <li>
@@ -297,7 +297,7 @@ if ($exist) {
                 <ul id="supplier-nav" class="nav-content collapse <?= $page == 'supplier.php' || $page == 'supplier-list.php' || $page == 'category.php' || $page == 'category-list.php' ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="supplier.php" class="<?= $page == 'supplier.php' ? 'active' : '' ?>">
-                            <i class="bi bi-plus-lg"></i><span>Ajouter un Fournisseur</span>
+                            <i class="bi bi-plus-lg"></i><span>Créer un Fournisseur</span>
                         </a>
                     </li>
                     <li>
@@ -312,7 +312,7 @@ if ($exist) {
                         <ul id="cat-nav" class="nav-content collapse <?= $page == 'category.php' || $page == 'category-list.php' ? 'show' : '' ?>" data-bs-parent="#supplier-nav">
                             <li>
                                 <a href="category.php" class="ms-3 <?= $page == 'category.php' ? 'active' : '' ?>">
-                                    <i class="bi bi-bookmark-plus"></i><span>Ajouter une Catégorie</span>
+                                    <i class="bi bi-bookmark-plus"></i><span>Créer une Catégorie</span>
                                 </a>
                             </li>
                             <li>
@@ -340,7 +340,7 @@ if ($exist) {
                 <ul id="devis-nav" class="nav-content collapse <?= $page == 'devis.php' || $page == 'devis-view.php' || $page == 'devis-edit.php' || $page == 'devis-show.php' || $page =='payments.php' || $page == 'payment-create.php' ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="devis.php" class="<?= $page == 'devis.php' ? 'active' : '' ?> <?= ($role->hasPerm('create devis')) ? "" : "hide-element" ?>">
-                            <i class="bi bi-plus-lg"></i><span>Ajouter un Devis</span>
+                            <i class="bi bi-plus-lg"></i><span>Créer un Devis</span>
                         </a>
                     </li>
                     <li>
@@ -365,7 +365,7 @@ if ($exist) {
                 <ul id="dossier-nav" class="nav-content collapse <?= $page == 'dossier.php' || $page == 'dossier-view.php' || $page == 'dossier-show.php' ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="dossier.php" class="<?= $page == 'dossier.php' ? 'active' : '' ?>">
-                            <i class="bi bi-plus-lg"></i><span>Ajouter un Dossier</span>
+                            <i class="bi bi-plus-lg"></i><span>Créer un Dossier</span>
                         </a>
                     </li>
                     <li>
@@ -385,7 +385,7 @@ if ($exist) {
                 <ul id="facture-nav" class="nav-content collapse <?= $page == 'invoice-create.php' || $page == 'invoice-list.php' || $page == 'invoice-edit.php' || $page == 'invoice-view.php'  ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="invoice-create.php" class="<?= $page == 'invoice-create.php' ? 'active' : '' ?> <?= ($role->hasPerm('create invoice')) ? "" : "hide-element" ?>">
-                            <i class="bi bi-plus-lg"></i><span>Ajouter une Facture</span>
+                            <i class="bi bi-plus-lg"></i><span>Créer une Facture</span>
                         </a>
                     </li>
                     <li>
@@ -419,7 +419,7 @@ if ($exist) {
                 <ul id="purchase-nav" class="nav-content collapse <?= $page == 'purchase-create.php' || $page == 'purchase-list.php' || $page == 'purchase-edit.php'  ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="purchase-create.php" class="<?= $page == 'purchase-create.php' ? 'active' : '' ?> <?= ($role->hasPerm('create purchase')) ? "" : "hide-element" ?>">
-                            <i class="bi bi-plus-lg"></i><span>Ajouter un achat</span>
+                            <i class="bi bi-plus-lg"></i><span>Créer un achat</span>
                         </a>
                     </li>
                     <li>
@@ -444,7 +444,7 @@ if ($exist) {
             <li class="nav-item">
                 <a class="nav-link collapsed <?= $page == 'user-list.php' || $page == 'user-create.php' ? 'active' : '' ?>  <?= ($role->hasPerm('show user') || $role->hasPerm('create user')) ? "" : "hide-element" ?>" href="user-list.php">
                     <i class="bi bi-person"></i>
-                    <span>User</span>
+                    <span>Utilisateur</span>
                 </a>
             </li>
             <!-- User End -->
@@ -457,7 +457,7 @@ if ($exist) {
                 <ul id="history-nav" class="nav-content collapse <?= $page == 'customerHistory.php' || $page == 'serviceHistory.php' || $page == 'devisHistory.php' || $page == 'invoiceHistory.php' || $page == 'purchaseHistory.php' || $page == 'brokerHistory.php'  ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="customerHistory.php" class="<?= $page == 'customerHistory.php' ? 'active' : '' ?>">
-                            <i class="bi bi-dot"></i><span>Clients</span>
+                            <i class="bi bi-dot"></i><span>Maitres d'ouvrage</span>
                         </a>
                     </li>
                     <li>
