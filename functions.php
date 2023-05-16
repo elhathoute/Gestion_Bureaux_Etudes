@@ -795,7 +795,7 @@ function getFirstPayDevis($client_id){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-    $query = "SELECT devis.* FROM `devis` INNER JOIN `detail_devis` ON devis.id = detail_devis.id_devis WHERE id_client = $client_id  AND `remove`=0 AND detail_devis.paid_srv = 0 ORDER BY `date_creation` ASC LIMIT 1;";
+    $query = "SELECT devis.* FROM `devis` INNER JOIN `detail_devis` ON devis.id = detail_devis.id_devis WHERE id_client = $client_id  AND `remove`=0 AND detail_devis.paid_srv = 0 ORDER BY `date_creation` ASC LIMIT 1";
     $res = mysqli_query($cnx, $query);
     if($res){
         return $res;
