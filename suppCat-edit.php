@@ -5,7 +5,7 @@ include 'functions.php';
 
 
 $id = $_POST["id"];
-$title = $_POST["catTitle"];
+$title =mysqli_real_escape_string($cnx,$_POST["catTitle"]);
 $type = mysqli_real_escape_string($cnx,$_POST['catType']);
 
 
