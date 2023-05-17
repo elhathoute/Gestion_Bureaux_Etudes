@@ -51,11 +51,12 @@ if(isset($_SESSION["success"])){
                                                     <a href="#">Nom</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#">Téléphone</a>
-                                                </th>
-                                                <th>
                                                     <a href="#">Email</a>
                                                 </th>
+                                                <th>
+                                                    <a href="#">Téléphone</a>
+                                                </th>
+                                              
                                                 <th>
                                                     <a href="#">Address</a>
                                                 </th>
@@ -76,13 +77,13 @@ if(isset($_SESSION["success"])){
                                                     $html .= '<td>'.$number.'</td>';
                                                     $html .= '<td>'.$row['prenom'].'</td>';
                                                     $html .= '<td>'.$row['nom'].'</td>';
-                                                    $html .= '<td>'.$row['tel'].'</td>';
                                                     $html .= '<td>'.$row['email'].'</td>';
+                                                    $html .= '<td>'.$row['tel'].'</td>';
                                                     $html .= '<td>'.$row['address'].'</td>';
                                                     
                                                     $html .= '  <td>
-                                                                    <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editBtn '.$check_edit.' " data-bs-toggle="modal" data-bs-target="#EditCusModal" title="Modifier Client" ><span><i class="bi bi-pencil-square"></i></span></a>
-                                                                    <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteBtn '.$check_delete.' " title="Supprimer Client"><span><i class="bi bi-trash"></i></span></a>
+                                                                    <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editBtn '.$check_edit.' " data-bs-toggle="modal" data-bs-target="#EditCusModal" title="Modifier Maître ouvrage" ><span><i class="bi bi-pencil-square"></i></span></a>
+                                                                    <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteBtn '.$check_delete.' " title="Supprimer  Maître ouvrage"><span><i class="bi bi-trash"></i></span></a>
                                                                 </td>';
                                                     $html .= '</tr>';
                                                     $number++;
@@ -114,11 +115,12 @@ if(isset($_SESSION["success"])){
                                                     <a href="#">ICE</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#">Téléphone</a>
-                                                </th>
-                                                <th>
                                                     <a href="#">Email</a>
                                                 </th>
+                                                <th>
+                                                    <a href="#">Téléphone</a>
+                                                </th>
+                                               
                                                 <th>
                                                     <a href="#">Address</a>
                                                 </th>
@@ -139,13 +141,13 @@ if(isset($_SESSION["success"])){
                                                     $html .= '<td>'.$number.'</td>';
                                                     $html .= '<td>'.$row['nom'].'</td>';
                                                     $html .= '<td>'.$row['ICE'].'</td>';
-                                                    $html .= '<td>'.$row['tel'].'</td>';
                                                     $html .= '<td>'.$row['email'].'</td>';
+                                                    $html .= '<td>'.$row['tel'].'</td>';
                                                     $html .= '<td>'.$row['address'].'</td>';
                                                     
                                                     $html .= '  <td>
-                                                                    <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editEntrepBtn '. $check_edit.' " title="Modifier Client" ><span><i class="bi bi-pencil-square"></i></span></a>
-                                                                    <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteEntrepBtn '.$check_delete.' " title="Supprimer Client" ><span><i class="bi bi-trash"></i></span></a>
+                                                                    <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editEntrepBtn '. $check_edit.' " title="Modifier Maître ouvrage" ><span><i class="bi bi-pencil-square"></i></span></a>
+                                                                    <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteEntrepBtn '.$check_delete.' " title="Supprimer Maître ouvrage" ><span><i class="bi bi-trash"></i></span></a>
                                                                 </td>';
                                                     $html .= '</tr>';
                                                     $number++;
@@ -178,7 +180,7 @@ if(isset($_SESSION["success"])){
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">mettre à jour client</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">mettre à jour Maître d'ouvrage</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="javascript:void(0)" id="editCusForm" method="POST">
@@ -197,7 +199,7 @@ if(isset($_SESSION["success"])){
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" class="form-control" name="email" id="email" placeholder="Email" required>
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Email">
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Téléphone</label>
@@ -205,7 +207,7 @@ if(isset($_SESSION["success"])){
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" name="address" id="address" placeholder="Address" required>
+                        <input type="text" class="form-control" name="address" id="address" placeholder="Address" >
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -227,7 +229,7 @@ if(isset($_SESSION["success"])){
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class='modal-body'>
-                <p class="text-center">Êtes-vous sûr de vouloir supprimer ce client ?</p>
+                <p class="text-center">Êtes-vous sûr de vouloir supprimer ce Maître d'ouvrage ?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -243,7 +245,7 @@ if(isset($_SESSION["success"])){
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">mettre à jour client</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">mettre à jour Maître d'ouvrage</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="javascript:void(0)" id="editCusEntrepForm" method="POST">
@@ -254,7 +256,7 @@ if(isset($_SESSION["success"])){
                     <div class="mb-3">
                         <label for="prenom" class="form-label">Prenom</label>
                         <!-- <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Prenom" required> -->
-                        <input type="text" class="form-control" name="prenom" id="nom_ent" placeholder="Nom" required>
+                        <input type="text" class="form-control" name="prenom" id="nom_ent" placeholder="Nom" required >
                     </div>
                     <div class="mb-3">
                         <label for="nom" class="form-label">Nom</label>
@@ -262,7 +264,7 @@ if(isset($_SESSION["success"])){
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" class="form-control" name="email" id="email_ent" placeholder="Email" required>
+                        <input type="text" class="form-control" name="email" id="email_ent" placeholder="Email" >
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Téléphone</label>
@@ -270,7 +272,7 @@ if(isset($_SESSION["success"])){
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" name="address" id="address_ent" placeholder="Address" required>
+                        <input type="text" class="form-control" name="address" id="address_ent" placeholder="Address" reqired>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -292,7 +294,7 @@ if(isset($_SESSION["success"])){
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class='modal-body'>
-                <p class="text-center">Êtes-vous sûr de vouloir supprimer ce client ?</p>
+                <p class="text-center">Êtes-vous sûr de vouloir supprimer ce Maître d'ouvrage ?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

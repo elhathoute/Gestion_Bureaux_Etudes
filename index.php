@@ -16,8 +16,9 @@
 </head>
 <body>
     <div class="container">
-        <div class="row ">
-            <div class="col-md-5 col-lg-4 offset-md-4 offset-lg-4">
+  
+        <div class="row  d-flex align-items-center justify-content-center">
+            <div class="col-md-8">
                 <div class="card shadow-lg login-panel">
                     <div class="card-header bg-white">
                             <!-- Company logo -->
@@ -35,24 +36,28 @@
                             }
                         ?>
                         <form action="login.php" method="POST">
+                        <label class="my-1 fs-5" for="username">Nom d'utilisateur :</label>
+
                             <div class="input-group mb-3">
                                 <div class="input-group-text">
                                     <i class="fa-solid fa-user"></i>
                                 </div>
-                                <input type="text" name="username" class="form-control required" placeholder="Enter nom d'utilisateur" required  value="<?php (isset($_COOKIE['logged_in']) ) ? ($_COOKIE['logged_in'])  : ''?>" >
+                                <input type="text" name="username" class="form-control required fw-bold fs-5" placeholder="Enter nom d'utilisateur" required  value="<?php if(!empty($_COOKIE["logged_in"])) echo $_COOKIE["logged_in"]?>">
                             </div>
+                            <label class="my-1 fs-5" for="password">Mot de passe :</label>
+
                             <div class="input-group mb-3">
                                 <div class="input-group-text">
                                     <i class="fa-solid fa-lock"></i>
                                 </div>
-                                <input type="password" name="password" class="form-control required" placeholder="Enter mot de passe" required value="dsd">
+                                <input type="password" name="password" class="form-control required fw-bold fs-5" placeholder="Enter mot de passe" required value="<?php if(!empty($_COOKIE["logged_in_password"])) echo $_COOKIE["logged_in_password"]?>">
                                 <!-- <div class="invalid-feedback">Please fill out this field</div> -->
                             </div>
                             <div class="mb-3 form-check">
-                                <input type="checkbox" name="remember-me" id="remember-me" class="form-check-input">
+                                <input type="checkbox" name="remember-me" id="remember-me" class="form-check-input ">
                                 <label for="remember-me" class="form-check-">Remember me</label>
                             </div>
-                            <button type="submit" name="submit" class="btn btn-primary col-12" style="background-color:#7B7DE5;border-color: #7B7DE5;">connexion</button>
+                            <button type="submit" name="submit" class="btn btn-primary col-12 fw-bold fs-5" style="background-color:#7B7DE5;border-color: #7B7DE5;">connexion</button>
                         </form>
                     </div>
                 </div>

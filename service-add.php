@@ -22,7 +22,7 @@
         if($exist){
             $_SESSION['error'] = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
                         <i class="bi bi-exclamation-triangle-fill"></i>&nbsp;
-                        <strong>This Title aleardy exists!</strong> please try another Title.
+                        <strong>Ce titre existe déjà!</strong> S`il vous plaît essayer un autre titre.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>';
 
