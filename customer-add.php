@@ -66,13 +66,11 @@ $res = mysqli_query($cnx,$request);
                                             </div> -->
                                             <div id="broker_div">
                                                 <div class="input-group mb-3">
-                                                    <select name="" id="brokerSelect" class="form-control">
+                                                    <select name="broker" id="brokerSelect" class="form-control" onchange="populateInput()">
                                                     <option value="" selected disabled>veuillez sélectionner l'intermédiaire</option>
-                                                    <?php
-                                                        foreach($res as $broker){
-                                                            echo '<option value="'.$broker['id'].'">'.$broker['nom'].' '.$broker['prenom'].'</option>';
-                                                        }
-                                                    ?>
+                                                    <?php  foreach($res as $broker){ ?>
+                                                        <option value="<?php echo $broker['phone']; ?>"><?php echo $broker['nom'] . ' ' . $broker['prenom']; ?></option>
+                                                    <?php } ?>
                                                     </select>
                                                 </div>
                                                 <!-- <div>
@@ -167,5 +165,13 @@ $res = mysqli_query($cnx,$request);
         </div> -->
     </form>
 </section>
-
+<script>
+    function populateInput() {
+        var select = document.getElementById("brokerSelect");
+        var input = document.getElementById("telCusTxt");
+        var selectedOption = select.options[select.selectedIndex];
+        input.value = selectedOption.value;
+        console.log(selectedOption.value)
+    }
+</script>
 <?php include 'footer.php'; ?>
