@@ -41,7 +41,7 @@
                 userService_history($user_id,$title,'Add');
                 $_SESSION['success'] = '<div class="alert alert-success alert-dismissible fade show" role="alert">
                             <i class="bi bi-check-circle-fill"></i>&nbsp;
-                            <strong>Service Added Successfully.</strong>
+                            <strong>Service ajouté avec succès.</strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>';
     

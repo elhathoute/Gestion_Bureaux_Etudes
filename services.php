@@ -22,7 +22,7 @@ if (isset($_SESSION["error"])) {
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group mb-3">
-                                    <input type="text" name="serviceTitle" id="serTitleTxt" class="form-control" required placeholder="Title">
+                                    <input type="text" name="serviceTitle" id="serTitleTxt" class="form-control serTitleTxt" required placeholder="Title">
                                 </div>
                             </div>
                             <!-- <div class="col-md-6">
@@ -31,12 +31,12 @@ if (isset($_SESSION["error"])) {
                                         
                                         MAD
                                     </div>
-                                    <input type="number" min="0" step="0.01" name="servicePrice" id="serTitlePrix" class="form-control" required placeholder="0.00">
+                                    <input type="number" min="0" step="0.01" name="servicePrice" id="serTitlePrix" class="form-control serTitlePrix" required placeholder="0.00">
                                 </div>
                             </div> -->
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input type="text" name="serviceRef" id="serRef" class="form-control" placeholder="Référence" required>
+                                    <input type="text" name="serviceRef" id="serRef" class="form-control servRef" placeholder="Référence" required>
                                 </div>
                                 <p class="feedback text-danger ps-1">
                                     

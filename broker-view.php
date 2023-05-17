@@ -115,7 +115,7 @@ if(isset($_SESSION["success"])){
                     </div>
                     <div class="mb-3">
                         <label for="brkAdr" class="form-label">Address</label>
-                        <input type="text" class="form-control"  name="brkAdr" id="brkAdr" placeholder="Address" required>
+                        <input type="text" class="form-control"  name="brkAdr" id="brkAdr" placeholder="Address" >
                     </div>
                     <input type="hidden" name="brkSold" id="brkSold">
                 </div>

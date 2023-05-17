@@ -406,7 +406,18 @@ $(document).ready(function () {
                 $("#editServiceModal").modal('show');
             }
         });
-        
+        $.ajax({
+            url:"srf.php",
+            type:"POST",
+            success:function(data){
+                // alert(data);
+                let json = JSON.parse(data);
+
+                service_ref_Obj = {...json};
+                serviceRefArr = [...Object.values(json)];
+                
+            }
+        })
     });
 
     /**
@@ -481,34 +492,55 @@ $(document).ready(function () {
     let serviceRefArr = [];
     let service_ref_Obj = [];
     if($("#serRef").length>0 || $("#addServiceRowBtn").length>0){
+        console.log('lenght service : '+$(".servRef").length)
+
         $.ajax({
             url:"srf.php",
             type:"POST",
             success:function(data){
+                // alert(data);
                 let json = JSON.parse(data);
-
                 service_ref_Obj = {...json};
 
-                // console.log(Object.values(json).length);
-                // console.log(json);
-                //getting the json values
                 serviceRefArr = [...Object.values(json)];
+                // console.log(serviceRefArr);
                 
             }
         })
     }
+    $(document).on('input','.servRef_update',function(){
+
+    $.ajax({
+        url:"srf.php",
+        type:"POST",
+        success:function(data){
+            // alert(data);
+            let json = JSON.parse(data);
+
+            service_ref_Obj = {...json};
+            serviceRefArr = [...Object.values(json)];
+            
+        }
+    })
+})
     
 
     let submitServiceForm=false;
-    $(document).on('input','#serRef',function(){
+    $(document).on('input','.servRef',function(){
+        // alert($(this).val())
+       
+
         try{
             const existRef = serviceRefArr.some((ref)=>{
                 return ref.replace(" ", "").toLowerCase() === $(this).val().replace(" ", "").toLowerCase();
             });
+            // console.log(existRef);
+            // alert(existRef);
             if(existRef && $(this).val().length != 0){
-                throw "This Ref already exist";
+                throw "Ce référentiel existe déjà.";
             }else{
-                $("#serRef").removeClass("border-danger");
+                $(this).removeClass("border-danger");
+                $(this).addClass("border-secondary");
                 $(".feedback").text("");
                 submitServiceForm = false;
             }
@@ -519,12 +551,19 @@ $(document).ready(function () {
         }
         
     });
+    // edit service editServiceBtn
+    // $(document).on('input','.servRef_update',function(){
+    
+    // })
+    
+    // end
 
-    $(document).on("click","#serv_add",function(){
+    $(document).on("click","#serv_add,#sev_update",function(){
+    //    alert(submitServiceForm);
         if(submitServiceForm){
             return false;
         }
-        if($("#serTitleTxt").val()!="" && $("#serTitlePrix").val()!="" && $("#serRef").val()!=""){
+        if($(".serTitleTxt").val()!="" && $(".serTitlePrix").val()!="" && $(".serRef").val()!=""){
             lunchLoader();
         }
     });

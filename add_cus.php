@@ -37,7 +37,7 @@
         if($res){
             $_SESSION['success'] = '<div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill"></i>&nbsp;
-                        <strong>Customer Added Successfully.</strong>
+                        <strong>Maîtres ouvrage ajouté avec succès.</strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>';
             header('location:customer-view.php');

@@ -8,6 +8,7 @@
     <title>Devis</title>
 
     <style>
+    
         * {
             box-sizing: border-box;
             /* font-family: 'Times New Roman', Times, serif; */
@@ -88,10 +89,12 @@
                 <img src="" alt="Logo Company">
             </div>
         </section> -->
+
+        
         
         <section>
                 <div style="position:relative;">
-                    <p class="" style='font-size:1rem;text-decoration:underline;position:absolute;top:30;right:0'>Agadir le: <?php echo date("d/m/Y"); ?></p>
+                    <p class="" style='font-size:1rem;text-decoration:underline;position:absolute;top:30;right:0'>Agadir le : <?php echo date("d/m/Y"); ?></p>
                 </div>
         </section>
         <section style="margin-top:5rem">
@@ -117,7 +120,7 @@
 
         <div class="my-5">
             <span style="text-decoration:underline">Objet:</span><br>
-            <p style="text-align:center;padding:0 20px"><?=$devisInfo['objet'];?></p>
+            <p style="text-align:center;padding:0 20px"><?=$devisInfo['objet'];?>. <span style="font-weight: bold !important;">Size</span> à <span> <?= $devisInfo['located'] ?></span>.</p>
         </div>
         <?php 
         if($_GET){ 
@@ -214,7 +217,8 @@
         <!-- <div class="page-break"></div> -->
         <div class="my-3">
             <span>Arrêté le présent Devis à la somme de:</span>
-            <p class="underline"style="text-align:center;padding:0 20px;font-size:0.9rem;"><strong><?php echo intergerIntoFrenchWords($devisInfo['net_total']); ?></strong></p>
+            <!-- <?php var_dump($devisInfo)?> -->
+            <p class="underline"style="text-align:center;padding:0 20px;font-size:0.9rem;"><strong><?= intergerIntoFrenchWords($devisInfo['net_total']); ?> <span><?php if(($devisInfo['remove_tva']=="0")) {echo('T.T.C.');}else{ echo 'H.T.';} ?></span> </strong></p>
         </div>
         <div class="my-5"style="font-size:0.7rem;line-height:0.5;z-index:1">
             <span class='underline'><strong>Condition de vente:</strong></span>

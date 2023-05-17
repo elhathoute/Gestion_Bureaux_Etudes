@@ -61,7 +61,7 @@ if($_GET){
 
         while($row = mysqli_fetch_assoc($res)){
             $price = $row["remove_tva"] == '0'? sprintf('%05.2f',round($row["prix"] * 1.2,2)) : sprintf('%05.2f',round($row["prix"],2));
-            $status = $row["paid_srv"] == '1' ? "Payé" : "Non payé";
+            $status = $row["paid_srv"] == '1' ? "Paye" : "Non paye";
             $date = new DateTime($row["date_creation"]);
             $formated_date = $date->format('d/m/Y');
             $avance = sprintf('%05.2f',round($row["avance"],2));
