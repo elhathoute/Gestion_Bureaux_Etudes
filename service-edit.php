@@ -7,7 +7,10 @@ include 'functions.php';
 $id = $_POST["id"];
 
 $title = $_POST["title"];
-$prix = $_POST["prix"];
+if(isset($_POST['prix'])){
+
+    $prix = $_POST["prix"];
+}
 $ref = $_POST["servRef"];
 
 $query = "UPDATE `service` SET `title`='$title',`ref`='$ref' WHERE id=$id";

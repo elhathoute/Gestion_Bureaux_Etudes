@@ -397,6 +397,8 @@ function getClientId($id,$type){
 
 function intergerIntoFrenchWords($int)
 {
+    // var_dump($int);
+
     $number = explode(".",$int);
     $after_comma = ($number[1]=="0" || $number[1]=="00")?"": " et ".$number[1] ." cents";
 
@@ -415,7 +417,7 @@ function intergerIntoFrenchWords($int)
         9=>'neuf'
     );
     $exceptions = array(
-        11=>"onze",
+        11=>'onze',
         12=>'douze',
         13=>'treize',
         14=>'quatorze',
@@ -423,7 +425,7 @@ function intergerIntoFrenchWords($int)
         16=>'seize'
     );
     $thousands = array(
-        1=>"mille",
+        1=>'mille',
         2=>'million',
         3=>'milliard'
     );

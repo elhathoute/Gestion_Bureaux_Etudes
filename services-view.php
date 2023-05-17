@@ -93,21 +93,25 @@ if(isset($_SESSION["success"])){
                     <input type="hidden" name="tr_id" id="tr_id" value="">
                     <div class="mb-3">
                         <label for="tile" class="form-label">Titre</label>
-                        <input type="text" class="form-control" name="title" id="title" placeholder="Title" required>
+                        <input type="text" class="form-control serTitleTxt" name="title" id="title" placeholder="Title" required>
                     </div>
                     <div class="mb-3">
                         <label for="prix" class="form-label">Référence</label>
-                        <input type="text" class="form-control"  name="ref" id="servRef" placeholder="Référence" required>
+                        <input type="text" class="form-control servRef servRef_update"  name="ref" id="servRef" placeholder="Référence" required>
                     </div>
+                    <p class="feedback text-danger ps-1">
+                                    
+                    </p>
+                    
                     <!-- <div class="mb-3">
                         <label for="prix" class="form-label">Prix</label>
-                        <input type="number" class="form-control"  name="prix" min="0" step="0.01" id="prix" placeholder="Prix" required>
+                        <input type="number" class="form-control serTitlePrix"  name="prix" min="0" step="0.01" id="prix" placeholder="Prix" required>
                     </div> -->
                     <input type="hidden" name="" id="hiddenPrix">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="submit" name="submit" class="btn btn-primary">Modifier</button>
+                    <button type="submit" name="submit" id="sev_update" class="btn btn-primary">Modifier</button>
                 </div>
 
             </form>

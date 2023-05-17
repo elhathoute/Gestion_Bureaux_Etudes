@@ -44,7 +44,7 @@ if(isset($_SESSION["error"])){
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input type="text" name="brokerAdr" id="brokerAdr" class="form-control" placeholder="Address" required>
+                                    <input type="text" name="brokerAdr" id="brokerAdr" class="form-control" placeholder="Address" >
                                 </div>
                             </div>
                         </div>
