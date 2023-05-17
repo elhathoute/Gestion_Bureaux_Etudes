@@ -60,30 +60,6 @@ $res = mysqli_query($cnx,$request);
                                             </div>
                                             <!-- start of New Options -->
 
-                                            <!-- <div class="my-4">
-                                                <input type="checkbox" id="brokerCheckBox" class="form-check-input">
-                                                <label for="brokerCheckBox"> &nbsp; Inclure un intermédiaire</label>
-                                            </div> -->
-                                            <!-- <div id="broker_div"> -->
-                                                <!-- <div class="input-group mb-3">
-                                                    <select name="" id="brokerSelect" class="form-control">
-                                                    <option value="" selected disabled>veuillez sélectionner l'intermédiaire</option>
-                                                    <?php
-                                                        foreach($res as $broker){
-                                                            echo '<option value="'.$broker['id'].'">'.$broker['nom'].' '.$broker['prenom'].'</option>';
-                                                        }
-                                                    ?>
-                                                    </select>
-                                                </div> -->
-                                                <!-- <div>
-                                                    <div class="input-group mb-3">
-                                                    <div class="input-group-text">
-                                                        <i class="bi bi-telephone-fill"></i>
-                                                    </div>
-                                                        <input type="number" min="0" name="brokerTel" id="brokerTel" class="form-control" required placeholder="intermédiaire Telephone">
-                                                    </div>
-                                                </div> -->
-                                            <!-- </div> -->
 
                                             <!-- end of New Options -->
                                             <div class="mb-3">
