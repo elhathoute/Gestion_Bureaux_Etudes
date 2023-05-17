@@ -6,6 +6,7 @@ if(isset($_SESSION["success"])){
     echo $_SESSION["success"];
     unset($_SESSION["success"]);
 }
+
 ?>
 
 
@@ -205,6 +206,13 @@ if(isset($_SESSION["success"])){
                         <label for="phone" class="form-label">Téléphone</label>
                         <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="broker" class="form-label">intermédiaire</label>
+                        <select class="form-control" name="broker" id="broker">
+                            <option value="" selected disabled>Sélectionnez un intermédiaire</option>
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" name="address" id="address" placeholder="Address" >
