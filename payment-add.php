@@ -38,7 +38,7 @@
                         $supplier_id = $_POST['supplier'];
                         $supplier = getSupplierById($supplier_id);
                         $category = getSuppCatById($supplier['cat_id']);
-                        if($category['type'] == 'Bureau de controle'){
+                        if($category['type'] == 'Bureau de contrôle'){
                             $amount = $_POST['paymentSupplier'] + $supplier['sold'];
                             updateSupplierSold($supplier_id,$amount);
                         }

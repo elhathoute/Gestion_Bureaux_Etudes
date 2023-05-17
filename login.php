@@ -20,7 +20,7 @@
                 if($row['status'] != "1"){
                     $_SESSION['error'] = '<div class="alert alert-danger alert-dismissible fade show"  role="alert">
                         <i class="bi bi-exclamation-triangle-fill"></i>
-                        <strong>Your account is inactive!</strong> Please Contact your Administrator.
+                        <strong>Votre compte est inactif!</strong> Veuillez contacter votre administrateur.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>';
                     header('location:index.php');
@@ -33,6 +33,8 @@
                     $_SESSION['user_id'] = $row["id"];
                     if(isset($_POST["remember-me"])){
                         setcookie("logged_in",$username,time()+(60*60*24));
+                    //    die(var_dump($_COOKIE['logged_in']));
+                        // setcookie("logged_in_password",$username,time()+(60*60*24));
                     }
                     $current_date = date('Y-m-d H:i:s');
                     last_login($row['id'],$current_date);

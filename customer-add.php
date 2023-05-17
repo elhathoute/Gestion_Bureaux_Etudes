@@ -9,19 +9,19 @@ $res = mysqli_query($cnx,$request);
 ?>
 
 <div class="pagetitle">
-    <h1>Ajouter un client</h1>
+    <h1>Ajouter un Maître d'ouvrage</h1>
 </div>
 <section class="section">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Information du client</h5>
+                        <h5 class="card-title">Information du Maître d'ouvrage</h5>
                         <!-- Tabs navs -->
                         <ul class="nav nav-tabs mb-3" id="client" role="tablist">
 
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="indiv-tab" data-bs-toggle="tab" data-bs-target="#indiv-tabs" type="button" role="tab" aria-controls="indiv-tabs" aria-selected="true">Individual</button>
+                                <button class="nav-link active" id="indiv-tab" data-bs-toggle="tab" data-bs-target="#indiv-tabs" type="button" role="tab" aria-controls="indiv-tabs" aria-selected="true">Individuel</button>
                             </li>
 
                             <li class="nav-item" role="presentation">
@@ -99,7 +99,7 @@ $res = mysqli_query($cnx,$request);
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mt-4">
-                                                <input type="submit" name="submit" id="cus_add" value="Create Customer" class="btn btn-outline-success fw-bold float-end" title="Créer un Client">
+                                                <input type="submit" name="submit" id="cus_add" value="Créer un Maître d'ouvrage" class="btn btn-outline-success fw-bold float-end" title="Créer un Maître d'ouvrage ">
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +147,7 @@ $res = mysqli_query($cnx,$request);
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mt-4">
-                                                <input type="submit" name="submit" id="cus_add" value="Create Customer" class="btn btn-outline-success fw-bold float-end" title="Créer un Client">
+                                                <input type="submit" name="submit" id="cus_add" value="Créer un Maître d'ouvrage" class="btn btn-outline-success fw-bold float-end" title="Créer un Maître d'ouvrage">
                                             </div>
                                         </div>
                                     </div>
