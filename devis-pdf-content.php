@@ -103,7 +103,8 @@
                     <span>A</span><br>
                     <span><?php echo strtoupper(getSelectedClientName());?></span><br>
                     
-                    <textarea  value="" name="" id="receiverAdr" style='resize: none;height:auto;border:none;' disabled><?php 
+                    <!-- <textarea  value="" name="" id="receiverAdr" style='resize: none;height:auto;border:none;' disabled> -->
+                    <!-- <?php 
                         $adr_ice = explode('/',getSelectedClientAdr());
                         if(count($adr_ice) > 1){
                             $string = $adr_ice[1] . '<br>' . $adr_ice[0];
@@ -111,8 +112,8 @@
                         }else{
                             echo getSelectedClientAdr();
                         }
-                    
-                    ?></textarea>
+                    ?> -->
+                    <!-- </textarea> -->
                     <span style="text-decoration:underline">Devis N°<?= $devisInfo["number"]  ?></span>
                 </div>
             </div>
