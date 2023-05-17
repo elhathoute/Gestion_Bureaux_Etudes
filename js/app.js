@@ -97,10 +97,11 @@ $(document).ready(function () {
                 // Populate broker options
                 var brokerSelect = $("#broker");
                 // Clear previous options
-                // brokerSelect.empty(); 
+                brokerSelect.empty(); 
 
                 // Add options to the select element
-                console.log(brokers);
+                var option1 = $('<option>Sélectionnez un intermédiaire</option>');
+                brokerSelect.append(option1);
                 brokers.forEach(function(broker) {
                     var option = $('<option></option>').attr('value', broker.phone).text(broker.nom);
                     brokerSelect.append(option);
@@ -108,7 +109,7 @@ $(document).ready(function () {
                 brokerSelect.on('change', function() {
                     var selectedPhone = $(this).val();
                     $("#phone").val(selectedPhone);
-                  });
+                });
             }
         });
         

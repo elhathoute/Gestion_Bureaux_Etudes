@@ -209,7 +209,7 @@ if(isset($_SESSION["success"])){
                     <div class="mb-3">
                         <label for="broker" class="form-label">intermédiaire</label>
                         <select class="form-control" name="broker" id="broker">
-                            <option value="" selected disabled>Sélectionnez un intermédiaire</option>
+                            <option value="">Sélectionnez un intermédiaire</option>
                         </select>
                     </div>
 
