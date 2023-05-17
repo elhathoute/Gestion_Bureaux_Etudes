@@ -89,7 +89,7 @@
         
         <section>
                 <div style="position:relative;">
-                    <p class="" style='font-size:1.1rem;text-decoration:underline;position:absolute;top:30;right:0'>Agadir le: <?php echo date("d/m/Y"); ?></p>
+                    <p class="" style='font-size:1.1rem;text-decoration:underline;position:absolute;top:30;right:0'>Agadir le : <?php echo date("d/m/Y"); ?></p>
                 </div>
         </section>
         <section style="margin-top:4rem">
@@ -97,7 +97,8 @@
                 <div style="margin:auto;width:fit-content;text-align:center;font-weight:600;font-size:1.3rem">
                     <span>A</span><br>
                     <span><?php echo strtoupper(getSelectedClientName());?></span><br>
-                    <textarea  value="" name="" id="receiverAdr" style='resize: none;height:auto;border:none;' disabled><?php 
+                    <!-- <textarea  value="" name="" id="receiverAdr" style='resize: none;height:auto;border:none;' disabled> -->
+                    <!-- <?php 
                         $adr_ice = explode('/',getSelectedClientAdr());
                         if(count($adr_ice) > 1){
                             $string = $adr_ice[1] . '<br>' . $adr_ice[0];
@@ -106,7 +107,8 @@
                             echo getSelectedClientAdr();
                         }
                     
-                    ?></textarea>
+                    ?> -->
+                    <!-- </textarea> -->
                     <span style="text-decoration:underline">Facture N°<?= $invoiceInfo["F_number"]  ?></span>
                 </div>
             </div>
@@ -114,7 +116,7 @@
 
         <div class="my-5">
             <span style="text-decoration:underline">Objet:</span><br>
-            <p style="text-align:center;padding:0 20px"><?=ucfirst($invoiceInfo["objet"]);?></p>
+            <p style="text-align:center;padding:0 20px"><?=ucfirst($invoiceInfo["objet"]);?>. <span style="font-weight: bold !important;">Size</span> à <span> <?= $invoiceInfo['located'] ?></span>.</p>
         </div>
         <?php 
         if($_GET){
@@ -200,7 +202,7 @@
             
         <div class="my-3">
             <span>Arrêté le présent Facture à la somme de:</span><br>
-            <p class="underline"style="text-align:center;padding:0 20px;font-size:0.9rem;"><strong><?php echo intergerIntoFrenchWords($invoiceInfo['net_total']); ?></strong></p>
+            <p class="underline"style="text-align:center;padding:0 20px;font-size:0.9rem;"><strong><?php echo intergerIntoFrenchWords($invoiceInfo['net_total']); ?> <span><?php if(($invoiceInfo['remove_tva']=="0")) {echo('T.T.C.');}else{ echo 'H.T.';} ?></span></strong></p>
         </div>
         <div class="my-5"style="font-size:0.7rem;line-height:0.5;">
             <span class='underline'><strong>Condition de vente:</strong></span>
