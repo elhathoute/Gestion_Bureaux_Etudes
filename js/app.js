@@ -70,6 +70,7 @@ $(document).ready(function () {
     //     }]
     // });
 
+// fill the broker model with data 
 
     $(document).on('click','.editBtn',function(){
         var id = $(this).data('id');
@@ -82,18 +83,38 @@ $(document).ready(function () {
             type:"post",
             success:function(data){
                 var json = JSON.parse(data);
-                $("#id").val(json.id);
+                var customer = json.customer;
+                var brokers = json.brokers;
+                $("#id").val(customer.id);
                 $("#tr_id").val(tr_id);
-                $("#prenom").val(json.prenom);
-                $("#nom").val(json.nom);
-                $("#email").val(json.email);
-                $("#phone").val(json.tel);
-                $("#address").val(json.address);
-                // $("#EditCusModal").modal('show');
+                $("#prenom").val(customer.prenom);
+                $("#nom").val(customer.nom);
+                $("#email").val(customer.email);
+                $("#phone").val(customer.tel);
+                $("#address").val(customer.address);
+
+
+                // Populate broker options
+                var brokerSelect = $("#broker");
+                // Clear previous options
+                brokerSelect.empty(); 
+
+                // Add options to the select element
+                var option1 = $('<option>Sélectionnez un intermédiaire</option>');
+                brokerSelect.append(option1);
+                brokers.forEach(function(broker) {
+                    var option = $('<option></option>').attr('value', broker.phone).text(broker.nom);
+                    brokerSelect.append(option);
+                });
+                brokerSelect.on('change', function() {
+                    var selectedPhone = $(this).val();
+                    $("#phone").val(selectedPhone);
+                });
             }
         });
         
     });
+    
 
     /**
      * update button click for customer Form
@@ -138,7 +159,7 @@ $(document).ready(function () {
     /**
      * delete button click for customer Form
      */
-     var indv_deleted_id,indv_deleted_row_id;
+    var indv_deleted_id,indv_deleted_row_id;
     $(document).on('click','.deleteBtn',function(event){
         $("#deleteModal").modal('show');
         indv_deleted_id = $(this).data('id');
@@ -203,7 +224,7 @@ $(document).ready(function () {
     //         'orderable':true,
     //     }]
     // });
-
+//fill the entreprise model with data 
     $(document).on('click','.editEntrepBtn',function(){
         var id = $(this).data('id');
         // console.log(id);
@@ -215,14 +236,36 @@ $(document).ready(function () {
             type:"post",
             success:function(data){
                 var json = JSON.parse(data);
-                $("#id_ent").val(json.id);
+                var customer = json.customer;
+                var brokers = json.brokers;
+                $("#id_ent").val(customer.id);
                 $("#tr_id_ent").val(tr_id);
-                $("#nom_ent").val(json.nom);
-                $("#ice").val(json.ICE);
-                $("#email_ent").val(json.email);
-                $("#phone_ent").val(json.tel);
-                $("#address_ent").val(json.address);
+                $("#nom_ent").val(customer.nom);
+                $("#ice").val(customer.ICE);
+                $("#email_ent").val(customer.email);
+                $("#phone_ent").val(customer.tel);
+                $("#address_ent").val(customer.address);
                 $("#EditCusEntrepModal").modal('show');
+                
+
+                // Populate broker options
+                var brokerSelect = $("#brokerEntr");
+                // Clear previous options
+                brokerSelect.empty(); 
+
+                // Add options to the select element
+                var option1 = $('<option>Sélectionnez un intermédiaire</option>');
+                brokerSelect.append(option1);
+                brokers.forEach(function(broker) {
+                    var option = $('<option></option>').attr('value', broker.phone).text(broker.nom);
+                    brokerSelect.append(option);
+                });
+                brokerSelect.on('change', function() {
+                    var selectedPhone = $(this).val();
+                    // alert(selectedPhone);
+                    $(".entrePhone").val(selectedPhone);
+                });
+                
             }
         });
         

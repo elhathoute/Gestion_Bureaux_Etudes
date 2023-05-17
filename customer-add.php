@@ -132,6 +132,18 @@ $res = mysqli_query($cnx,$request);
                                             <div class="input-group mb-3">
                                                 <input type="text" name="entAddress" id="adrEntTxt" class="form-control"  placeholder="Address">
                                             </div>
+                                            <!-- start of the new option -->
+                                            <div id="broker_div">
+                                                <div class="input-group mb-3">
+                                                    <select name="broker" id="brokerSelected" class="form-control" onchange="populateInput2()">
+                                                    <option value="" selected disabled>veuillez sélectionner l'intermédiaire</option>
+                                                    <?php  foreach($res as $broker){ ?>
+                                                        <option value="<?php echo $broker['phone']; ?>"><?php echo $broker['nom'] . ' ' . $broker['prenom']; ?></option>
+                                                    <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!-- end of the new option -->
                                             <div class="mb-3">
                                                 <div class="form-check" style="display:none">
                                                     <input class="form-check-input" type="radio" name="client-type" id="indivRadioBtn" value="individual"   >
@@ -166,12 +178,19 @@ $res = mysqli_query($cnx,$request);
     </form>
 </section>
 <script>
+    // for individual client
     function populateInput() {
         var select = document.getElementById("brokerSelect");
         var input = document.getElementById("telCusTxt");
         var selectedOption = select.options[select.selectedIndex];
         input.value = selectedOption.value;
-        console.log(selectedOption.value)
+    }
+    //for entreprise client
+    function populateInput2() {
+        var select = document.getElementById("brokerSelected");
+        var input = document.getElementById("telEntTxt");
+        var selectedOption = select.options[select.selectedIndex];
+        input.value = selectedOption.value;
     }
 </script>
 <?php include 'footer.php'; ?>
