@@ -60,6 +60,28 @@ $res = mysqli_query($cnx,$request);
                                             </div>
                                             <!-- start of New Options -->
 
+                                            <!-- <div class="my-4">
+                                                <input type="checkbox" id="brokerCheckBox" class="form-check-input">
+                                                <label for="brokerCheckBox"> &nbsp; Inclure un intermédiaire</label>
+                                            </div> -->
+                                            <div id="broker_div">
+                                                <div class="input-group mb-3">
+                                                    <select name="broker" id="brokerSelect" class="form-control" onchange="populateInput()">
+                                                    <option value="" selected disabled>veuillez sélectionner l'intermédiaire</option>
+                                                    <?php  foreach($res as $broker){ ?>
+                                                        <option value="<?php echo $broker['phone']; ?>"><?php echo $broker['nom'] . ' ' . $broker['prenom']; ?></option>
+                                                    <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <!-- <div>
+                                                    <div class="input-group mb-3">
+                                                    <div class="input-group-text">
+                                                        <i class="bi bi-telephone-fill"></i>
+                                                    </div>
+                                                        <input type="number" min="0" name="brokerTel" id="brokerTel" class="form-control" required placeholder="intermédiaire Telephone">
+                                                    </div>
+                                                </div> -->
+                                            </div>
 
                                             <!-- end of New Options -->
                                             <div class="mb-3">
@@ -143,5 +165,13 @@ $res = mysqli_query($cnx,$request);
         </div> -->
     </form>
 </section>
-
+<script>
+    function populateInput() {
+        var select = document.getElementById("brokerSelect");
+        var input = document.getElementById("telCusTxt");
+        var selectedOption = select.options[select.selectedIndex];
+        input.value = selectedOption.value;
+        console.log(selectedOption.value)
+    }
+</script>
 <?php include 'footer.php'; ?>
