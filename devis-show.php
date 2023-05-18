@@ -82,7 +82,7 @@ function br2nl($string)
                                         <input type="hidden" id="client_id" name="client_id" >
                                         <input type="text" class="form-control-plaintext fw-bold fs-6 py-0" value="<?php echo getSelectedClientName(); ?>" name="" id="receiverName" disabled>
                                     </div>
-                                    <div class="input-group">
+                                    <!-- <div class="input-group">
                                         <textarea  class="form-control-plaintext fs-6 py-0 " value="" name="" id="receiverAdr" style='resize: none;' disabled><?php 
                                             $adr_ice = explode('/',getSelectedClientAdr());
                                             if(count($adr_ice) > 1){
@@ -93,7 +93,8 @@ function br2nl($string)
                                             }
                                         
                                         ?></textarea>
-                                    </div>
+                                    </div> -->
+
                                     <!-- <div class="input-group">
                                         <input type="text" class="form-control-plaintext fs-6 py-0 " placeholder="Something..." name="" id="">
                                     </div> -->
@@ -265,7 +266,7 @@ function br2nl($string)
                                             <input type="hidden" id="client_id" name="client_id" >
                                             <input type="text" class="form-control-plaintext fw-bold fs-6 py-0" value="<?php echo getSelectedClientName(); ?>" name="" id="receiverName" disabled>
                                         </div>
-                                        <div class="input-group">
+                                        <!-- <div class="input-group">
                                             <textarea  class="form-control-plaintext fs-6 py-0 " value="" name="" id="receiverAdr" style='resize: none;' disabled><?php 
                                                 $adr_ice = explode('/',getSelectedClientAdr());
                                                 if(count($adr_ice) > 1){
@@ -276,7 +277,8 @@ function br2nl($string)
                                                 }
                                             
                                             ?></textarea>
-                                        </div>
+                                        </div> -->
+
                                         <!-- <div class="input-group">
                                             <input type="text" class="form-control-plaintext fs-6 py-0 " placeholder="Something..." name="" id="">
                                         </div> -->

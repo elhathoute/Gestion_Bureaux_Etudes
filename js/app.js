@@ -1005,8 +1005,8 @@ $(document).ready(function () {
                                 html += `<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="${devisTableData[i]["srvRef"]}" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover" disabled><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="${devisTableData[i]["serviceName"]}" class="form-control serviceDropdown" aria-describedby="srvRT" disabled><datalist id="servicesList"></datalist></td>`;
                                 html += `<td><input style="width: 50px;" type="text" name="" class="form-control py-1 serviceUnit" value="${devisTableData[i]["unit"]}"  placeholder="Unité" disabled></td>`;
                                 html += `<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte rowBrkServiceQte"  value="${devisTableData[i]["quantity"]}" placeholder="Quantité" disabled></td>`;
-                                html += `<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice serviceBrkPrice"  value="${devisTableData[i]["price"]}" placeholder="0.00" disabled ></td>`;
-                                html += `<td><div class="input-group"><span style="width: 30px;" class="input-group-text py-1"><i class="bi bi-percent"></i></span><input style="width: 38px;" type="number"  min="0" name="" value="${devisTableData[i]["discount"]}" class="form-control py-1 serviceDiscount serviceBrkDiscount" placeholder="Enter % (ex: 10%)" disabled></div></td>`;
+                                html += `<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice serviceBrkPrice"  value="${devisTableData[i]["price"]}" placeholder="0.00"  ></td>`;
+                                html += `<td><div class="input-group"><span style="width: 30px;" class="input-group-text py-1"><i class="bi bi-percent"></i></span><input style="width: 38px;" type="number"  min="0" name="" value="${devisTableData[i]["discount"]}" class="form-control py-1 serviceDiscount serviceBrkDiscount" placeholder="Enter % (ex: 10%)" ></div></td>`;
                                 html += `<td><input type="text" name="" class="form-control py-1 rowServiceTotal rowServiceBrkTotal" value="${devisTableData[i]["montant"]}" disabled placeholder="0" disabled></td>`;
                                 html += `</tr>`;
                             }
@@ -1023,7 +1023,7 @@ $(document).ready(function () {
                     }
                     // else if(status=='success' && selectedDevisBroker==false){
                    
-                        location.href='devis-view.php?sc=sucadd';
+                        // location.href='devis-view.php?sc=sucadd';
                     // }
                 },
                 errro:function(err){
