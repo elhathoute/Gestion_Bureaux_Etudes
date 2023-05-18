@@ -619,10 +619,10 @@ $(document).ready(function () {
             type:"post",
             success:function(data){
                 var json = JSON.parse(data);
-                $('#client_id').val(json.id);
+                $('#client_id').val(json.customer.id);
                 $("#client_type").val("individual");
-                $("#receiverName").val(json.prenom.toUpperCase() +' '+ json.nom.toUpperCase());
-                $("#receiverAdr").val(json.address);
+                $("#receiverName").val(json.customer.prenom.toUpperCase() +' '+ json.customer.nom.toUpperCase());
+                $("#receiverAdr").val(json.customer.address);
                 $("#clientShowModal").modal('hide');
                 // $("#tr_id").val(tr_id);
                 // $("#prenom").val(json.prenom);
@@ -674,11 +674,13 @@ $(document).ready(function () {
             type:"post",
             success:function(data){
                 var json = JSON.parse(data);
-                $('#client_id').val(json.id);
+                console.log(json.customer);
+
+                $('#client_id').val(json.customer.id);
                 $("#client_type").val("entreprise");
-                $("#receiverName").val(json.nom.toUpperCase());
+                $("#receiverName").val(json.customer.nom.toUpperCase());
                 const br = document.createElement("br");
-                $("#receiverAdr").val(`${json.address} \n ${json.ICE}`);
+                $("#receiverAdr").val(`${json.customer.address} \n ${json.customer.ICE}`);
                 $("#clientShowModal").modal('hide');
                 // $("#id_ent").val(json.id);
                 // $("#tr_id_ent").val(tr_id);

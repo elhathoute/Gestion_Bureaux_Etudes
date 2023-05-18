@@ -22,9 +22,9 @@
         $label_netTotal = floatval(trim(str_replace('DH',"",$_POST['labelDevisTotal'])));
         $located_txt = $_POST['located_txt'];
         $user_role=getUserRole($_SESSION['user_id']);
-        ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
+        // ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
         
-        $query = "UPDATE `invoice` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='$type', `status`='$invoiceStatus', `comment`='$invoice_comment',`objet`='$objet_name',`located`='$located_txt' WHERE id='$invoice_id'";
+        $query = "UPDATE `invoice` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='Approved', `status`='accepter', `comment`='$invoice_comment',`objet`='$objet_name',`located`='$located_txt' WHERE id='$invoice_id'";
         $res = mysqli_query($cnx,$query);
         
         //adding to user_invoice for history...
