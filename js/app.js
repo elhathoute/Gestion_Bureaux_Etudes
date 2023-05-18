@@ -492,7 +492,7 @@ $(document).ready(function () {
     let serviceRefArr = [];
     let service_ref_Obj = [];
     if($("#serRef").length>0 || $("#addServiceRowBtn").length>0){
-        console.log('lenght service : '+$(".servRef").length)
+        // console.log('lenght service : '+$(".servRef").length)
 
         $.ajax({
             url:"srf.php",
@@ -953,24 +953,25 @@ $(document).ready(function () {
                 success:function(data){
                     // if(status == 'success')
                     // {
-                    //     alert(data);
-                    // }
-                    // alert("all good");
-                    // location.href = "devis.php";
-                    var json = JSON.parse(data);
-                    // alert(json.status +'brk is'+selectedDevisBroker)
-                    var status = json.status;
-
-                    //TODO use this id in add those prices to DB
-                    //devis id from the devis_add 
-                    dBrk_id = json.dBrk_id;
-                  
-                    //set condition if broker empty or not
-                    if(status == 'success' && selectedDevisBroker){
-                      
-                    // if(selectedDevisBroker){
-                        //hide table rows && all the labels to prevent the rowTotal function runing on client devis
-                        $("#devisSrvTbl tbody tr").remove();
+                        //     alert(data);
+                        // }
+                        // alert("all good");
+                        // location.href = "devis.php";
+                        var json = JSON.parse(data);
+                        // alert(json.status +'brk is'+selectedDevisBroker)
+                        var status = json.status;
+                        
+                        //TODO use this id in add those prices to DB
+                        //devis id from the devis_add 
+                        dBrk_id = json.dBrk_id;
+                        devis_id = json.devis_id;
+                        
+                        //set condition if broker empty or not
+                        if(status == 'success' && selectedDevisBroker){
+                            
+                            // if(selectedDevisBroker){
+                                //hide table rows && all the labels to prevent the rowTotal function runing on client devis
+                                $("#devisSrvTbl tbody tr").remove();
                         $('#labelSubTotal ,#labelDiscount ,#labelTva ,#labelDevisTotal').addClass("invisible");
                         // $('#labelDiscount').text(" ");
                         // $('#labelTva').text(" ");
@@ -986,7 +987,9 @@ $(document).ready(function () {
                         $("#BrkObjet_name").val($("#objet_name").val());
                         $("#brkSisTxt").val($("#sisTxt").val());
                         $("#brkDevis_comment").val($("#devis_comment").val());
-                        // total partiel
+                        // devis_id
+                        
+                        // alert(devis_id);
                    
                         // $(".labelSubTotal_broker");
                         // console.log($(".labelSubTotal_broker").text())
@@ -1008,6 +1011,8 @@ $(document).ready(function () {
                                 html += `<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice serviceBrkPrice"  value="${devisTableData[i]["price"]}" placeholder="0.00"  ></td>`;
                                 html += `<td><div class="input-group"><span style="width: 30px;" class="input-group-text py-1"><i class="bi bi-percent"></i></span><input style="width: 38px;" type="number"  min="0" name="" value="${devisTableData[i]["discount"]}" class="form-control py-1 serviceDiscount serviceBrkDiscount" placeholder="Enter % (ex: 10%)" ></div></td>`;
                                 html += `<td><input type="text" name="" class="form-control py-1 rowServiceTotal rowServiceBrkTotal" value="${devisTableData[i]["montant"]}" disabled placeholder="0" disabled></td>`;
+                               html += `<td class="d-block"><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled value="${devis_id+i+1}"></td>`;
+
                                 html += `</tr>`;
                             }
                             
@@ -1040,14 +1045,28 @@ $(document).ready(function () {
     $(document).on('click','.btn_brk_devis_confirm',function(){
        if(dBrk_id != '') {
         let prices = [];
+        let discounts = [];
+        let service_unique_ids = [];
         $('#devisBrkShowTable tbody tr').each(function(){
-            var price = $('.servicePrice',this).val();
+            // prices
+            var price = {
+                "price":$('.servicePrice',this).val(),
+                "discount":$('.serviceDiscount',this).val(),
+                "service_unique_id":$('.serviceUniqueId',this).val(),
+            }
+            
             prices.push(price);
+            // // discounts 
+            // var discount = $('.serviceDiscount',this).val();
+            // discounts.push(discount);
+            // // service_unique_ids
+            // var service_unique_id = $('.serviceUniqueId',this).val();
+            // service_unique_ids.push(service_unique_id);
         });
         $.ajax({
             url:"devis_brk_dets.php",
             type:'POST',
-            data:{dBrk_id:dBrk_id,prices:prices},
+            data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
             success:function(data){
                 var json = JSON.parse(data);
                 var status = json.status;
