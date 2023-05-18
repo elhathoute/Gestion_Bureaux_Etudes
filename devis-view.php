@@ -79,6 +79,7 @@ if(isset($_GET["sc"])){
                                           
                                             $check_delete = ($role->hasPerm('delete devis')) ? "":"hide-element";
                                             while($row=mysqli_fetch_assoc($res)){
+                                                // var_dump($row);
                                                 // $check_client = ($row['status']=="accepter" && strtolower($row['type'])=="approved")? '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$row['id'].'" ></i></span> ' :'';//<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="'.$row['id'].'" ></i></span>
                                                 // $check_client = '';
                                                 // if($row['status']=="accepter" && strtolower($row['type'])=="approved"){

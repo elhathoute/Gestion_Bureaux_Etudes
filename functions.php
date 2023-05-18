@@ -213,7 +213,13 @@ function viewBrokerDevisServices(){
     }
     if($_GET){
         $id = $_GET['id'];
-        $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id'";
+        $query = "
+        SELECT  detail_devis.*,broker_devis.id as 'id_broker_devis',detail_broker_devis.*
+FROM `detail_devis`
+LEFT JOIN broker_devis on broker_devis.id_devis=detail_devis.id_devis
+LEFT JOIN detail_broker_devis on detail_broker_devis.id_broker_devis=broker_devis.id
+WHERE detail_devis.id_devis=$id and detail_devis.srv_unique_id=detail_broker_devis.srv_unique_id;
+        ";
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_all($res);
         // print_r($row);
@@ -223,6 +229,9 @@ function viewBrokerDevisServices(){
         }
         $html = '';
         foreach ($row as $val) {
+            
+            $montant=($val[4]*$val[19])-($val[4]*$val[19]*$val[20])/100;
+            var_dump($montant);
             $check_client = '';
             if(strtolower($devis_type)=="approved"){
                 $check_client = '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i></span> ';
@@ -241,9 +250,9 @@ function viewBrokerDevisServices(){
             $html .= '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
             $html .= '<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowBrkServiceQte"  value="'.$val[4].'" placeholder="Quantité"></td>';
-            $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 serviceBrkPrice"  value="'.$val[3].'" placeholder="0.00"></td>';
-            $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[5].'" class="form-control py-1 serviceBrkDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
-            $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceBrkTotal" disabled placeholder="0"></td>';
+            $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 serviceBrkPrice"  value="'.$val[19].'" placeholder="0.00"></td>';
+            $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[20].'" class="form-control py-1 serviceBrkDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
+            $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceBrkTotal" value="'.$montant.'" disabled placeholder="0"></td>';
             $html .= '</tr>';
         }
         return $html;

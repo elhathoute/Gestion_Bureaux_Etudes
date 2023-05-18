@@ -34,9 +34,10 @@
         $tableData = $_POST['tableData'];
         $tableData = json_decode($tableData,TRUE);
         $res;
-        foreach ($tableData as $val) {
+        
+        foreach ($tableData as $key=>$val) {
             $discount = $val['discount']==""?0:$val['discount'];
-            $query = "INSERT INTO `detail_devis`(`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`,`unit`,`ref`) VALUES (null,'$last_id','".$val["serviceName"]."','".floatval($val["price"])."','".$val["quantity"]."', '$discount','".$val["unit"]."','".$val["srvRef"]."')";
+            $query = "INSERT INTO `detail_devis`(`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`,`unit`,`ref`,`srv_unique_id`) VALUES (null,'$last_id','".$val["serviceName"]."','".floatval($val["price"])."','".$val["quantity"]."', '$discount','".$val["unit"]."','".$val["srvRef"]."',$last_id+$key+1)";
             $res = mysqli_query($cnx,$query);
             
         }
@@ -88,7 +89,7 @@
         $res = mysqli_query($cnx,$query);
 
         if($res){
-            $data = array('status'=>'success',"dBrk_id"=>$dBrk_id);
+            $data = array('status'=>'success',"dBrk_id"=>$dBrk_id,"devis_id"=>$last_id);
             echo json_encode($data);
         }else{
             $data = array('status'=>'failed');

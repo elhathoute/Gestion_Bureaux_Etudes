@@ -348,7 +348,7 @@ function br2nl($string)
                                         </thead>
                                         <tbody>
                                             <?php
-                                                echo viewBrokerDevisServices();
+                                                echo ( viewBrokerDevisServices());
                                             ?>
 
                                         </tbody>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 18 mai 2023 à 12:16
+-- Généré le : jeu. 18 mai 2023 à 16:16
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -316,7 +316,34 @@ INSERT INTO `broker_devis` (`id`, `id_broker`, `id_devis`) VALUES
 (16, 4, 101),
 (17, 4, 102),
 (18, 4, 103),
-(19, 4, 104);
+(19, 4, 104),
+(20, 6, 105),
+(21, 4, 106),
+(22, 6, 107),
+(23, 4, 108),
+(24, 4, 109),
+(25, 4, 110),
+(26, 4, 111),
+(27, 4, 112),
+(28, 6, 113),
+(29, 4, 114),
+(30, 4, 115),
+(31, 6, 116),
+(32, 4, 117),
+(33, 4, 118),
+(34, 4, 119),
+(35, 4, 120),
+(36, 4, 121),
+(37, 6, 122),
+(38, 4, 123),
+(39, 4, 124),
+(40, 4, 125),
+(41, 4, 126),
+(42, 4, 127),
+(43, 4, 128),
+(44, 4, 129),
+(45, 4, 130),
+(46, 4, 131);
 
 -- --------------------------------------------------------
 
@@ -459,8 +486,30 @@ DELIMITER ;
 CREATE TABLE `detail_broker_devis` (
   `id` int(11) NOT NULL,
   `id_broker_devis` int(11) NOT NULL,
-  `prix` decimal(10,2) NOT NULL
+  `srv_unique_id` int(11) DEFAULT NULL,
+  `new_prix` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `new_discount` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `detail_broker_devis`
+--
+
+INSERT INTO `detail_broker_devis` (`id`, `id_broker_devis`, `srv_unique_id`, `new_prix`, `new_discount`) VALUES
+(7, 20, NULL, 0.00, 0),
+(8, 20, NULL, 0.00, 0),
+(9, 30, NULL, 0.00, 0),
+(10, 37, NULL, 0.00, 0),
+(11, 37, NULL, 0.00, 0),
+(12, 41, NULL, 0.00, 0),
+(13, 42, NULL, 0.00, 0),
+(14, 42, NULL, 0.00, 0),
+(15, 44, 130, 75.00, 31),
+(16, 44, 131, 29.00, 75),
+(17, 45, 131, 36.00, 4),
+(18, 45, 132, 74.00, 63),
+(19, 46, 132, 50.00, 100),
+(20, 46, 133, 40.00, 58);
 
 -- --------------------------------------------------------
 
@@ -477,6 +526,7 @@ CREATE TABLE `detail_devis` (
   `discount` decimal(10,2) NOT NULL,
   `unit` varchar(100) NOT NULL,
   `ref` varchar(100) NOT NULL,
+  `srv_unique_id` int(11) NOT NULL DEFAULT 0,
   `approved` tinyint(1) NOT NULL DEFAULT 0,
   `confirmed` tinyint(1) NOT NULL DEFAULT 0,
   `paid_srv` tinyint(1) NOT NULL DEFAULT 0,
@@ -489,58 +539,95 @@ CREATE TABLE `detail_devis` (
 -- Déchargement des données de la table `detail_devis`
 --
 
-INSERT INTO `detail_devis` (`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`, `unit`, `ref`, `approved`, `confirmed`, `paid_srv`, `srv_avance`, `payment_made`, `srv_notif`) VALUES
-(172, 79, 'create website', 200.00, 1, 0.00, '04-Nov-2009', 'cws', 0, 1, 1, 0.00, 0, 0),
-(173, 79, 'create Logo', 300.00, 1, 0.00, '06-Apr-1970', 'crl', 0, 1, 1, 0.00, 0, 0),
-(174, 79, 'service', 500.00, 1, 0.00, 'dd', 'dss', 0, 1, 1, 0.00, 0, 0),
-(175, 80, 'Consequatur et quia', 69.00, 61, 72.00, '09-Jul-1984', 'Q', 0, 0, 1, 0.00, 0, 0),
-(176, 80, 'Odio aliquam rem asp', 19.00, 35, 59.00, '02-Dec-2016', 'Q', 0, 0, 1, 0.00, 0, 0),
-(177, 80, 'Odit repellendus Qu', 95.00, 7, 84.00, '24-May-1974', 'Q', 0, 0, 1, 0.00, 0, 0),
-(178, 80, 'Facere vero sint es', 100.00, 88, 84.00, '10-Apr-2021', 'Q', 0, 0, 1, 0.00, 0, 0),
-(179, 80, 'Nihil rem architecto', 51.00, 71, 58.00, '05-Jul-1973', 'Q', 0, 0, 1, 0.00, 0, 0),
-(180, 81, 'A aute duis aliquam ', 75.00, 50, 86.00, '01-Apr-1975', 'C', 0, 1, 1, 0.00, 0, 0),
-(181, 81, 'Architecto sit est ', 10.00, 32, 78.00, '13-Sep-2000', 'C', 0, 1, 1, 0.00, 0, 0),
-(182, 81, 'Sed non in optio et', 100.00, 88, 24.00, '11-Oct-2020', 'C', 0, 1, 1, 0.00, 0, 0),
-(183, 81, 'Optio neque quisqua', 4.00, 91, 94.00, '17-Apr-1973', 'C', 0, 1, 1, 0.00, 0, 0),
-(184, 81, 'Asperiores voluptate', 13.00, 21, 16.00, '28-Jul-1975', 'C', 0, 1, 1, 0.00, 0, 0),
-(185, 81, 'Vel eum perspiciatis', 20.00, 36, 37.00, '07-Jul-2022', 'C', 0, 1, 1, 0.00, 0, 0),
-(186, 82, 'Magni et voluptates ', 100.00, 26, 14.00, '04-Mar-1978', 'sss', 0, 1, 1, 0.00, 0, 0),
-(187, 82, 'Ea aut id dolorum d', 72.00, 28, 28.00, '24-Aug-2004', 'dsd', 0, 1, 1, 0.00, 0, 0),
-(188, 83, 'Ea nostrud consectet', 100.00, 2, 30.00, '07-Jun-2015', 'ssssa', 0, 0, 1, 0.00, 0, 0),
-(189, 83, 'Quia minim aliquip a', 200.00, 5, 4.00, '02-Aug-2010', 'zdds', 0, 0, 1, 0.00, 0, 0),
-(190, 84, 'Consequatur pariatu', 58.01, 22, 6.00, '02-Mar-2011', 'DSDS', 0, 0, 1, 0.00, 0, 0),
-(191, 84, 'Quam excepteur nisi ', 22.00, 10, 17.00, '19-Nov-1974', 'DSDSD', 0, 0, 1, 0.00, 0, 0),
-(192, 84, 'qsqklj', 100.00, 10, 0.00, 'i', 'z', 0, 0, 1, 0.00, 0, 0),
-(193, 85, 'Possimus aut est ut', 20.00, 31, 75.00, '14-May-2010', 'DD', 0, 0, 1, 0.00, 0, 0),
-(194, 85, 'Praesentium ipsum s', 23.00, 66, 48.00, '06-May-2009', 'DS', 0, 0, 1, 0.00, 0, 0),
-(195, 86, 'Nam aliqua Ipsum co', 82.00, 40, 24.00, '08-Sep-2012', 'sudiqjs', 0, 1, 1, 0.00, 0, 0),
-(196, 86, 'Et irure totam possi', 79.00, 16, 83.00, '28-Feb-2005', 'pidpsqid', 0, 1, 1, 0.00, 0, 0),
-(197, 87, 'Voluptatem accusanti', 62.00, 28, 2.00, '03-Jun-2014', 'djhqshd', 0, 1, 1, 0.00, 0, 0),
-(198, 87, 'Soluta qui sit qui d', 73.00, 72, 82.00, '04-Oct-2003', 'djqsldjl', 0, 1, 1, 0.00, 0, 0),
-(199, 88, 'szszs', 0.00, 3, 28.00, '20-Oct-1979', 'zszs', 0, 1, 0, 0.00, 0, 0),
-(200, 89, 'Voluptatem sit repr', 32.00, 23, 78.00, '25-Jan-1987', 'cc', 0, 0, 1, 0.00, 0, 0),
-(201, 89, 'Ea exercitation sed ', 86.00, 83, 80.00, '26-Jan-2007', 'ccc', 0, 0, 1, 0.00, 0, 0),
-(202, 89, 'Aut sit ut nemo dui', 87.00, 97, 13.00, '01-Jan-1991', 'ccc', 0, 0, 1, 0.00, 0, 0),
-(203, 90, 'sss', 123.00, 1, 0.00, 'ss', 'ssss', 0, 0, 1, 0.00, 0, 0),
-(204, 91, 'qqqqqqqqq', 234.00, 1, 0.00, 's', 'qs', 0, 1, 0, 0.00, 0, 0),
-(205, 92, 'S.HQKS', 234.00, 1, 0.00, 'S', 'SHQ', 0, 0, 0, 0.00, 0, 0),
-(206, 93, 'ajzkla', 123.00, 1, 0.00, 'j', 'zkazk', 0, 0, 0, 0.00, 0, 0),
-(207, 93, 'kqljsklqjsk', 109.00, 1, 0.00, 'sq', 'qjhsjkqs', 0, 0, 0, 0.00, 0, 0),
-(208, 93, 'qshqjkshjkq', 21231.00, 1, 0.00, 'zz', 'azazazaz', 0, 0, 0, 0.00, 0, 0),
-(209, 94, 'kqjslkqj', 232.00, 1, 0.00, '23', 'jkshqjs', 0, 0, 0, 0.00, 0, 0),
-(210, 94, 'sqsqsq', 123.00, 1, 0.00, 'z', 'qsqs', 0, 0, 0, 0.00, 0, 0),
-(211, 95, 'kjlkjze', 233.00, 1, 3.00, 'z', 'ieizaoeh', 0, 0, 0, 0.00, 0, 0),
-(212, 96, 'DDDD', 323.00, 1, 0.00, 'D', 'DED', 0, 0, 0, 0.00, 0, 0),
-(213, 97, 'EEEEEEEEE', 234.00, 1, 0.00, 'Z', 'ZZZZZZ', 0, 1, 0, 0.00, 0, 0),
-(214, 97, 'Adsence1', 23.00, 1, 0.00, 'XS', 'crere', 0, 0, 0, 0.00, 0, 0),
-(215, 98, 'Adsence1', 1221.99, 1, 0.00, '4', 'crere', 0, 0, 0, 0.00, 0, 0),
-(216, 99, 'Adipisci nulla illum', 46.00, 42, 92.00, '19-Oct-2014', 'FDF', 0, 0, 0, 0.00, 0, 0),
-(217, 99, 'Molestiae dolore cul', 48.00, 26, 56.00, '01-Jun-1999', 'FDFDF', 0, 0, 0, 0.00, 0, 0),
-(218, 100, 'Ut laborum Ipsum hi', 87.00, 74, 41.00, '07-Sep-2002', 'xwxw', 0, 0, 0, 0.00, 0, 0),
-(219, 101, 'Natus assumenda eum ', 13.00, 71, 15.00, '21-May-1974', 'Qq', 0, 0, 0, 0.00, 0, 0),
-(220, 102, 'Ipsum omnis digniss', 22.00, 37, 30.00, '14-Sep-1994', 'qsqss', 0, 0, 0, 0.00, 0, 0),
-(221, 103, 'Ex ut laborum id per', 85.00, 6, 26.00, '26-Oct-1982', 'qslmkQ', 0, 0, 0, 0.00, 0, 0),
-(222, 104, 'Sed consequuntur rem', 58.00, 39, 27.00, '16-Oct-1993', 'Sqs', 0, 0, 0, 0.00, 0, 0);
+INSERT INTO `detail_devis` (`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`, `unit`, `ref`, `srv_unique_id`, `approved`, `confirmed`, `paid_srv`, `srv_avance`, `payment_made`, `srv_notif`) VALUES
+(172, 79, 'create website', 200.00, 1, 0.00, '04-Nov-2009', 'cws', 0, 0, 1, 1, 0.00, 0, 0),
+(173, 79, 'create Logo', 300.00, 1, 0.00, '06-Apr-1970', 'crl', 0, 0, 1, 1, 0.00, 0, 0),
+(174, 79, 'service', 500.00, 1, 0.00, 'dd', 'dss', 0, 0, 1, 1, 0.00, 0, 0),
+(175, 80, 'Consequatur et quia', 69.00, 61, 72.00, '09-Jul-1984', 'Q', 0, 0, 0, 1, 0.00, 0, 0),
+(176, 80, 'Odio aliquam rem asp', 19.00, 35, 59.00, '02-Dec-2016', 'Q', 0, 0, 0, 1, 0.00, 0, 0),
+(177, 80, 'Odit repellendus Qu', 95.00, 7, 84.00, '24-May-1974', 'Q', 0, 0, 0, 1, 0.00, 0, 0),
+(178, 80, 'Facere vero sint es', 100.00, 88, 84.00, '10-Apr-2021', 'Q', 0, 0, 0, 1, 0.00, 0, 0),
+(179, 80, 'Nihil rem architecto', 51.00, 71, 58.00, '05-Jul-1973', 'Q', 0, 0, 0, 1, 0.00, 0, 0),
+(180, 81, 'A aute duis aliquam ', 75.00, 50, 86.00, '01-Apr-1975', 'C', 0, 0, 1, 1, 0.00, 0, 0),
+(181, 81, 'Architecto sit est ', 10.00, 32, 78.00, '13-Sep-2000', 'C', 0, 0, 1, 1, 0.00, 0, 0),
+(182, 81, 'Sed non in optio et', 100.00, 88, 24.00, '11-Oct-2020', 'C', 0, 0, 1, 1, 0.00, 0, 0),
+(183, 81, 'Optio neque quisqua', 4.00, 91, 94.00, '17-Apr-1973', 'C', 0, 0, 1, 1, 0.00, 0, 0),
+(184, 81, 'Asperiores voluptate', 13.00, 21, 16.00, '28-Jul-1975', 'C', 0, 0, 1, 1, 0.00, 0, 0),
+(185, 81, 'Vel eum perspiciatis', 20.00, 36, 37.00, '07-Jul-2022', 'C', 0, 0, 1, 1, 0.00, 0, 0),
+(186, 82, 'Magni et voluptates ', 100.00, 26, 14.00, '04-Mar-1978', 'sss', 0, 0, 1, 1, 0.00, 0, 0),
+(187, 82, 'Ea aut id dolorum d', 72.00, 28, 28.00, '24-Aug-2004', 'dsd', 0, 0, 1, 1, 0.00, 0, 0),
+(188, 83, 'Ea nostrud consectet', 100.00, 2, 30.00, '07-Jun-2015', 'ssssa', 0, 0, 0, 1, 0.00, 0, 0),
+(189, 83, 'Quia minim aliquip a', 200.00, 5, 4.00, '02-Aug-2010', 'zdds', 0, 0, 0, 1, 0.00, 0, 0),
+(190, 84, 'Consequatur pariatu', 58.01, 22, 6.00, '02-Mar-2011', 'DSDS', 0, 0, 0, 1, 0.00, 0, 0),
+(191, 84, 'Quam excepteur nisi ', 22.00, 10, 17.00, '19-Nov-1974', 'DSDSD', 0, 0, 0, 1, 0.00, 0, 0),
+(192, 84, 'qsqklj', 100.00, 10, 0.00, 'i', 'z', 0, 0, 0, 1, 0.00, 0, 0),
+(193, 85, 'Possimus aut est ut', 20.00, 31, 75.00, '14-May-2010', 'DD', 0, 0, 0, 1, 0.00, 0, 0),
+(194, 85, 'Praesentium ipsum s', 23.00, 66, 48.00, '06-May-2009', 'DS', 0, 0, 0, 1, 0.00, 0, 0),
+(195, 86, 'Nam aliqua Ipsum co', 82.00, 40, 24.00, '08-Sep-2012', 'sudiqjs', 0, 0, 1, 1, 0.00, 0, 0),
+(196, 86, 'Et irure totam possi', 79.00, 16, 83.00, '28-Feb-2005', 'pidpsqid', 0, 0, 1, 1, 0.00, 0, 0),
+(197, 87, 'Voluptatem accusanti', 62.00, 28, 2.00, '03-Jun-2014', 'djhqshd', 0, 0, 1, 1, 0.00, 0, 0),
+(198, 87, 'Soluta qui sit qui d', 73.00, 72, 82.00, '04-Oct-2003', 'djqsldjl', 0, 0, 1, 1, 0.00, 0, 0),
+(199, 88, 'szszs', 0.00, 3, 28.00, '20-Oct-1979', 'zszs', 0, 0, 1, 0, 0.00, 0, 0),
+(200, 89, 'Voluptatem sit repr', 32.00, 23, 78.00, '25-Jan-1987', 'cc', 0, 0, 0, 1, 0.00, 0, 0),
+(201, 89, 'Ea exercitation sed ', 86.00, 83, 80.00, '26-Jan-2007', 'ccc', 0, 0, 0, 1, 0.00, 0, 0),
+(202, 89, 'Aut sit ut nemo dui', 87.00, 97, 13.00, '01-Jan-1991', 'ccc', 0, 0, 0, 1, 0.00, 0, 0),
+(203, 90, 'sss', 123.00, 1, 0.00, 'ss', 'ssss', 0, 0, 0, 1, 0.00, 0, 0),
+(204, 91, 'qqqqqqqqq', 234.00, 1, 0.00, 's', 'qs', 0, 0, 1, 0, 0.00, 0, 0),
+(205, 92, 'S.HQKS', 234.00, 1, 0.00, 'S', 'SHQ', 0, 0, 0, 0, 0.00, 0, 0),
+(206, 93, 'ajzkla', 123.00, 1, 0.00, 'j', 'zkazk', 0, 0, 0, 0, 0.00, 0, 0),
+(207, 93, 'kqljsklqjsk', 109.00, 1, 0.00, 'sq', 'qjhsjkqs', 0, 0, 0, 0, 0.00, 0, 0),
+(208, 93, 'qshqjkshjkq', 21231.00, 1, 0.00, 'zz', 'azazazaz', 0, 0, 0, 0, 0.00, 0, 0),
+(209, 94, 'kqjslkqj', 232.00, 1, 0.00, '23', 'jkshqjs', 0, 0, 0, 0, 0.00, 0, 0),
+(210, 94, 'sqsqsq', 123.00, 1, 0.00, 'z', 'qsqs', 0, 0, 0, 0, 0.00, 0, 0),
+(211, 95, 'kjlkjze', 233.00, 1, 3.00, 'z', 'ieizaoeh', 0, 0, 0, 0, 0.00, 0, 0),
+(212, 96, 'DDDD', 323.00, 1, 0.00, 'D', 'DED', 0, 0, 0, 0, 0.00, 0, 0),
+(213, 97, 'EEEEEEEEE', 234.00, 1, 0.00, 'Z', 'ZZZZZZ', 0, 0, 1, 0, 0.00, 0, 0),
+(214, 97, 'Adsence1', 23.00, 1, 0.00, 'XS', 'crere', 0, 0, 0, 0, 0.00, 0, 0),
+(215, 98, 'Adsence1', 1221.99, 1, 0.00, '4', 'crere', 0, 0, 0, 0, 0.00, 0, 0),
+(216, 99, 'Adipisci nulla illum', 46.00, 42, 92.00, '19-Oct-2014', 'FDF', 0, 0, 0, 0, 0.00, 0, 0),
+(217, 99, 'Molestiae dolore cul', 48.00, 26, 56.00, '01-Jun-1999', 'FDFDF', 0, 0, 0, 0, 0.00, 0, 0),
+(218, 100, 'Ut laborum Ipsum hi', 87.00, 74, 41.00, '07-Sep-2002', 'xwxw', 0, 0, 0, 0, 0.00, 0, 0),
+(219, 101, 'Natus assumenda eum ', 13.00, 71, 15.00, '21-May-1974', 'Qq', 0, 0, 0, 0, 0.00, 0, 0),
+(220, 102, 'Ipsum omnis digniss', 22.00, 37, 30.00, '14-Sep-1994', 'qsqss', 0, 0, 0, 0, 0.00, 0, 0),
+(221, 103, 'Ex ut laborum id per', 85.00, 6, 26.00, '26-Oct-1982', 'qslmkQ', 0, 0, 0, 0, 0.00, 0, 0),
+(222, 104, 'Sed consequuntur rem', 58.00, 39, 27.00, '16-Oct-1993', 'Sqs', 0, 0, 1, 0, 0.00, 0, 0),
+(223, 105, 'Adsence1', 123.00, 25, 9.00, '24-Dec-1982', 'crere', 0, 0, 0, 0, 0.00, 0, 0),
+(224, 105, 'Adsence1', 344.00, 60, 6.00, '21-Feb-2004', 'crere', 0, 0, 0, 0, 0.00, 0, 0),
+(225, 106, 'Saepe magnam ea iust', 42.00, 4, 57.00, '26-May-1999', 'ssssz', 0, 0, 0, 0, 0.00, 0, 0),
+(226, 107, 'Quae in voluptatum r', 56.00, 88, 18.00, '06-Aug-1982', 'szsz', 0, 0, 0, 0, 0.00, 0, 0),
+(227, 108, 'Dignissimos incididu', 34.00, 73, 17.00, '22-Oct-2000', 'qsdqs', 0, 0, 0, 0, 0.00, 0, 0),
+(228, 109, 'Enim et laudantium ', 93.00, 65, 48.00, '24-Mar-1991', 'sqss', 0, 0, 0, 0, 0.00, 0, 0),
+(229, 110, 'Consequatur perspici', 69.00, 75, 100.00, '09-Feb-2000', 'sd', 0, 0, 1, 0, 0.00, 0, 0),
+(230, 111, 'Maiores quasi incidu', 7.00, 84, 84.00, '12-Dec-2005', 'qsdd', 0, 0, 0, 0, 0.00, 0, 0),
+(231, 112, 'Sit animi ipsum qu', 4.00, 1, 61.00, '24-Apr-1981', 'qsqq', 0, 0, 0, 0, 0.00, 0, 0),
+(232, 113, 'Similique labore ull', 43.00, 78, 88.00, '24-Jan-1976', 'd', 0, 0, 0, 0, 0.00, 0, 0),
+(233, 113, 'Nihil quo doloribus ', 58.00, 88, 3.00, '06-May-1972', 'd', 0, 0, 0, 0, 0.00, 0, 0),
+(234, 113, 'Temporibus laborum q', 63.00, 4, 62.00, '11-Mar-1982', 'd', 0, 0, 0, 0, 0.00, 0, 0),
+(235, 114, 'Nulla mollitia ullam', 64.00, 86, 95.00, '12-May-2015', 'qQq', 0, 0, 1, 0, 0.00, 0, 0),
+(236, 115, 'Ipsa optio enim ve', 29.00, 79, 49.00, '03-Dec-1984', 'qsqsqs', 0, 0, 0, 0, 0.00, 0, 0),
+(237, 116, 'Accusamus quibusdam ', 65.00, 88, 65.00, '23-Nov-1989', 'qssq', 0, 0, 0, 0, 0.00, 0, 0),
+(238, 117, 'Et quis molestiae co', 15.00, 0, 92.00, '27-May-1988', 'lmklk', 0, 0, 0, 0, 0.00, 0, 0),
+(239, 118, 'Quis numquam error c', 97.00, 85, 7.00, '05-Oct-1996', 'kkkk', 0, 0, 0, 0, 0.00, 0, 0),
+(240, 119, 'Est animi consequat', 39.00, 36, 1.00, '08-Jun-2007', 'azzaz', 0, 0, 0, 0, 0.00, 0, 0),
+(241, 120, 'In enim nisi asperio', 27.00, 66, 84.00, '30-Mar-2013', 'kzjaklzj', 0, 0, 0, 0, 0.00, 0, 0),
+(242, 121, 'Quo modi id vero per', 13.00, 85, 99.00, '23-Sep-2022', 'sdsd', 0, 0, 0, 0, 0.00, 0, 0),
+(243, 121, 'Alias laboris volupt', 19.00, 36, 62.00, '27-Sep-2009', 'dsdsddd', 0, 0, 0, 0, 0.00, 0, 0),
+(244, 122, 'Corrupti mollit eos', 42.00, 18, 46.00, '10-Jul-2011', 'zaa', 0, 0, 0, 0, 0.00, 0, 0),
+(245, 122, 'Sapiente doloribus a', 14.00, 53, 61.00, '21-Sep-2005', 'zaz', 0, 0, 0, 0, 0.00, 0, 0),
+(246, 123, 'Pariatur In enim od', 22.00, 5, 1.00, '01-Apr-2004', 'okamkza', 0, 0, 0, 0, 0.00, 0, 0),
+(247, 124, 'Vel aut ea vel unde ', 43.00, 80, 45.00, '27-Nov-2017', 'zeze', 0, 0, 0, 0, 0.00, 0, 0),
+(248, 125, 'Sed est commodo ad o', 17.00, 26, 89.00, '26-Mar-1989', 'lmklmkl', 0, 0, 0, 0, 0.00, 0, 0),
+(249, 126, 'Est a quidem repudia', 13.00, 5, 52.00, '11-Nov-1995', 'akkekz', 0, 0, 0, 0, 0.00, 0, 0),
+(250, 127, 'In facilis duis est', 67.00, 8, 46.00, '17-Apr-1988', 'oooo', 0, 0, 0, 0, 0.00, 0, 0),
+(251, 127, 'Nulla tenetur praese', 72.00, 78, 99.00, '22-May-1972', 'ooo', 0, 0, 0, 0, 0.00, 0, 0),
+(252, 128, 'Perspiciatis pariat', 100.00, 5, 0.00, '1d4-Oct-2010', 'dds', 0, 0, 0, 0, 0.00, 0, 0),
+(253, 128, 'Pariatur Quasi aliq', 200.00, 5, 0.00, 'd01-Jul-1992', 'dds', 0, 0, 0, 0, 0.00, 0, 0),
+(254, 129, 'Voluptatibus ab dist', 75.00, 72, 31.00, '27-Nov-2010', 'hk', 0, 0, 0, 0, 0.00, 0, 0),
+(255, 129, 'Dolorem fugiat et b', 29.00, 33, 75.00, '06-Jul-2020', 'jazklej', 0, 0, 0, 0, 0.00, 0, 0),
+(256, 130, 'Voluptate ex quia no', 36.00, 81, 4.00, '04-Sep-1976', 'qjlkjqds', 130, 0, 0, 0, 0.00, 0, 0),
+(257, 130, 'Non eos et deserunt ', 74.00, 84, 63.00, '16-Jun-2003', 'djqskdj', 131, 0, 0, 0, 0.00, 0, 0),
+(258, 131, 'Aliquid vitae quis q', 60.00, 51, 99.00, '23-Jan-1989', 'QLKSLMQ', 132, 0, 0, 0, 0.00, 0, 0),
+(259, 131, 'Tempora consequatur ', 51.00, 30, 58.00, '24-Sep-2003', 'LKSLQKs', 133, 0, 0, 0, 0.00, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -605,7 +692,7 @@ CREATE TABLE `devis` (
 --
 
 INSERT INTO `devis` (`id`, `number`, `id_client`, `type`, `date_creation`, `date_validation`, `sub_total`, `discount`, `net_total`, `remove`, `status`, `remove_tva`, `client_approve`, `comment`, `objet`, `located`) VALUES
-(79, '001/2023', 11, 'Approved', '2023-05-15 15:24:44', '2023-05-15 15:24:44', 1000.00, 0.00, 1000.00, 1, 'accepter', 1, 0, 'Ut et tenetur iste r', 'Excepteur qui mollit', 'Provident deserunt '),
+(79, '001/2023', 11, 'Approved', '2023-05-15 15:24:44', '2023-05-15 15:24:44', 1000.00, 0.00, 1000.00, 0, 'accepter', 1, 0, 'Ut et tenetur iste r', 'Excepteur qui mollit', 'Provident deserunt '),
 (80, '002/2023', 12, 'Approved', '2023-05-15 17:08:04', '2023-05-15 17:08:04', 4486.39, 13473.61, 4486.39, 0, 'accepter', 1, 0, 'Aut tempora quam aut', 'Enim enim voluptatum', 'Ipsam quidem harum e'),
 (81, '003/2023', 12, 'Approved', '2023-05-15 17:42:30', '2023-05-15 17:42:30', 7988.16, 6238.84, 7988.16, 0, 'accepter', 1, 0, 'Non qui nisi itaque ', 'Facilis maiores et q', 'agadir'),
 (82, '004/2023', 12, 'Approved', '2023-05-15 21:44:28', '2023-05-15 21:44:28', 3687.52, 928.48, 3687.52, 0, 'accepter', 1, 0, 'Quasi numquam commod', 'Exercitationem velit', 'Id nemo dolorem nat'),
@@ -630,7 +717,34 @@ INSERT INTO `devis` (`id`, `number`, `id_client`, `type`, `date_creation`, `date
 (101, '019/2023', 17, 'Approved', '2023-05-18 11:10:11', '2023-05-18 11:10:11', 784.55, 138.45, 784.55, 0, 'accepter', 1, 0, 'Molestias eiusmod la', 'Ullamco perspiciatis', 'Do molestiae cupidat'),
 (102, '020/2023', 17, 'Approved', '2023-05-18 11:11:36', '2023-05-18 11:11:36', 569.80, 244.20, 569.80, 0, 'accepter', 1, 0, 'Amet dolores rerum ', 'Corrupti anim aut a', 'Dignissimos cumque i'),
 (103, '021/2023', 18, 'Approved', '2023-05-18 11:12:01', '2023-05-18 11:12:01', 377.40, 132.60, 452.88, 0, 'accepter', 0, 0, 'Deleniti voluptas ad', 'Qui amet est qui re', 'Est quibusdam vel di'),
-(104, '022/2023', 17, 'Approved', '2023-05-18 11:14:49', '2023-05-18 11:14:49', 1651.26, 610.74, 1651.26, 0, 'accepter', 1, 0, 'Duis id dolor sunt ', 'Dolorem corporis quo', 'Rem nulla voluptate ');
+(104, '022/2023', 17, 'Approved', '2023-05-18 11:14:49', '2023-05-18 11:14:49', 1651.26, 610.74, 1651.26, 0, 'accepter', 1, 0, 'Duis id dolor sunt ', 'Dolorem corporis quo', 'Rem nulla voluptate '),
+(105, '023/2023', 17, 'Approved', '2023-05-18 11:40:45', '2023-05-18 11:40:45', 22199.85, 1515.15, 22199.85, 0, 'accepter', 1, 0, 'Qui blanditiis debit', 'Enim qui quia tempor', 'Qui qui rerum quia m'),
+(106, '024/2023', 17, 'Approved', '2023-05-18 12:22:22', '2023-05-18 12:22:22', 72.24, 95.76, 86.69, 0, 'accepter', 0, 0, 'Quod distinctio Ips', 'Ut magnam deserunt e', 'Et cumque rerum dolo'),
+(107, '025/2023', 18, 'Approved', '2023-05-18 12:23:23', '2023-05-18 12:23:23', 4040.96, 887.04, 4040.96, 0, 'accepter', 1, 0, 'Et ut magnam dolorem', 'Neque delectus veri', 'Nulla obcaecati quo '),
+(108, '026/2023', 17, 'Approved', '2023-05-18 12:26:03', '2023-05-18 12:26:03', 2060.06, 421.94, 2472.07, 0, 'accepter', 0, 0, 'Qui cupiditate enim ', 'Ut quasi exercitatio', 'Minim molestias numq'),
+(109, '027/2023', 17, 'Approved', '2023-05-18 12:28:41', '2023-05-18 12:28:41', 3143.40, 2901.60, 3143.40, 0, 'accepter', 1, 0, 'Ad rem velit aliqua', 'Dignissimos laborum ', 'Fugit sequi ullam p'),
+(110, '028/2023', 17, 'Approved', '2023-05-18 12:30:29', '2023-05-18 12:30:29', 0.00, 5175.00, 0.00, 0, 'accepter', 0, 0, 'Atque aut nostrum po', 'Irure exercitation s', 'Id amet eos mollit'),
+(111, '029/2023', 17, 'Approved', '2023-05-18 12:31:40', '2023-05-18 12:31:40', 94.08, 493.92, 112.90, 0, 'accepter', 0, 0, 'Est sunt voluptatem', 'Dignissimos nulla et', 'Nostrud a dicta aut '),
+(112, '030/2023', 17, 'Approved', '2023-05-18 12:33:49', '2023-05-18 12:33:49', 1.56, 2.44, 1.56, 0, 'accepter', 1, 0, 'Sequi corporis nihil', 'Est itaque veritatis', 'Voluptatem pariatur'),
+(113, '031/2023', 17, 'Approved', '2023-05-18 12:34:50', '2023-05-18 12:34:50', 5449.12, 3260.88, 5449.12, 0, 'accepter', 1, 0, 'Neque a consectetur', 'Beatae esse asperna', 'Quibusdam illum per'),
+(114, '032/2023', 17, 'Approved', '2023-05-18 12:41:17', '2023-05-18 12:41:17', 275.20, 5228.80, 330.24, 0, 'accepter', 0, 0, 'Quam itaque aperiam ', 'Cum provident volup', 'Et explicabo Magna '),
+(115, '033/2023', 17, 'Approved', '2023-05-18 12:48:59', '2023-05-18 12:48:59', 1168.41, 1122.59, 1168.41, 0, 'accepter', 1, 0, 'Eligendi enim irure ', 'Nam tenetur consequa', 'Perspiciatis ut odi'),
+(116, '034/2023', 18, 'Approved', '2023-05-18 12:50:05', '2023-05-18 12:50:05', 2002.00, 3718.00, 2002.00, 0, 'accepter', 1, 0, 'Aperiam cillum facil', 'Facere adipisci accu', 'Maxime omnis aute do'),
+(117, '035/2023', 17, 'Approved', '2023-05-18 13:03:03', '2023-05-18 13:03:03', 0.00, 0.00, 0.00, 0, 'accepter', 0, 0, 'Sit beatae aliquip ', 'Asperiores numquam e', 'Quia nostrud eum qua'),
+(118, '036/2023', 17, 'Approved', '2023-05-18 13:06:44', '2023-05-18 13:06:44', 7667.85, 577.15, 9201.42, 0, 'accepter', 0, 0, 'Facere accusantium s', 'Qui provident commo', 'Consequat Quia dese'),
+(119, '037/2023', 17, 'Approved', '2023-05-18 13:08:06', '2023-05-18 13:08:06', 1389.96, 14.04, 1389.96, 0, 'accepter', 1, 0, 'Qui incidunt pariat', 'Alias ut cillum inci', 'Quae in ab expedita '),
+(120, '038/2023', 17, 'Approved', '2023-05-18 13:08:43', '2023-05-18 13:08:43', 285.12, 1496.88, 342.14, 0, 'accepter', 0, 0, 'Nostrud dolor modi d', 'Minus tempor dolor i', 'Eius dolore cupidata'),
+(121, '039/2023', 17, 'Approved', '2023-05-18 13:36:35', '2023-05-18 13:36:35', 270.97, 1518.03, 270.97, 0, 'accepter', 1, 0, 'Esse quaerat labore', 'Qui fugit velit com', 'Tempora veritatis pe'),
+(122, '040/2023', 17, 'Approved', '2023-05-18 13:38:40', '2023-05-18 13:38:40', 697.62, 800.38, 697.62, 0, 'accepter', 1, 0, 'Lorem saepe repudian', 'Cupidatat voluptatem', 'Ex ea maxime nisi cu'),
+(123, '041/2023', 17, 'Approved', '2023-05-18 13:43:31', '2023-05-18 13:43:31', 108.90, 1.10, 130.68, 0, 'accepter', 0, 0, 'Dolore enim quasi be', 'Quis consequatur con', 'Esse ipsam magna eo'),
+(124, '042/2023', 17, 'Approved', '2023-05-18 13:44:38', '2023-05-18 13:44:38', 1892.00, 1548.00, 2270.40, 0, 'accepter', 0, 0, 'Quae incididunt ea c', 'Consequuntur adipisi', 'Nemo laborum alias p'),
+(125, '043/2023', 17, 'Approved', '2023-05-18 13:45:33', '2023-05-18 13:45:33', 48.62, 393.38, 48.62, 0, 'accepter', 1, 0, 'Ea aperiam nihil dol', 'Aliqua Facilis cons', 'Qui repudiandae moll'),
+(126, '044/2023', 17, 'Approved', '2023-05-18 13:47:08', '2023-05-18 13:47:08', 31.20, 33.80, 37.44, 0, 'accepter', 0, 0, 'Sequi cillum aut eiu', 'Et reprehenderit ver', 'Eos voluptatem opt'),
+(127, '045/2023', 17, 'Approved', '2023-05-18 13:48:57', '2023-05-18 13:48:57', 345.60, 5806.40, 414.72, 0, 'accepter', 0, 0, 'Necessitatibus eos ', 'Velit esse voluptate', 'Non qui sint eveniet'),
+(128, '046/2023', 19, 'Approved', '2023-05-18 14:07:33', '2023-05-18 14:07:33', 1500.00, 0.00, 1800.00, 0, 'accepter', 0, 0, 'Quibusdam expedita d', 'Placeat similique e', 'Expedita quis praese'),
+(129, '047/2023', 17, 'Approved', '2023-05-18 14:12:32', '2023-05-18 14:12:32', 3965.25, 2391.75, 3965.25, 0, 'accepter', 1, 0, 'Eu ab qui consequunt', 'Eum qui illo duis po', 'Fugiat ut quasi ver'),
+(130, '048/2023', 17, 'Approved', '2023-05-18 14:23:06', '2023-05-18 14:23:06', 5099.28, 4032.72, 6119.14, 0, 'accepter', 0, 0, 'Irure sed incidunt ', 'Sint voluptas sed pa', 'Doloribus magni cons'),
+(131, '049/2023', 19, 'Approved', '2023-05-18 14:24:13', '2023-05-18 14:24:13', 673.20, 3916.80, 807.84, 0, 'accepter', 0, 0, 'Occaecat reprehender', 'Quis odit quis accus', 'Ipsum voluptate ut e');
 
 -- --------------------------------------------------------
 
@@ -868,7 +982,34 @@ INSERT INTO `notifications` (`id`, `id_document`, `date`, `active`) VALUES
 (118, 101, '2023-05-18 12:10:11', 1),
 (119, 102, '2023-05-18 12:11:36', 1),
 (120, 103, '2023-05-18 12:12:01', 1),
-(121, 104, '2023-05-18 12:14:49', 1);
+(121, 104, '2023-05-18 12:14:49', 1),
+(122, 105, '2023-05-18 12:40:45', 1),
+(123, 106, '2023-05-18 13:22:22', 1),
+(124, 107, '2023-05-18 13:23:23', 1),
+(125, 108, '2023-05-18 13:26:03', 1),
+(126, 109, '2023-05-18 13:28:41', 1),
+(127, 110, '2023-05-18 13:30:29', 1),
+(128, 111, '2023-05-18 13:31:40', 1),
+(129, 112, '2023-05-18 13:33:49', 1),
+(130, 113, '2023-05-18 13:34:51', 1),
+(131, 114, '2023-05-18 13:41:17', 1),
+(132, 115, '2023-05-18 13:48:59', 1),
+(133, 116, '2023-05-18 13:50:05', 1),
+(134, 117, '2023-05-18 14:03:03', 1),
+(135, 118, '2023-05-18 14:06:44', 1),
+(136, 119, '2023-05-18 14:08:06', 1),
+(137, 120, '2023-05-18 14:08:43', 1),
+(138, 121, '2023-05-18 14:36:35', 1),
+(139, 122, '2023-05-18 14:38:40', 1),
+(140, 123, '2023-05-18 14:43:31', 1),
+(141, 124, '2023-05-18 14:44:38', 1),
+(142, 125, '2023-05-18 14:45:33', 1),
+(143, 126, '2023-05-18 14:47:08', 1),
+(144, 127, '2023-05-18 14:48:57', 1),
+(145, 128, '2023-05-18 15:07:33', 1),
+(146, 129, '2023-05-18 15:12:32', 1),
+(147, 130, '2023-05-18 15:23:06', 1),
+(148, 131, '2023-05-18 15:24:13', 1);
 
 -- --------------------------------------------------------
 
@@ -1471,7 +1612,37 @@ INSERT INTO `user_devis` (`id_user`, `id_devis`, `action`, `date`, `is_vue`) VAL
 (1, 101, 'Add', '2023-05-18 11:10:11', 0),
 (1, 102, 'Add', '2023-05-18 11:11:36', 0),
 (1, 103, 'Add', '2023-05-18 11:12:01', 0),
-(1, 104, 'Add', '2023-05-18 11:14:49', 0);
+(1, 104, 'Add', '2023-05-18 11:14:49', 0),
+(1, 104, 'Devis Approved', '2023-05-18 11:20:30', 0),
+(1, 105, 'Add', '2023-05-18 11:40:45', 0),
+(1, 106, 'Add', '2023-05-18 12:22:22', 0),
+(1, 107, 'Add', '2023-05-18 12:23:23', 0),
+(1, 108, 'Add', '2023-05-18 12:26:03', 0),
+(1, 109, 'Add', '2023-05-18 12:28:41', 0),
+(1, 110, 'Add', '2023-05-18 12:30:29', 0),
+(1, 111, 'Add', '2023-05-18 12:31:40', 0),
+(1, 112, 'Add', '2023-05-18 12:33:49', 0),
+(1, 113, 'Add', '2023-05-18 12:34:50', 0),
+(1, 114, 'Add', '2023-05-18 12:41:17', 0),
+(1, 114, 'Devis Approved', '2023-05-18 12:42:43', 0),
+(1, 110, 'Devis Approved', '2023-05-18 12:43:37', 0),
+(1, 115, 'Add', '2023-05-18 12:48:59', 0),
+(1, 116, 'Add', '2023-05-18 12:50:05', 0),
+(1, 117, 'Add', '2023-05-18 13:03:03', 0),
+(1, 118, 'Add', '2023-05-18 13:06:44', 0),
+(1, 119, 'Add', '2023-05-18 13:08:06', 0),
+(1, 120, 'Add', '2023-05-18 13:08:43', 0),
+(1, 121, 'Add', '2023-05-18 13:36:35', 0),
+(1, 122, 'Add', '2023-05-18 13:38:40', 0),
+(1, 123, 'Add', '2023-05-18 13:43:31', 0),
+(1, 124, 'Add', '2023-05-18 13:44:38', 0),
+(1, 125, 'Add', '2023-05-18 13:45:33', 0),
+(1, 126, 'Add', '2023-05-18 13:47:08', 0),
+(1, 127, 'Add', '2023-05-18 13:48:57', 0),
+(1, 128, 'Add', '2023-05-18 14:07:33', 0),
+(1, 129, 'Add', '2023-05-18 14:12:32', 0),
+(1, 130, 'Add', '2023-05-18 14:23:06', 0),
+(1, 131, 'Add', '2023-05-18 14:24:13', 0);
 
 -- --------------------------------------------------------
 
@@ -1882,7 +2053,7 @@ ALTER TABLE `broker`
 -- AUTO_INCREMENT pour la table `broker_devis`
 --
 ALTER TABLE `broker_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT pour la table `client`
@@ -1906,13 +2077,13 @@ ALTER TABLE `client_individual`
 -- AUTO_INCREMENT pour la table `detail_broker_devis`
 --
 ALTER TABLE `detail_broker_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT pour la table `detail_devis`
 --
 ALTER TABLE `detail_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
 
 --
 -- AUTO_INCREMENT pour la table `detail_invoice`
@@ -1924,7 +2095,7 @@ ALTER TABLE `detail_invoice`
 -- AUTO_INCREMENT pour la table `devis`
 --
 ALTER TABLE `devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT pour la table `devis_payments`
@@ -1954,7 +2125,7 @@ ALTER TABLE `invoice_payments`
 -- AUTO_INCREMENT pour la table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT pour la table `permissions`
