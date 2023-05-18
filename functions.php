@@ -580,7 +580,7 @@ function getNotifCount(){
    
     $num = mysqli_num_rows($res);
    
-    return $num + notifInvNumRows() + notifPaymentNumRows();
+    return $num + notifInvNumRows() /*+ notifPaymentNumRows()*/;
 }
 
 //get invoice notification procedure num rows
@@ -722,21 +722,36 @@ function devisNotificationData(){
         $html .= '<td>'.ucfirst($user['prenom'])." ".ucfirst($user['nom']) .'</td>';
         $html .= '<td>'.$row['number'].'</td>';
         $html .= '<td>Devis</td>';
-        $html .= '<td>'.$row['date'].'</td>';
+        $html .= '<td>'.$row['date-action'].'</td>';
         $html .= '<td>'.$row['action'].'</td>';
+        // $html .= '
+        // <form action="notification-action.php" id="notificationForm" method="POST">
+
+        // <td><a target="_blank" href="devis_export.php?id='.$row['id_devis'].'&client_id='.$row['id_client'].'" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
+        //          <a href="devis-edit.php?id='.$row['id_devis'].'&client_id='.$row['id_client'].'" data-id="'.$row['id_devis'].'" class="btn btn-primary btn-sm editDevisBtn"><span><i class="bi bi-pencil-square"></i></span></a>
+        //             &nbsp;
+                   
+        //             <input title="Accepter" type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
+        //             <input title="Annuler" type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
+        //             <input type="hidden" name="devis_id" value="'.$row['id_devis'].'">
+        //             <input type="hidden" name="doc_type" value="devis">
+        //         </td>
+        //         </form>
+
+        //         ';
         $html .= '
         <form action="notification-action.php" id="notificationForm" method="POST">
 
-        <td><a target="_blank" href="devis_export.php?id='.$row['id_devis'].'&client_id='.$row['id_client'].'" class="btn btn-secondary btn-sm"  ><span><i class="bi bi-eye"></i></span></a>
-                    <a href="devis-edit.php?id='.$row['id_devis'].'&client_id='.$row['id_client'].'" data-id="'.$row['id_devis'].'" class="btn btn-primary btn-sm editDevisBtn"><span><i class="bi bi-pencil-square"></i></span></a>
-                    &nbsp;
-                   
-                    <input title="Accepter" type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
-                    <input title="Annuler" type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
-                    <input type="hidden" name="devis_id" value="'.$row['id_devis'].'">
-                    <input type="hidden" name="doc_type" value="devis">
-                    </form>
-                </td>';
+        <td class="d-flex align-items-center justify-content-center">
+        <button title="masquer la notification" type="submit" name="btn-disabled-notif"  class="btn btn-danger btn-sm"><span><i class="bi bi-bell-slash "></i></span></button>
+                   <input type="hidden" name="user-id" value="'.$row['id_user'].'"/>
+                   <input type="hidden" name="devis-id" value="'.$row['id_devis'].'"/>
+                   <input type="hidden" name="date-action" value="'.$row['date-action'].'"/>
+                   <input type="hidden" name="doc_type" value="devis"/>
+                </td>
+                </form>
+
+                ';
         $html .= '</tr>';
     }
     return $html;
@@ -756,21 +771,34 @@ function invoiceNotificationData(){
         $html .= '<td>' . ucfirst($user['prenom']) . " " . ucfirst($user['nom']) . '</td>';
         $html .= '<td>' . $row['F_number'] . '</td>';
         $html .= '<td>Facture</td>';
-        $html .= '<td>' . $row['date'] . '</td>';
+        $html .= '<td>' . $row['date-action'] . '</td>';
         $html .= '<td>'.$row['action'].'</td>';
 
+        // $html .= '
+        // <form action="notification-action.php" id="notificationForm" method="POST">
+
+        // <td><a target="_blank" href="invoice_export.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" class="btn btn-secondary btn-sm"><span><i class="bi bi-eye"></i></span></a>
+        //             <a href="invoice-edit.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" data-id="' . $row['id_invoice'] . '" class="btn btn-primary btn-sm editInvoiceBtn"><span><i class="bi bi-pencil-square"></i></span></a>
+        //             &nbsp;
+        //             <input type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
+        //             <input type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
+        //             <input type="hidden" name="invoice_id" value="' . $row['id_invoice'] . '">
+        //             <input type="hidden" name="doc_type" value="invoice">
+        //         </form>
+        //             </td>';
         $html .= '
         <form action="notification-action.php" id="notificationForm" method="POST">
 
-        <td><a target="_blank" href="invoice_export.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" class="btn btn-secondary btn-sm"><span><i class="bi bi-eye"></i></span></a>
-                    <a href="invoice-edit.php?id=' . $row['id_invoice'] . '&client_id=' . $row['id_client'] . '" data-id="' . $row['id_invoice'] . '" class="btn btn-primary btn-sm editInvoiceBtn"><span><i class="bi bi-pencil-square"></i></span></a>
-                    &nbsp;
-                    <input type="submit" name="btn-approve-notif" class="btn btn-success btn-sm btn-approve-notif" value="Approve"/>
-                    <input type="submit" name="btn-decline-notif" class="btn btn-danger btn-sm btn-decline-notif" value="Decline"/>
-                    <input type="hidden" name="invoice_id" value="' . $row['id_invoice'] . '">
-                    <input type="hidden" name="doc_type" value="invoice">
+        <td class="d-flex align-items-center justify-content-center">
+        <button title="masquer la notification" type="submit" name="btn-disabled-notif"  class="btn btn-danger btn-sm"><span><i class="bi bi-bell-slash "></i></span></button>
+                   <input type="hidden" name="user-id" value="'.$row['id_user'].'"/>
+                   <input type="hidden" name="invoice-id" value="'.$row['id_invoice'].'"/>
+                   <input type="hidden" name="date-action" value="'.$row['date-action'].'"/>
+                   <input type="hidden" name="doc_type" value="invoice"/>
+                </td>
                 </form>
-                    </td>';
+
+                ';
         $html .= '</tr>';
     }
     return $html;

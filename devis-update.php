@@ -28,9 +28,9 @@
         // echo "azeddine";
         // echo $label_netTotal;
         $user_role=getUserRole($_SESSION['user_id']);
-        ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
+        // ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
 
-        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='$type', `status`='$devisStatus', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located' WHERE id='$devis_id'";
+        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='Approved', `status`='accepter', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located' WHERE id='$devis_id'";
         $res = mysqli_query($cnx,$query);
         
         //adding to user_devis for history...

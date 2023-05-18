@@ -72,7 +72,7 @@ $clientRes = mysqli_query($cnx, $query);
                                                     <a href="#">Avance</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#"></a>
+                                                    <a href="#">Action</a>
                                                 </th>
 
 

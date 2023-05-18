@@ -30,7 +30,7 @@
                                                     <a href="#">Type</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#">Date</a>
+                                                    <a href="#">Date Action</a>
                                                 </th>
                                                 <th>
                                                     <a href="#">Action</a>
@@ -45,7 +45,7 @@
                                         <?php
                                             echo devisNotificationData();
                                             echo invoiceNotificationData();
-                                            echo paymentNotificationData();
+                                            // echo paymentNotificationData();
                                         ?>
                                         
                                             
