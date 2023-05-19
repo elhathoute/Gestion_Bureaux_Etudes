@@ -240,7 +240,7 @@ include 'header.php';
                                     <div class="row my-2">
                                         <div class="col-sm-6">
                                             <label class="form-check-label fw-light" for="tvaCheckbox">Enlever TVA&nbsp</label>
-                                            <input type="checkbox" class="form-check-input removeTva" name="" id="tvaCheckbox">
+                                            <input type="checkbox" class="form-check-input removeTva removeTvaClient" name="" id="tvaCheckbox">
                                         </div>
 
                                     </div>
@@ -557,11 +557,11 @@ include 'header.php';
                                                         
                                                         <input type="text" class="form-control-plaintext fw-bold fs-6 py-0"  name="" id="brkReceiverName" value="" disabled>
                                                     </div>
-                                                    <div class="input-group">
+                                                    <!-- <div class="input-group">
                                                         <textarea class="form-control-plaintext fs-6 py-0 " value="" name="" id="brkReceiverAdr" style='resize: none;' disabled>
                                                         
                                                         </textarea>
-                                                    </div>
+                                                    </div> -->
                                                    
                                             </div>
                                             <div class="col-md-4">
@@ -600,7 +600,7 @@ include 'header.php';
                                                 <div class="h-line"></div>
                                             </div>
                                             <div class="row my-3">
-                                                <table class="table table-bordered table-hover table-striped " id="devisBrkShowTable">
+                                                <table class="table table-bordered table-hover table-striped  devisShowTableBrk" id="devisBrkShowTable">
                                                     <thead>
                                                         <tr>
                                                             <th></th>
@@ -610,6 +610,8 @@ include 'header.php';
                                                             <th>Prix</th>
                                                             <th>Discount</th>
                                                             <th>Montant</th>
+                                                             <th>Uniquee_Srv_id</th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -654,7 +656,7 @@ include 'header.php';
                                                     <div class="row my-2">
                                                         <div class="col-sm-6">
                                                             <label class="form-check-label fw-light" for="adrtextcb">Enlever TVA&nbsp</label>
-                                                            <input type="checkbox" class="form-check-input removeTva" name="" id="BrkTvaCheckbox"  disabled>
+                                                            <input type="checkbox" class="form-check-input removeTva removeTva_broker" name="" id="BrkTvaCheckbox"  disabled>
                                                         </div>
 
                                                     </div>

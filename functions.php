@@ -143,7 +143,7 @@ function getSelectedDevisServices(){
         $row = mysqli_fetch_all($res);
         // print_r($row);
         $html = '';
-        foreach ($row as $val) {
+        foreach ($row as $key=>$val) {
             $html .= '<tr>';
             $html .= '<td><i class="bi bi-trash fs-5 deleteRowBtn" ></i></td>';
             $html .= '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
@@ -152,6 +152,8 @@ function getSelectedDevisServices(){
             $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice"  value="'.$val[3].'" placeholder="0.00"></td>';
             $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[5].'" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
+            $html .= '<td><input type="text" name="srv_unique_id" id="srv_unique_id_update" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
+
             $html .= '</tr>';
         }
         return $html;
@@ -176,19 +178,20 @@ function viewDevisServices(){
         }
         $html = '';
         foreach ($row as $val) {
+            var_dump($val);
             $check_client = '';
             if(strtolower($devis_type)=="approved"){
                 $check_client = '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i></span> ';
-                if($val[9]){
+                if($val[10]){
                     $check_client = '<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="'.$val[0].'" title="Annuler l\'approbation" ></i></span>';
                 }
             }
-            if($val[8] == "1"){
+            if($val[9] == "1"){
                 $check_client ='';
             }
             // $success_icon = (strtolower($devis_type)=="approved")? '<i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i>': '';
-            $client_approve = ($val[9]=="1")? "approved_row" :"";
-            $html .= '<tr class="'.$client_approve.'" >';
+            $client_approve = ($val[10]=="1")? "approved_row" :"";
+            $html .= '<tr id="'.$val[0].'" class="'.$client_approve.'" >';
             $html .= '<td>'.$check_client.'</td>';
             $html .= '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
@@ -196,6 +199,8 @@ function viewDevisServices(){
             $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice"  value="'.$val[3].'" placeholder="0.00"></td>';
             $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[5].'" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
+            $html .= '<td><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
+
             $html .= '</tr>';
         }
         return $html;
@@ -214,11 +219,11 @@ function viewBrokerDevisServices(){
     if($_GET){
         $id = $_GET['id'];
         $query = "
-        SELECT  detail_devis.*,broker_devis.id as 'id_broker_devis',detail_broker_devis.*
-FROM `detail_devis`
-LEFT JOIN broker_devis on broker_devis.id_devis=detail_devis.id_devis
-LEFT JOIN detail_broker_devis on detail_broker_devis.id_broker_devis=broker_devis.id
-WHERE detail_devis.id_devis=$id and detail_devis.srv_unique_id=detail_broker_devis.srv_unique_id;
+        SELECT  detail_devis.*,broker_devis.id as 'id_broker_devis',detail_broker_devis.*,broker_devis.id_broker
+        FROM `detail_devis`
+        LEFT JOIN broker_devis on broker_devis.id_devis=detail_devis.id_devis
+        LEFT JOIN detail_broker_devis on detail_broker_devis.id_broker_devis=broker_devis.id
+        WHERE detail_devis.id_devis=$id and detail_devis.srv_unique_id=detail_broker_devis.srv_unique_id;;
         ";
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_all($res);
@@ -228,31 +233,33 @@ WHERE detail_devis.id_devis=$id and detail_devis.srv_unique_id=detail_broker_dev
 
         }
         $html = '';
-        foreach ($row as $val) {
-            
+        foreach ($row as $key=>$val) {
+            // var_dump($val);
+            $html .='<input type="hidden" disabled min="0" name="broker_devis" class="form-control py-1 px-1 broker_id" id="broker_id"  value="'.$val[17].'" >';
             $montant=($val[4]*$val[19])-($val[4]*$val[19]*$val[20])/100;
-            var_dump($montant);
+            // var_dump($montant);
             $check_client = '';
             if(strtolower($devis_type)=="approved"){
                 $check_client = '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i></span> ';
-                if($val[9]){
+                if($val[10]){
                     $check_client = '<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="'.$val[0].'" title="Annuler l\'approbation" ></i></span>';
                 }
             }
-            if($val[8] == "1"){
+            if($val[9] == "1"){
                 $check_client ='';
             }
             // $success_icon = (strtolower($devis_type)=="approved")? '<i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i>': '';
-            $client_approve = ($val[9]=="1")? "approved_row" :"";
-            $html .= '<tr class="'.$client_approve.'" >';
+            $client_approve = ($val[10]=="1")? "approved_row" :"";
+            $html .= '<tr id="'.$val[0].'" class="'.$client_approve.'" >';
             // $html .= '<td>'.$check_client.'</td>';
             $html .= '<td></td>';
-            $html .= '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
-            $html .= '<td><input type="text" name="" class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
-            $html .= '<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowBrkServiceQte"  value="'.$val[4].'" placeholder="Quantité"></td>';
+            $html .= '<td class="input-group"><input disabled type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input disabled type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
+            $html .= '<td><input type="text" name="" disabled class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
+            $html .= '<td><input type="number" disabled min="0" name="" class="form-control py-1 px-1 rowBrkServiceQte"  value="'.$val[4].'" placeholder="Quantité"></td>';
             $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 serviceBrkPrice"  value="'.$val[19].'" placeholder="0.00"></td>';
             $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[20].'" class="form-control py-1 serviceBrkDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceBrkTotal" value="'.$montant.'" disabled placeholder="0"></td>';
+            $html .= '<td><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
             $html .= '</tr>';
         }
         return $html;
@@ -269,7 +276,10 @@ function getSelectedDevisInfo(){
     }
     if($_GET){
         $id = $_GET['id'];
-        $query = "SELECT * FROM `devis` WHERE `id`='$id' AND `remove`=0";
+        $query = "SELECT devis.*,broker_devis.id_broker
+        FROM `devis` 
+        LEFT JOIN broker_devis on devis.id=broker_devis.id_devis
+        WHERE devis.id=$id AND `remove`=0;";
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_assoc($res);
         return $row; 
@@ -489,6 +499,10 @@ function intergerIntoFrenchWords($int)
         elseif ($unit > 0 && $dixaine == 0) $return .= ' '.$units[$unit];
 
         $thousandKey = $nbThousandPacket - ($i+1);
+       
+            $str=strcmp($return,' un');
+            
+        if($str==0) $return ='';
         if(array_key_exists($thousandKey, $thousands))  {
             $return .= ' '.$thousands[$thousandKey];
             if($thousandKey > 1 && $value >1)$return .= 's';
@@ -1866,6 +1880,21 @@ function bindBrokerDevis($idBroker,$idDevis)
     return $last_id;
 }
 
+// get broker by devis
+function getBrokerByDevis($idDevis,$idBroker)
+{
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT id FROM broker_devis WHERE id_devis = $idDevis and id_broker=$idBroker";
+    $result = mysqli_query($cnx, $query);
+    $row = mysqli_fetch_assoc($result);
+    $broker_id = $row['id'];
+    return $broker_id;
+    
+}
 //insert to dossier table
 function saveDossier($serv_id,$N_dossier){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);

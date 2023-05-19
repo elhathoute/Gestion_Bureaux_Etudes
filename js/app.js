@@ -811,17 +811,40 @@ $(document).ready(function () {
     //Column montant Display value
     $(document).on("input",".servicePrice",function(){
         rowTotal();
+        brkRowTotal();
+
     });
-    
+  
+    // client
     $(document).on("input",".rowServiceQte",function(){
         rowTotal();
+        
     });
-
+   
+    
     $(document).on("input",".serviceDiscount",function(){
         rowTotal();
+        brkRowTotal();
+
     });
     $(document).on("change",".removeTva",function(){
         rowTotal();
+        brkRowTotal();
+
+    });
+
+     // broker
+     $(document).on("input",".rowBrkServiceQte",function(){    
+        brkRowTotal();
+        // console.log('hi');
+    });
+    $(document).on("input",".serviceBrkPrice",function(){    
+        // console.log('hi');
+        brkRowTotal();
+    });
+    $(document).on("input",".serviceBrkDiscount",function(){    
+        // console.log('hi');
+        brkRowTotal();
     });
     // calculate row price function and Total price For "devis"
     // function rowTotal(){
@@ -920,8 +943,6 @@ $(document).ready(function () {
                 "unit":unit,
                 "srvRef":srvRef,
                 "montant":montant
-
-             
             }
             row++;
         });
@@ -929,7 +950,7 @@ $(document).ready(function () {
             tableData = JSON.stringify(tableData);
             var client_id = $('#client_id').val(),
             client_type = $("#client_type").val(),
-            tva_checked = $('.removeTva').is(':checked'),
+            tva_checked = $('.removeTvaClient').is(':checked'),
             devis_number = $('#devis_number').val(),
             devis_comment = $("#devis_comment").val(),
             labelSubTotal = $('#labelSubTotal').text(),
@@ -971,7 +992,7 @@ $(document).ready(function () {
                             
                             // if(selectedDevisBroker){
                                 //hide table rows && all the labels to prevent the rowTotal function runing on client devis
-                                $("#devisSrvTbl tbody tr").remove();
+                      $("#devisSrvTbl tbody tr").remove();
                         $('#labelSubTotal ,#labelDiscount ,#labelTva ,#labelDevisTotal').addClass("invisible");
                         // $('#labelDiscount').text(" ");
                         // $('#labelTva').text(" ");
@@ -1021,15 +1042,19 @@ $(document).ready(function () {
                         if(tva_checked){
                             $("#BrkTvaCheckbox").prop("checked",true);
                         }
-                        rowTotal();
+                        // rowTotal();
+                        $('.removeTva_broker').prop('checked', true);
                         brkRowTotal();
+
                         
 
                     }
-                    // else if(status=='success' && selectedDevisBroker==false){
+                    else if(status=='success' && selectedDevisBroker==false){
                    
-                        // location.href='devis-view.php?sc=sucadd';
-                    // }
+                        location.href='devis-view.php?sc=sucadd';
+                    }
+                    
+
                 },
                 errro:function(err){
                     console.log(err);
@@ -1045,8 +1070,6 @@ $(document).ready(function () {
     $(document).on('click','.btn_brk_devis_confirm',function(){
        if(dBrk_id != '') {
         let prices = [];
-        let discounts = [];
-        let service_unique_ids = [];
         $('#devisBrkShowTable tbody tr').each(function(){
             // prices
             var price = {
@@ -1056,12 +1079,7 @@ $(document).ready(function () {
             }
             
             prices.push(price);
-            // // discounts 
-            // var discount = $('.serviceDiscount',this).val();
-            // discounts.push(discount);
-            // // service_unique_ids
-            // var service_unique_id = $('.serviceUniqueId',this).val();
-            // service_unique_ids.push(service_unique_id);
+        
         });
         $.ajax({
             url:"devis_brk_dets.php",
@@ -1077,7 +1095,45 @@ $(document).ready(function () {
         });
        }
     });
-
+    // btn broker edit devis
+    $(document).on('click','#updateBrkDevis',function(e){
+        e.preventDefault();
+        var DevisId = $('#devis_id').val();
+        var brkId =   $('#broker_id').val();
+        // var uniqueServiceId =   $('#uniqueService_id').val();
+        if(brkId != '') {
+            // alert(DevisId+','+brkId);
+         let prices = [];
+        //  let discounts = [];
+        //  let service_unique_ids = [];
+         $('.devisShowTableBrk tbody tr').each(function(){
+            
+        //      // prices
+             var price = {
+                 "price":$('.serviceBrkPrice',this).val(),
+                 "discount":$('.serviceBrkDiscount',this).val(),
+                 "service_unique_id":$('.serviceUniqueId',this).val(),
+             }
+             
+             prices.push(price);
+             console.log(prices);
+         
+         });
+         $.ajax({
+             url:"devis_brk_dets._update.php",
+             type:'POST',
+             data:{dBrk_id:brkId,devis_id:DevisId,prices:prices},
+             success:function(data){
+                // alert(data);
+                 var json = JSON.parse(data);
+                 var status = json.status;
+                 if(status == 'success'){
+                     location.href='devis-view.php?sc=sucadd';
+                 }
+             }
+         });
+        }
+     });
 
     //fetching devis data
 
@@ -1100,12 +1156,16 @@ $(document).ready(function () {
     //     rowTotal();
     // })
     // window.onload = rowTotal;
-    $('#devisShowTable input').prop('disabled',true);
+    // $('#devisShowTable input').prop('disabled',true);
     $('#devisShowTable .deleteRowBtn').css("display","none");
     // $('#devisShowTable .deleteRowBtn').prop('disabled',true);
     //btn View devis Click 
 
     // $(document).on('click',".viewDevisBtn",function(){
+    //     alert('stop');
+    //     brkRowTotal();
+
+    // });
         
     //     var devis_id = $(this).data('id'),
     //     client_id = $(this).data("id_client");
@@ -1145,7 +1205,7 @@ $(document).ready(function () {
     //devis update
 
     $(document).on("submit","#devisEditForm",function(e){
-
+        // rowTotal();
         //checking if services ref not exist
 
         if(submitServiceForm){
@@ -1160,7 +1220,8 @@ $(document).ready(function () {
             qte = $('.rowServiceQte',this).val(),
             price = $('.servicePrice',this).val(),
             discount = $(".serviceDiscount",this).val(),
-            unit = $(".serviceUnit",this).val();
+            unit = $(".serviceUnit",this).val(),
+            serviceUniqueId=$('.serviceUniqueId',this).val();
         
             tableData[row] = {
                 "serviceName":service_name,
@@ -1168,12 +1229,13 @@ $(document).ready(function () {
                 "price":price,
                 "discount":discount,
                 "unit":unit,
-                "srvRef":srvRef
+                "srvRef":srvRef,
+                "serviceUniqueId":serviceUniqueId
             }
             row++;
         });
         // alert(0);
-        if($("#devis_id").val()!="" ){
+        if($("#devis_id").val()!="" && tableData.length != 0){
             tableData = JSON.stringify(tableData);
             var client_id = $('#client_id').val(),
             devis_id = $('#devis_id').val(),
@@ -1181,10 +1243,18 @@ $(document).ready(function () {
             labelSubTotal = $('#labelSubTotal').text(),
             labelDiscount = $('#labelDiscount').text(),
             labelDevisTotal = $('#labelDevisTotal').text(),
+            tva_checked = $('.removeTvaClient').is(':checked'),
             // devisStatus = $('#devisStatusDropdown').val(),
             
             objet_name = $("#objet_name").val(),
             located_txt = $("#sisTxt").val();
+
+            
+            let brkId;
+            if($("#selectedBrkId").val()!=""){
+                brkId = $("#selectedBrkId").val();
+                // console.log(brkId);
+            }
             // alert(located_txt);
             // console.log(1);
             // alert(1);
@@ -1204,23 +1274,132 @@ $(document).ready(function () {
             $.ajax({
                 url:'devis-update.php',
                 type:"POST",
-                data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt},
+                data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt,tva_checked:tva_checked,brkId:brkId},
                 success:function(data){
                     // alert(data);
                     // alert('az');
                     var json = JSON.parse(data);
                     var status = json.status;
-                    if(status == 'success'){
-                        location.href='devis-view.php?sc=sucupd';
+
+                    dBrk_id = json.dBrk_id;
+                    devis_id = json.devis_id;
+                    
+                    // if(status == 'success'){
+                    //     location.href='devis-view.php?sc=sucupd';
+                    // }
+                    if(status == 'success' && dBrk_id!=0){
+                            
+                        // if(selectedDevisBroker){
+                            //hide table rows && all the labels to prevent the rowTotal function runing on client devis
+                            // alert($(".servicesTable tbody tr"));
+                  $(".servicesTable tbody tr").remove();
+                    $('#labelSubTotal ,#labelDiscount ,#labelTva ,#labelDevisTotal').addClass("invisible");
+                    // $('#labelDiscount').text(" ");
+                    // $('#labelTva').text(" ");
+                    // $('#labelDevisTotal').text(" ");
+                    //initialize broker devis
+                    $(".loader-wrapper").addClass("loader-hidden");
+                    $("#devisBrokerViewModal_update").modal("show");
+                    //setting values
+                    $("#brkReceiverName").val($("#receiverName").val());
+                    $("#brkReceiverAdr").val($("#receiverAdr").val());
+                    $("#brkDevis_number").val($("#devis_number").val());
+                    $("#brk_dateTxt").val($("#dateTxt").val());
+                    $("#BrkObjet_name").val($("#objet_name").val());
+                    $("#brkSisTxt").val($("#sisTxt").val());
+                    $("#brkDevis_comment").val($("#devis_comment").val());
+                    // devis_id
+                    
+                    // alert(devis_id);
+               
+                    // $(".labelSubTotal_broker");
+                    // console.log($(".labelSubTotal_broker").text())
+                    
+                   
+
+                    //insert data in service table
+                    let html = ``;
+                    let devisTableData = JSON.parse(tableData);
+                    // console.log(devisTableData);
+                    for (let i = 0; i < devisTableData.length; i++) {
+                        uniqueSrvice_id=parseInt(devis_id)+i+1;
+                        if(devisTableData[i]["srvRef"] != ""){
+                            // console.log(devisTableData[i]["unit"]);
+                            html += `<tr>`;
+                            html += `<td></td>`;
+                            html += `<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="${devisTableData[i]["srvRef"]}" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover" disabled><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="${devisTableData[i]["serviceName"]}" class="form-control serviceDropdown" aria-describedby="srvRT" disabled><datalist id="servicesList"></datalist></td>`;
+                            html += `<td><input style="width: 50px;" type="text" name="" class="form-control py-1 serviceUnit" value="${devisTableData[i]["unit"]}"  placeholder="Unité" disabled></td>`;
+                            html += `<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte rowBrkServiceQte"  value="${devisTableData[i]["quantity"]}" placeholder="Quantité" disabled></td>`;
+                            html += `<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice serviceBrkPrice"  value="${devisTableData[i]["price"]}" placeholder="0.00"  ></td>`;
+                            html += `<td><div class="input-group"><span style="width: 30px;" class="input-group-text py-1"><i class="bi bi-percent"></i></span><input style="width: 38px;" type="number"  min="0" name="" value="${devisTableData[i]["discount"]}" class="form-control py-1 serviceDiscount serviceBrkDiscount" placeholder="Enter % (ex: 10%)" ></div></td>`;
+                            html += `<td><input type="text" name="" class="form-control py-1 rowServiceTotal rowServiceBrkTotal" value="${devisTableData[i]["montant"]}" disabled placeholder="0" disabled></td>`;
+                           html += `<td class="d-block"><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled value="`+(uniqueSrvice_id)+`"></td>`;
+
+                            html += `</tr>`;
+                        }
+                        
                     }
+                    $("#devisBrokerViewModal_update tbody").html(html);
+                    // if(tva_checked){
+                    //     $("#BrkTvaCheckbox").prop("checked",true);
+                    // }
+                    // rowTotal();
+                    $('.removeTva_broker').prop('checked', true);
+                    brkRowTotal();
+
                 }
+                location.href='devis-view.php?sc=sucadd';
+
+                },
+                errro:function(err){
+                    console.log(err);
+                }
+                
             });
+           
+                return false;
+            
             
             // alert("ze");
             
         }
     });
+    $(document).on('click', '.btn_brk_devis_confirm_update', function() {
+        if (dBrk_id != '') {
+            let prices = [];
+            $('#devisBrkShowTable tbody tr').each(function() {
+                var price = {
+                    "price": $('.servicePrice', this).val(),
+                    "discount": $('.serviceDiscount', this).val(),
+                    "service_unique_id": $('.serviceUniqueId', this).val()
+                };
+                prices.push(price);
+            });
+            devis_id=$('#devis_id').val()
+            // console.log();
 
+            // console.log(prices);
+    
+            $.ajax({
+                url:"devis_brk_dets_delete_add.php.php",
+                type: 'POST',
+            data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
+                
+                success: function(data) {
+                    // alert(data);
+                    var json = JSON.parse(data);
+                    var status = json.status;
+                    if (status == 'success') {
+                        location.href = 'devis-view.php?sc=sucadd';
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+    
     //devis delete
 
     var devis_deleted_id, devis_deleted_row;
@@ -1369,6 +1548,7 @@ $(document).ready(function () {
     $(document).on('click','.btn-client-approve',function(){
         var doc_id = $(this).data('id');
         var doc_type = $("#doc_type").val();
+        
         var btn=$(this);
         lunchLoader();
         $.ajax({
@@ -1381,6 +1561,9 @@ $(document).ready(function () {
                 if(status == 'success'){
                     $(".loader-wrapper").addClass("loader-hidden");
                     btn.closest("tr").addClass("approved_row");
+                    // console.log($('#devisShowTable tr#'+ doc_id));
+                    $('#devisShowTable tr#'+doc_id).addClass('approved_row');
+                    $('#devisShowTableBrk tr#'+doc_id).addClass('approved_row');
                     // btn.closest("tr").css("background"," #bcf5bc");
                     // btn.css("display","none");
                     btn.parent().append(`<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="${doc_id}" ></i></span>`)
@@ -1407,6 +1590,8 @@ $(document).ready(function () {
                     $(".loader-wrapper").addClass("loader-hidden");
                     // btn.closest("tr").css("background-color","red");
                     btn.closest("tr").removeClass("approved_row");
+                    $('#devisShowTable tr#'+doc_id).removeClass('approved_row');
+                    $('#devisShowTableBrk tr#'+doc_id).removeClass('approved_row');
                     // btn.css("display","none");
                     // $(".btn-client-approve").css("display","inline-block");
                     btn.parent().append(`<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="${doc_id}" ></i></span>`)
@@ -3205,6 +3390,7 @@ function saveInvoicePayment(){
 
 
 function rowTotal(){
+    // console.log($('.removeTva')[0]);
     var grand_total = 0,
     disc = 0;
     $('.servicesTable tbody tr').each(function(){
@@ -3227,11 +3413,10 @@ function rowTotal(){
     var tva = 0.2;
     var price_Tva = (grand_total*tva) + grand_total;
     var addedTvaPrice = price_Tva - grand_total
-
     $('.labelTva').text(addedTvaPrice.toFixed(2)+" DH");
     $('.labelDevisTotal').text(price_Tva.toFixed(2)+" DH");
 
-    if($('.removeTva').is(':checked')){
+    if($('.removeTvaClient').is(':checked')){
         $('.labelTva').text('0.00 DH');
         $('.labelDevisTotal').text(grand_total.toFixed(2)+" DH");
     }
@@ -3239,15 +3424,17 @@ function rowTotal(){
 }
 
 function brkRowTotal(){
-  
     var grand_total = 0,
     disc = 0;
-    $('#devisBrkShowTable tbody tr').each(function(){
+    // console.log( $('.devisShowTableBrk tbody tr'));
+    $('.devisShowTableBrk tbody tr').each(function(){
         var rowQte = $('.rowBrkServiceQte',this).val(),
         rowPrice = $('.serviceBrkPrice',this).val(),
         rowDiscount = $('.serviceBrkDiscount',this).val(),
         rowMontant = $('.rowServiceBrkTotal',this);
+        // console.log(rowQte);
         var discount = (rowDiscount == "") ? 0 : parseFloat(rowDiscount)/100;
+        // alert('qte : '+rowQte);
         var originalPrice = parseFloat(rowQte)*parseFloat(rowPrice);
         var res = isNaN(originalPrice)? 0 : (originalPrice - (originalPrice*discount)).toFixed(2);
         rowMontant.val(res);

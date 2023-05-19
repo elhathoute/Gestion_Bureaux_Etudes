@@ -116,7 +116,7 @@
 
         <div class="my-5">
             <span style="text-decoration:underline">Objet:</span><br>
-            <p style="text-align:center;padding:0 20px"><?=ucfirst($invoiceInfo["objet"]);?>. <span style="font-weight: bold !important;">Size</span> à <span> <?= $invoiceInfo['located'] ?></span>.</p>
+            <p style="text-align:center;padding:0 20px"><?=ucfirst($invoiceInfo["objet"]);?>. <span style="font-weight: bold !important;">Sise</span> à <span> <?= $invoiceInfo['located'] ?></span>.</p>
         </div>
         <?php 
         if($_GET){
@@ -201,7 +201,7 @@
                 
             
         <div class="my-3">
-            <span>Arrêté le présent Facture à la somme de:</span><br>
+            <span>Arrêté la présent Facture à la somme de:</span><br>
             <p class="underline"style="text-align:center;padding:0 20px;font-size:0.9rem;"><strong><?php echo intergerIntoFrenchWords($invoiceInfo['net_total']); ?> <span><?php if(($invoiceInfo['remove_tva']=="0")) {echo('T.T.C.');}else{ echo 'H.T.';} ?></span></strong></p>
         </div>
         <div class="my-5"style="font-size:0.7rem;line-height:0.5;">

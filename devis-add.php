@@ -14,6 +14,7 @@
         $label_discount = floatval(trim(str_replace('DH',"",$_POST['labelDiscount'])));
         $label_netTotal = floatval(trim(str_replace('DH',"",$_POST['labelDevisTotal'])));
         $tva_checked = $_POST['tva_checked']=='true'?1:0;
+        
         $objet_name = $_POST['objet_name'];
         $located_txt = $_POST['located_txt'];
         if(isset($_POST['brkId'])){
@@ -47,31 +48,6 @@
         */
 
         $user_id = $_SESSION['user_id'];
-
-        //adding to devis_payment
-        // if($_POST['invoice_payment']!=""){
-        //     $invoice_payment = floatval($_POST['invoice_payment']) > $label_netTotal ? $label_netTotal : floatval($_POST['invoice_payment']);
-        //     $payment_method = $_POST['payment_method'];
-        //     $pay_giver = $_POST["invoice_pay_giver"];
-        //     $user_id = $_SESSION['user_id'];
-        //     $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `prix`, `pay_method`,`user_id`) VALUES (null,'$last_id','$invoice_payment','$payment_method',$user_id)";
-        //     mysqli_query($cnx,$query);
-        //     $pay_id = mysqli_insert_id($cnx);
-        //     // acceptPayment($last_id);
-            
-        //     addReceipt($pay_id,$pay_giver);
-        //     // if($invoice_payment==$label_netTotal){
-        //     //     updateInvoicePaidStatus($last_id);
-        //     // }
-
-        //     //user history
-        //     userDevis_history($user_id,$last_id,"Paiement Effectué");
-        // }
-
-
-
-
-
 
          //adding to user_devis for history...
         $user_id = $_SESSION['user_id'];
