@@ -2917,6 +2917,42 @@ $(document).ready(function () {
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
     });
 
+    // check if reference exist or not in dossier
+    $(document).on("input",".refTxt",function (e) {
+       var ref_dossier=$(this).val();
+       
+       $.ajax({
+        url:"check_ref_dossier.php",
+        data:{ref_dossier:ref_dossier},
+        type:"POST",
+        success:function(data){
+           
+          let  json = JSON.parse(data);
+          if(json.status =='success'){
+            $('.refTxt').removeClass('border border-success');
+            $('.refTxt').addClass('border border-danger');
+            // disabled btn
+            $('#btn_createDs').attr('disabled',true);
+            // show text
+            $('#error-ref-exist').text('Cette référence existe déjà veuillez choisir une autre');
+           
+          }else{
+            $('.refTxt').removeClass('border border-danger');
+            $('.refTxt').addClass('border border-success');
+            // btn not disabled
+            $('#btn_createDs').attr('disabled',false);
+            // remove text
+            $('#error-ref-exist').text('');
+
+
+
+          }
+        },error:function(xhr,err){
+            console.log(err);
+        }
+      });
+    });
+
     $(document).on("click",".dsServiceItem",function(){
         const d_devis_id = $(this).closest('div').data('d_id');
         $("#dossierClientSelect").prop("disabled",true);
@@ -2940,6 +2976,8 @@ $(document).ready(function () {
                                         <span class="input-group-text" id="ds_ref">${json[0]}</span>
                                         <input type="text" class="form-control refTxt" placeholder="N° Dossier" aria-describedby="ds_ref" required>
                                     </div>
+                                    <p id="error-ref-exist" class="text-danger fs-5 ms-3 mt-2"></p>
+
                                 </div>`;
                         html += `<div class="mb-3">
                                     <label  class="form-label fw-semibold">Objet</label>

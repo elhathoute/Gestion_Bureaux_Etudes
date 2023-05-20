@@ -2,7 +2,7 @@
 
 //fetch individual client data
 // get count service in dossier
-function getCountService($id_service){
+function getCountDossierService($id_service){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -10,10 +10,22 @@ function getCountService($id_service){
     }
     $query = "SELECT CASE WHEN dossier.N_dossier IS  NULL THEN 0 ELSE COUNT(dossier.id_service) END as service_count
     FROM dossier
-     WHERE dossier.id_service=$id_service";
+     WHERE dossier.id_service=$id_service ";
     $res = mysqli_query($cnx,$query);
     $row = mysqli_fetch_assoc($res);
     return $row['service_count'];
+}
+// check ref dossier exist or not
+function CheckRefDossier($ref_dossier){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT count(id) as count_ref from dossier WHERE N_dossier='$ref_dossier'  ";
+    $res = mysqli_query($cnx,$query);
+    $row = mysqli_fetch_assoc($res);
+    return $row['count_ref'];
 }
 function getIndvClientData(){
     // connect to database
