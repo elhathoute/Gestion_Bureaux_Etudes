@@ -972,6 +972,7 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,client_type:client_type,devis_number:devis_number,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,tva_checked:tva_checked,objet_name:objet_name,located_txt:located_txt,brkId:brkId},
                 success:function(data){
+                    // alert(data);
                     // if(status == 'success')
                     // {
                         //     alert(data);
@@ -1086,6 +1087,7 @@ $(document).ready(function () {
             type:'POST',
             data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
             success:function(data){
+                // alert(data);
                 var json = JSON.parse(data);
                 var status = json.status;
                 if(status == 'success'){
@@ -2988,7 +2990,7 @@ $(document).ready(function () {
                         html += `<div class="mb-3">
                                     <label  class="form-label fw-semibold">Sis à</label>
                                     <div class="ps-3">
-                                        <textarea id="ds_sis" class="form-control" rows="1" placeholder="Sis à" disabled></textarea>
+                                        <textarea id="ds_sis" class="form-control" rows="1" placeholder="Sis à" disabled >${json[5]}</textarea>
                                     </div>
                                 </div>`;
                         html += `<div class="mb-3">

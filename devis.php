@@ -118,7 +118,8 @@ include 'header.php';
                                 <div class="row my-1">
                                     <label for="" class="col-sm-8 col-form-label fw-bold">N° de devis</label>
                                     <div class="col-sm-4 my-auto">
-                                        <input type="text" class="form-control border-dashed p-0" id="devis_number" name="devis_number" value="<?php echo sprintf("%03d", getDevisNumber()) . '/' . date('Y'); ?>" disabled>
+                                        <!-- <input type="text" class="form-control border-dashed p-0" id="devis_number" name="devis_number" value="<?php echo sprintf("%03d", getDevisNumber()) . '/' . date('Y'); ?>" disabled> -->
+                                        <input type="text" class="form-control border-dashed p-0" id="devis_number" name="devis_number" value="<?= '/' . date('Y'); ?>" >
                                     </div>
                                 </div>
                                 <div class="row my-1">

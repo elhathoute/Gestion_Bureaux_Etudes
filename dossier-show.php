@@ -42,7 +42,7 @@ if(isset($_GET["s_id"])){
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Sis à</label>
                             <div class="ps-3">
-                                <textarea id="ds_sis" class="form-control" rows="1" placeholder="Sis à" disabled></textarea>
+                                <textarea id="ds_sis" class="form-control" rows="1" placeholder="Sis à" disabled><?=ucfirst($row["located"])?></textarea>
                             </div>
                         </div>
                         <div class="mb-3">
