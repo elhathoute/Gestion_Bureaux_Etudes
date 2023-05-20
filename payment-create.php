@@ -9,7 +9,7 @@ $clientRes = mysqli_query($cnx, $query);
 <div class="row py-4">
     <div class="col-md-4">
         <a href='javascript:void(0)' class="btn btn-outline-secondary btnChangePaymentClient" title="Sélectionner un autre Client">
-            <i class="bi bi-plus-circle"></i>&nbsp;Change client
+            <i class="bi bi-plus-circle"></i>&nbsp;Change Maître d'ouvrage
         </a>
     </div>
 </div>
@@ -20,7 +20,7 @@ $clientRes = mysqli_query($cnx, $query);
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title">Paiements pour Client</h3>
+                        <h3 class="card-title">Paiements pour Maître d'ouvrage</h3>
                         <div class="tab-content" id="services-content">
                             <!-- table payment -->
                             <div class="overflow-auto">
@@ -57,13 +57,16 @@ $clientRes = mysqli_query($cnx, $query);
                                                     <a href="#">Devis</a>
                                                 </th>
                                                 <th>
-                                                    <a href="#">Client</a>
+                                                    <a href="#">Maître d'ouvrage</a>
                                                 </th>
                                                 <th>
                                                     <a href="#">Ref</a>
                                                 </th>
                                                 <th>
                                                     <a href="#">Service</a>
+                                                </th>
+                                                <th>
+                                                    <a href="#">Qte</a>
                                                 </th>
                                                 <th>
                                                     <a href="#">Prix</a>
@@ -185,14 +188,14 @@ $clientRes = mysqli_query($cnx, $query);
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Choisissez la perssone qui paie</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3 client-select-container">
-                    <label for="selectClientModal" class="form-label">Client</label>
+                    <label for="selectClientModal" class="form-label">Maître d'ouvrage</label>
                     <select id="selectClientModal" class="form-select">
-                        <option value="" selected disabled>Choisir un Client</option>
+                        <option value="" selected disabled>Choisir un Maître d'ouvrage</option>
                         <?php
                         while ($row = mysqli_fetch_assoc($clientRes)) {
                             $clientName = fetchClientName($row['type'], $row['id_client']);

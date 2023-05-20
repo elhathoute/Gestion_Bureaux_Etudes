@@ -1,7 +1,20 @@
 <?php
 
 //fetch individual client data
-
+// get count service in dossier
+function getCountService($id_service){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT CASE WHEN dossier.N_dossier IS  NULL THEN 0 ELSE COUNT(dossier.id_service) END as service_count
+    FROM dossier
+     WHERE dossier.id_service=$id_service";
+    $res = mysqli_query($cnx,$query);
+    $row = mysqli_fetch_assoc($res);
+    return $row['service_count'];
+}
 function getIndvClientData(){
     // connect to database
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
@@ -178,7 +191,7 @@ function viewDevisServices(){
         }
         $html = '';
         foreach ($row as $val) {
-            var_dump($val);
+            // var_dump($val);
             $check_client = '';
             if(strtolower($devis_type)=="approved"){
                 $check_client = '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i></span> ';

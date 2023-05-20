@@ -674,7 +674,7 @@ $(document).ready(function () {
             type:"post",
             success:function(data){
                 var json = JSON.parse(data);
-                console.log(json.customer);
+                // console.log(json.customer);
 
                 $('#client_id').val(json.customer.id);
                 $("#client_type").val("entreprise");
@@ -1811,7 +1811,7 @@ $(document).ready(function () {
         if($(".broker-select-container").css("display") == "none"){
             $(".broker-select-container").show();
             $(".client-select-container").hide();
-            $(this).text('Filtrer avec le client');
+            $(this).text('Filtrer avec le Maître d\'ouvrage');
         }else{
             $(".client-select-container").show();
             $(".broker-select-container").hide();
@@ -1864,6 +1864,7 @@ $(document).ready(function () {
                 data:{clientId:clientId},
                 success:function(data){
                     var json = JSON.parse(data)["data"];
+                    console.log(json);
                     var html =``;
                     var total=0,
                     solde = 0;
@@ -1871,16 +1872,17 @@ $(document).ready(function () {
 
                         json.forEach(row => {
                             html += `<tr>`;
-                            html += `<td>${row[0]}${row[7]}</td>`;
+                            html += `<td>${row[0]}${row[8]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td class="totalRow">${row[4]} DH</td>`;
-                            html += `<td class="soldeRow">${row[5]} DH</td>`;
-                            html += `<td class="text-center">${row[6]}</td>`;
+                            html += `<td>${row[4]}</td>`;
+                            html += `<td class="totalRow">${row[5]} DH</td>`;
+                            html += `<td class="soldeRow">${row[6]} DH</td>`;
+                            html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
-                            total += parseFloat(row[4]);
-                            solde += parseFloat(row[5]);
+                            total += parseFloat(row[5]);
+                            solde += parseFloat(row[6]);
                         });
                     }else{
                         html += `<tr><td colspan="7" class="text-center"><strong>No Data Available</strong></td></tr>`;
@@ -1917,16 +1919,17 @@ $(document).ready(function () {
 
                         json.forEach(row => {
                             html += `<tr>`;
-                            html += `<td>${row[0]}${row[7]}</td>`;
+                            html += `<td>${row[0]}${row[8]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td class="totalRow">${row[4]} DH</td>`;
-                            html += `<td class="soldeRow">${row[5]} DH</td>`;
-                            html += `<td class="text-center">${row[6]}</td>`;
+                            html += `<td>${row[4]}</td>`;
+                            html += `<td class="totalRow">${row[5]} DH</td>`;
+                            html += `<td class="soldeRow">${row[6]} DH</td>`;
+                            html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
-                            total += parseFloat(row[4]);
-                            solde += parseFloat(row[5]);
+                            total += parseFloat(row[5]);
+                            solde += parseFloat(row[6]);
                         });
                     }else{
                         html += `<tr><td colspan="7" class="text-center"><strong>No Data Available</strong></td></tr>`;
