@@ -2927,7 +2927,7 @@ $(document).ready(function () {
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     if(json.length != 0){
-
+                     
                         json.forEach(row => {
                             
                             html += `<div class="list-group-item list-group-item-action d-flex justify-content-between"  data-bs-toggle="list" data-d_id="${row[3]}">
