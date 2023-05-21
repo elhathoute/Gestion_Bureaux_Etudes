@@ -209,7 +209,7 @@ function br2nl($string)
                                     <div class="row my-2">
                                         <div class="col-sm-6">
                                             <label class="form-check-label fw-light" for="tvaCheckbox">Enlever TVA&nbsp</label>
-                                            <input type="checkbox" class="form-check-input removeTva" name="" id="tvaCheckbox" <?= $devis['remove_tva']=='1'?'checked':"";?> disabled>
+                                            <input type="checkbox" class="form-check-input removeTva removeTvaClient"  name="" id="tvaCheckbox" <?= $devis['remove_tva']=='1'?'checked':"";?> disabled>
                                         </div>
 
                                     </div>
@@ -221,6 +221,8 @@ function br2nl($string)
                                             <label class="labelDevisTotal">0.00 DH</label>
                                         </div>
                                     </div>
+
+                                 
 
                                 </div>
                             </div>
@@ -334,7 +336,7 @@ function br2nl($string)
                                     <div class="h-line"></div>
                                 </div>
                                 <div class="row my-3">
-                                    <table class="table table-bordered table-hover table-striped brkServicesTable " id="devisShowTable">
+                                    <table class="table table-bordered table-hover table-striped brkServicesTable  devisShowTableBrk " id="devisShowTableBrk">
                                         <thead>
                                             <tr style="background-color: #edededed;">
                                                 <th></th>
@@ -344,6 +346,7 @@ function br2nl($string)
                                                 <th>Prix</th>
                                                 <th>Discount</th>
                                                 <th>Montant</th>
+                                                <th>Uniquee_Srv_id</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -393,7 +396,7 @@ function br2nl($string)
                                         <div class="row my-2">
                                             <div class="col-sm-6">
                                                 <label class="form-check-label fw-light" for="tvaCheckbox">Enlever TVA&nbsp</label>
-                                                <input type="checkbox" class="form-check-input removeTva" name="" id="tvaCheckbox" <?= $devis['remove_tva']=='1'?'checked':"";?> disabled>
+                                                <input type="checkbox" class="form-check-input removeTva " checked name="" id="tvaCheckbox" <?= $devis['remove_tva']=='1'?'checked':"";?> disabled>
                                             </div>
 
                                         </div>
@@ -405,6 +408,13 @@ function br2nl($string)
                                                 <label class="labelBrkDevisTotal">0.00 DH</label>
                                             </div>
                                         </div>
+
+                                        <div class="row my-2 d-flex align-items-center justify-content-end">
+                                      
+                                      <div class="col-sm-6">
+                                       <button class="btn btn-success" id="updateBrkDevis">Mise à jour</button>
+                                      </div>
+                                  </div>
 
                                     </div>
                                 </div>

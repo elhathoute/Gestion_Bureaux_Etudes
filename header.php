@@ -86,6 +86,7 @@ if ($exist) {
             $('#paymentByClientModal').modal('show');
         }
     </script>
+    
     <!-- chartJS CDN-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     

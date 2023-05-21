@@ -14,7 +14,8 @@ while($row=mysqli_fetch_assoc($res)){
     $data[] = ucfirst($row['objet']);
     $data[] = ucfirst($row['service_name']);
     $data[] = $row['prix'];
-    $data[] = $row["id"];
+    $data[] = $row['id'];
+    $data[] = ($row["located"]);
     
 }
 

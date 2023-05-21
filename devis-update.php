@@ -21,6 +21,11 @@
         $devis_comment = $_POST['devis_comment'];
         $objet_name = $_POST['objet_name'];
         $located = $_POST['located_txt'];
+        $tva_checked = $_POST['tva_checked']=='true'?1:0;
+
+        if(isset($_POST['brkId'])){
+            $brkId = $_POST['brkId'];
+        }
         $label_subTotal = floatval(trim(str_replace('DH',"",$_POST['labelSubTotal'])));
         // $label_discount = $_POST['labelDiscount'];
         $label_discount = floatval(trim(str_replace('DH',"",$_POST['labelDiscount'])));
@@ -30,7 +35,7 @@
         $user_role=getUserRole($_SESSION['user_id']);
         // ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
 
-        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='Approved', `status`='accepter', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located' WHERE id='$devis_id'";
+        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='Approved', `status`='accepter',`remove_tva`=$tva_checked, `comment`='$devis_comment', `objet`='$objet_name',`located`='$located' WHERE id='$devis_id'";
         $res = mysqli_query($cnx,$query);
         
         //adding to user_devis for history...
@@ -44,52 +49,68 @@
         // $res='';
 
         foreach($originalServices as $index => $originalService){
+
             $updated_service = $updatedServices[$index];
-            if($updated_service === null){
+            // if($updated_service === null){
                 //service has been deleted
                 //delete service from Database
                 $service_id = $originalService['id'];
                 $query = "DELETE FROM `detail_devis` WHERE `id` = $service_id";
                 mysqli_query($cnx,$query);
+                
+            // }
+            // else{
+            //     //check for updates to the service
+            //     $discount = $updated_service['discount']==""?0:$updated_service['discount'];
 
-            }else{
-                //check for updates to the service
-                $discount = $updated_service['discount']==""?0:$updated_service['discount'];
+            //     if($originalService['service_name'] !== $updated_service['serviceName'] ||
+            //         $originalService['prix'] !== $updated_service['price'] ||
+            //         $originalService['quantity'] !== $updated_service['quantity'] ||
+            //         $originalService['discount'] !== $discount || 
+            //         $originalService['unit'] !== $updated_service['unit'] || 
+            //         $originalService['ref'] !== $updated_service['srvRef']
+            //     )
+            //     {
+                   
+            //         $service_id = $originalService['id'];
+            //         $service_name = $updated_service['serviceName'];
+            //         $price = $updated_service['price'];
+            //         $qte = $updated_service['quantity'];
+            //         $unit = $updated_service['unit'];
+            //         $ref = $updated_service['srvRef'];
+               
 
-                if($originalService['service_name'] !== $updated_service['serviceName'] ||
-                    $originalService['prix'] !== $updated_service['price'] ||
-                    $originalService['quantity'] !== $updated_service['quantity'] ||
-                    $originalService['discount'] !== $discount || 
-                    $originalService['unit'] !== $updated_service['unit'] || 
-                    $originalService['ref'] !== $updated_service['srvRef']
-                )
-                {
-                    $service_id = $originalService['id'];
-                    $service_name = $updated_service['serviceName'];
-                    $price = $updated_service['price'];
-                    $qte = $updated_service['quantity'];
-                    $unit = $updated_service['unit'];
-                    $ref = $updated_service['srvRef'];
 
-                    $query = "UPDATE `detail_devis` SET `service_name`='$service_name',`prix`='$price',`quantity`='$qte',`discount`='$discount',`unit`='$unit',`ref`='$ref' WHERE `id` = '$service_id'";
-                    mysqli_query($cnx, $query);
-                }
-            }
+            //         $query = "UPDATE `detail_devis` SET `service_name`='$service_name',`prix`='$price',`quantity`='$qte',`discount`='$discount',`unit`='$unit',`ref`='$ref'  WHERE `id` = '$service_id'";
+            //         mysqli_query($cnx, $query);
+            //     }
+               
+            
+            // }
         }
 
+        $empl=1;
         foreach($updatedServices as $index => $updated_service){
-            if($updated_service !== null && !isset($originalServices[$index])){
+            // die(var_dump($updated_service));
+            // if($updated_service !== null && !isset($originalServices[$index])){
+               
+            for($i=0;$i<$updated_service['quantity'];$i++) {
+
                 $service_id = $originalService['id'];
                 $service_name = $updated_service['serviceName'];
                 $price = $updated_service['price'];
                 $qte = $updated_service['quantity'];
                 $unit = $updated_service['unit'];
                 $ref = $updated_service['srvRef'];
+                $serviceUniqueId = $updated_service['serviceUniqueId'];
+                // die(var_dump($serviceUniqueId));
                 $discount = $updated_service['discount']==""?0:$updated_service['discount'];
 
-                $query = "INSERT INTO `detail_devis`(`id_devis`, `service_name`, `prix`, `quantity`, `discount`, `unit`, `ref`) VALUES ('$devis_id','$service_name','$price','$qte','$discount','$unit','$ref')";
+                $query = "INSERT INTO `detail_devis`(`id_devis`, `service_name`, `prix`, `quantity`, `discount`, `unit`, `ref`,`srv_unique_id`,`empl`) VALUES ('$devis_id','$service_name','$price','$qte','$discount','$unit','$ref','$serviceUniqueId','$empl')";
                 mysqli_query($cnx, $query);
-            }
+            // }
+        }
+        $empl++;
         }
 
 
@@ -103,9 +124,14 @@
             
         // }
         
-        
+         //adding to broker_devis
+         $dBrk_id = '';
+         if(isset($brkId)){
+             $dBrk_id = getBrokerByDevis($devis_id,$brkId);
+         }
         if($res){
-            $data = array('status'=>'success');
+            $data = array('status'=>'success',"dBrk_id"=>$dBrk_id,"devis_id"=>$devis_id);
+          
             echo json_encode($data);
         }else{
             $data = array('status'=>'failed');
