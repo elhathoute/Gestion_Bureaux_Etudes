@@ -205,7 +205,7 @@ function viewDevisServices(){
     }
     if($_GET){
         $id = $_GET['id'];
-        $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id'";
+        $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id' GROUP BY `empl`";
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_all($res);
         // print_r($row);
@@ -263,7 +263,7 @@ function viewBrokerDevisServices(){
         FROM `detail_devis`
         LEFT JOIN broker_devis on broker_devis.id_devis=detail_devis.id_devis
         LEFT JOIN detail_broker_devis on detail_broker_devis.id_broker_devis=broker_devis.id
-        WHERE detail_devis.id_devis=$id and detail_devis.srv_unique_id=detail_broker_devis.srv_unique_id;;
+        WHERE detail_devis.id_devis=$id and detail_devis.srv_unique_id=detail_broker_devis.srv_unique_id GROUP BY detail_devis.`empl`;
         ";
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_all($res);

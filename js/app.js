@@ -1547,7 +1547,9 @@ $(document).ready(function () {
     });
 
     // make services unique
-    // $(document).on('click','.viewDevisBtn',funv)
+    // $(document).on('click','.viewDevisBtn',function(){
+    //     alert('lkjfd')
+    // })
 
     //client approve devis & invoice click
     $(document).on('click','.btn-client-approve',function(){
