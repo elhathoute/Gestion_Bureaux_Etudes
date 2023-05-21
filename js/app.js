@@ -1546,18 +1546,24 @@ $(document).ready(function () {
         "pagingType": "input",
     });
 
+    // make services unique
+    // $(document).on('click','.viewDevisBtn',funv)
+
     //client approve devis & invoice click
     $(document).on('click','.btn-client-approve',function(){
         var doc_id = $(this).data('id');
+        var srv_unique_id = $(this).data('srv_unique_id');
+        // console.log($(this).data());
         var doc_type = $("#doc_type").val();
         
         var btn=$(this);
         lunchLoader();
         $.ajax({
             url:"service_approve.php",
-            data:{doc_id:doc_id,doc_type:doc_type},
+            data:{doc_id:doc_id,doc_type:doc_type,srv_unique_id:srv_unique_id},
             type:"POST",
             success:function(data){
+                // alert(data);
                 var json = JSON.parse(data);
                 var status = json.status;
                 if(status == 'success'){
@@ -1566,9 +1572,14 @@ $(document).ready(function () {
                     // console.log($('#devisShowTable tr#'+ doc_id));
                     $('#devisShowTable tr#'+doc_id).addClass('approved_row');
                     $('#devisShowTableBrk tr#'+doc_id).addClass('approved_row');
+                   // Refresh the page after a specific time delay (e.g., 2000 milliseconds or 2 seconds)
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+
                     // btn.closest("tr").css("background"," #bcf5bc");
                     // btn.css("display","none");
-                    btn.parent().append(`<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="${doc_id}" ></i></span>`)
+                    btn.parent().append(`<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="${doc_id}" data-srv_unique_id="${srv_unique_id}" ></i></span>`)
                     btn.remove();
                     // $(".btn-cancel-client-approve").css("display","inline-block");
                 }
@@ -1579,13 +1590,17 @@ $(document).ready(function () {
     //cancel client approve devis Click
     $(document).on("click",".btn-cancel-client-approve",function(){
         const doc_id = $(this).data('id');
+        var srv_unique_id = $(this).data('srv_unique_id');
+        console.log(srv_unique_id);
         var btn=$(this);
         lunchLoader();
         $.ajax({
             url:"can_clA.php",
-            data:{doc_id:doc_id},
+            data:{doc_id:doc_id,srv_unique_id:srv_unique_id},
             type:"POST",
             success:function(data){
+                // alert(data)
+               
                 var json = JSON.parse(data);
                 var status = json.status;
                 if(status == 'success'){
@@ -1594,9 +1609,14 @@ $(document).ready(function () {
                     btn.closest("tr").removeClass("approved_row");
                     $('#devisShowTable tr#'+doc_id).removeClass('approved_row');
                     $('#devisShowTableBrk tr#'+doc_id).removeClass('approved_row');
+                    // Refresh the page after a specific time delay (e.g., 2000 milliseconds or 2 seconds)
+                            setTimeout(function() {
+                                location.reload();
+                            },1000);
+
                     // btn.css("display","none");
                     // $(".btn-client-approve").css("display","inline-block");
-                    btn.parent().append(`<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="${doc_id}" ></i></span>`)
+                    btn.parent().append(`<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="${doc_id}" data-srv_unique_id="${srv_unique_id}" ></i></span>`)
                     btn.remove();
                 }
             }
@@ -1874,7 +1894,8 @@ $(document).ready(function () {
 
                         json.forEach(row => {
                             html += `<tr>`;
-                            html += `<td>${row[0]}${row[8]}</td>`;
+                            // html += `<td>${row[0]}${row[8]}</td>`;
+                            html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
@@ -1921,7 +1942,8 @@ $(document).ready(function () {
 
                         json.forEach(row => {
                             html += `<tr>`;
-                            html += `<td>${row[0]}${row[8]}</td>`;
+                            // html += `<td>${row[0]}${row[8]}</td>`;
+                            html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
@@ -1939,7 +1961,9 @@ $(document).ready(function () {
 
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#paymentByClientTable tbody").html(html);
-                    $('#clientId').val((json.length!=0)? json[0][8]:"");
+                    // $('#clientId').val((json.length!=0)? json[0][8]:"");
+                    $('#brokerId').val(broker_id);
+
                     $("#labelClientPaymentTotal").text(`${(total - solde).toFixed(2)} DH`);
                     $("#hiddenTotal").val((total - solde).toFixed(2));
                     $("#hiddenTotalValue").val($("#labelClientPaymentTotal").text().split(' ')[0]);
@@ -1953,6 +1977,13 @@ $(document).ready(function () {
         }
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
     });
+
+    $(document).on('change','.CBPaymentByClient',function(e){
+    //    $('.DevisCheckBox').click(); 
+    // $(this).closest('td').children('.DevisCheckBox,.DossierCheckBox').click();
+    $(this).closest('td').children('.DevisCheckBox, .DossierCheckBox').click();
+    // $(this).closest('td').children('.DossierCheckBox').click();
+    })
 
 
 
@@ -2890,6 +2921,7 @@ $(document).ready(function () {
                 data : {devisId:devisId},
                 type:"POST",
                 success:function(data){
+                    // alert(data);
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     if(json.length != 0){

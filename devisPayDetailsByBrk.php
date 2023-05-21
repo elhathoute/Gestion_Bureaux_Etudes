@@ -20,9 +20,11 @@ while ($row = mysqli_fetch_assoc($res)) {
     $subarray[] = 'Qte=' . $row['quantity'] . ' count_dossier=' . getCountDossierService($row['srv_id']);
     $subarray[] = $row['srv_prix'];
     $subarray[] = $row['solde'];
-    $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'">';
-    $subarray[] = '<input type="hidden" name="invoiceId[]" class="" value="'.$row["srv_id"].'">';
-    $data[] = $subarray;
+    // $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'">';
+    $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'"><input type="checkbox" name="devis[]" class="DevisCheckBox d-none " value="'.$row["id"].'"><input type="checkbox" name="dossiers[]" class="DossierCheckBox d-none" value="'.$row["id_dossier"].'">';
+
+    // $subarray[] = '<input type="hidden" name="invoiceId[]" class="" value="'.$row["srv_id"].'">';
+       $data[] = $subarray;
 }
     else if(getCountDossierService($row['srv_id'])!=0 ){
         
@@ -34,8 +36,9 @@ while ($row = mysqli_fetch_assoc($res)) {
     $subarray[] = 'Qte=' . $row['quantity'] . ' count_dossier=' . getCountDossierService($row['srv_id']);
     $subarray[] = $row['srv_prix'];
     $subarray[] = $row['solde'];
-    $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'">';
-    $subarray[] = '<input type="hidden" name="invoiceId[]" class="" value="'.$row["srv_id"].'">';
+    $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'"><input type="checkbox" name="devis[]" class="DevisCheckBox d-none " value="'.$row["id"].'"><input type="checkbox" name="dossiers[]" class="DossierCheckBox d-none" value="'.$row["id_dossier"].'">';
+    // $subarray[] = '<input type="hidden" name="invoiceId[]" class="" value="'.$row["srv_id"].'">';
+   
     $data[] = $subarray;
 
     $diff_count_qte=$row['quantity'] - getCountDossierService($row['srv_id']);
@@ -48,8 +51,11 @@ while ($row = mysqli_fetch_assoc($res)) {
         $subarray2[] = 'Qte=' . $row['quantity'] . ' count_dossier=' . getCountDossierService($row['srv_id']);
         $subarray2[] = $row['srv_prix'];
         $subarray2[] = $row['solde'];
-        $subarray2[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'">';
-        $subarray2[] = '<input type="hidden" name="invoiceId[]" class="" value="'.$row["srv_id"].'">';
+        // $subarray2[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'">';
+        $subarray2[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'"><input type="checkbox" name="devis[]" class="DevisCheckBox d-none " value="'.$row["id"].'"><input type="checkbox" name="dossiers[]" class="DossierCheckBox d-none" value="'.$row["id_dossier"].'">';
+
+        // $subarray2[] = '<input type="hidden" name="invoiceId[]" class="" value="'.$row["srv_id"].'">';
+
         $data_2[] = $subarray2;
         
         
@@ -68,8 +74,11 @@ while ($row = mysqli_fetch_assoc($res)) {
     
         $subarray[] = $row['srv_prix'];
         $subarray[] = $row['solde'];
-        $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'">';
-        $subarray[] = '<input type="hidden" name="invoiceId[]" class="" value="'.$row["srv_id"].'">';
+        // $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'">';
+        $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'"><input type="checkbox" name="devis[]" class="DevisCheckBox d-none " value="'.$row["id"].'"><input type="checkbox" name="dossiers[]" class="DossierCheckBox d-none" value="'.$row["id_dossier"].'">';
+
+        // $subarray[] = '<input type="hidden" name="invoiceId[]" class="" value="'.$row["srv_id"].'">';
+   
         $data[] = $subarray;
 }
 }

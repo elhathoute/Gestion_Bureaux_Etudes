@@ -1,5 +1,17 @@
 <?php
 
+// function getAllDevisServicesNotPayed($id_devis){
+//     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+//     if(mysqli_connect_errno()){
+//         echo "Failed to connect to MySQL: " . mysqli_connect_error();
+//         exit();
+//     }
+//     $query = "SELECT detail_devis.* FROM detail_devis  WHERE detail_devis.id_devis=$id_devis and detail_devis.confirmed=1 and((detail_devis.prix)*(detail_devis.quantity)>(detail_devis.srv_avance)||detail_devis.srv_avance=0)";
+//     $res = mysqli_query($cnx,$query);
+//     $rows=mysqli_fetch_all($res);
+//     return $rows;
+// }
+
 //fetch individual client data
 // get count service in dossier
 function getCountDossierService($id_service){
@@ -163,7 +175,7 @@ function getSelectedDevisServices(){
     }
     if($_GET){
         $id = $_GET['id'];
-        $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id'";
+        $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id' GROUP BY `empl`";
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_all($res);
         // print_r($row);
@@ -202,13 +214,16 @@ function viewDevisServices(){
 
         }
         $html = '';
+
+        $uniqueService = array();
+
         foreach ($row as $val) {
             // var_dump($val);
             $check_client = '';
             if(strtolower($devis_type)=="approved"){
-                $check_client = '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i></span> ';
+                $check_client = '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" data-srv_unique_id="'.$val[8].'" title="Devis Approuvé par Client" ></i></span> ';
                 if($val[10]){
-                    $check_client = '<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="'.$val[0].'" title="Annuler l\'approbation" ></i></span>';
+                    $check_client = '<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="'.$val[0].'" data-srv_unique_id="'.$val[8].'" title="Annuler l\'approbation" ></i></span>';
                 }
             }
             if($val[9] == "1"){
@@ -216,7 +231,7 @@ function viewDevisServices(){
             }
             // $success_icon = (strtolower($devis_type)=="approved")? '<i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i>': '';
             $client_approve = ($val[10]=="1")? "approved_row" :"";
-            $html .= '<tr id="'.$val[0].'" class="'.$client_approve.'" >';
+            $html .= '<tr id="'.$val[0].'"  class="'.$client_approve.'" >';
             $html .= '<td>'.$check_client.'</td>';
             $html .= '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
@@ -265,9 +280,9 @@ function viewBrokerDevisServices(){
             // var_dump($montant);
             $check_client = '';
             if(strtolower($devis_type)=="approved"){
-                $check_client = '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i></span> ';
+                $check_client = '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" data-srv_unique_id="'.$val[8].'" title="Devis Approuvé par Client" ></i></span> ';
                 if($val[10]){
-                    $check_client = '<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="'.$val[0].'" title="Annuler l\'approbation" ></i></span>';
+                    $check_client = '<span><i class="bi bi-x-circle btn btn-outline-danger btn-sm rounded-circle btn-cancel-client-approve" data-id="'.$val[0].'"  data-srv_unique_id="'.$val[8].'" title="Annuler l\'approbation" ></i></span>';
                 }
             }
             if($val[9] == "1"){
@@ -275,7 +290,7 @@ function viewBrokerDevisServices(){
             }
             // $success_icon = (strtolower($devis_type)=="approved")? '<i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$val[0].'" title="Devis Approuvé par Client" ></i>': '';
             $client_approve = ($val[10]=="1")? "approved_row" :"";
-            $html .= '<tr id="'.$val[0].'" class="'.$client_approve.'" >';
+            $html .= '<tr id="'.$val[0].'" srv_unique_id="'.$val[8].'" class="'.$client_approve.'" >';
             // $html .= '<td>'.$check_client.'</td>';
             $html .= '<td></td>';
             $html .= '<td class="input-group"><input disabled type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input disabled type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';

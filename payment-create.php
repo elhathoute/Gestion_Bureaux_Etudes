@@ -112,6 +112,7 @@ $clientRes = mysqli_query($cnx, $query);
                                             <input type="hidden" name="" id="hiddenTotal">
                                             <input type="hidden" name="hiddenTotalValue" id="hiddenTotalValue">
                                             <input type="hidden" name="clientId" id="clientId">
+                                            <input type="hidden" name="brokerId" id="brokerId">
                                             <input type="hidden" name="filter_type" id="filter_type">
                                         </div>
                                     </div>
@@ -128,7 +129,7 @@ $clientRes = mysqli_query($cnx, $query);
                                     <label for="payment-method" class="form-label">Mode de paiement</label>
                                     <select name="payment-method"  class="form-select py-1 payment-method" id="payment-method">
                                         <option value="" selected disabled>Choisissez un mode de paiement</option>
-                                        <option value="Espéce">Espéce</option>
+                                        <option value="Espece">Espéce</option>
                                         <option value="Check">Check</option>
                                         <option value="Virement">Virement</option>
                                         <option value="Trita">Traite</option>

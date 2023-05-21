@@ -20,9 +20,10 @@
             $user_id = $_SESSION['user_id'];
             userDevis_history($user_id,$devis_id,'Devis Approved');
         }
-    
+        // die(var_dump($_POST));
+        $srv_unique_id=$_POST['srv_unique_id'];
 
-        $query = "UPDATE `detail_devis` SET `confirmed`='1' WHERE `id`='$detail_devis_id' ";
+        $query = "UPDATE `detail_devis` SET `confirmed`='1' WHERE `srv_unique_id`='$srv_unique_id' ";
         $res= mysqli_query($cnx,$query);
     
         if($res){

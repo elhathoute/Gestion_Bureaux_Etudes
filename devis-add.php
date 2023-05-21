@@ -36,12 +36,17 @@
         $tableData = json_decode($tableData,TRUE);
         $res;
         
+        $empl=1;
         foreach ($tableData as $key=>$val) {
+        for($i=0;$i<$val["quantity"];$i++) {
+            
             $discount = $val['discount']==""?0:$val['discount'];
-            $query = "INSERT INTO `detail_devis`(`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`,`unit`,`ref`,`srv_unique_id`) VALUES (null,'$last_id','".$val["serviceName"]."','".floatval($val["price"])."','".$val["quantity"]."', '$discount','".$val["unit"]."','".$val["srvRef"]."',$last_id+$key+1)";
+            $query = "INSERT INTO `detail_devis`(`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`,`unit`,`ref`,`srv_unique_id`,`empl`) VALUES (null,'$last_id','".$val["serviceName"]."','".floatval($val["price"])."','".$val["quantity"]."', '$discount','".$val["unit"]."','".$val["srvRef"]."',$last_id+$key+1,$empl)";
             $res = mysqli_query($cnx,$query);
             
         }
+        $empl++;
+    }
 
         /**
          * add payment if any 
