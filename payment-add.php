@@ -2,8 +2,7 @@
     include 'includes/config.php';
     include 'functions.php';
 
-var_dump($_POST);
-die();
+
     if($_POST){
      
         // user check services to pay them

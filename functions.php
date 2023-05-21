@@ -1870,6 +1870,18 @@ function getBrokerData(){
     $res = mysqli_query($cnx,$query);
     return $res;
 }
+// Maître d'ouvrage fetch data 
+// function getClientData(){
+//     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+//     if(mysqli_connect_errno()){
+//         echo "Failed to connect to MySQL: " . mysqli_connect_error();
+//         exit();
+//     }
+
+//     $query = "SELECT * FROM `client` ";
+//     $res = mysqli_query($cnx,$query);
+//     return $res;
+// }
 
 // insert into user_broker history
 
