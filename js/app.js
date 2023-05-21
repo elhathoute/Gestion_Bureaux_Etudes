@@ -1099,12 +1099,14 @@ $(document).ready(function () {
     });
     // btn broker edit devis
     $(document).on('click','#updateBrkDevis',function(e){
-        e.preventDefault();
+        // e.preventDefault();
         var DevisId = $('#devis_id').val();
-        var brkId =   $('#broker_id').val();
+        // var brkId =   $('#broker_id').val();
+        
         // var uniqueServiceId =   $('#uniqueService_id').val();
-        if(brkId != '') {
-            // alert(DevisId+','+brkId);
+        var devis_broker_id =$('#devis_broker_id').val();
+        // alert(devis_broker_id);
+        if(devis_broker_id != '') {
          let prices = [];
         //  let discounts = [];
         //  let service_unique_ids = [];
@@ -1118,19 +1120,20 @@ $(document).ready(function () {
              }
              
              prices.push(price);
-             console.log(prices);
+            //  console.log(prices);
+            //  alert('stop');
          
          });
          $.ajax({
-             url:"devis_brk_dets._update.php",
+             url:"devis_brk_dets_update.php",
              type:'POST',
-             data:{dBrk_id:brkId,devis_id:DevisId,prices:prices},
+             data:{dBrk_id:devis_broker_id,devis_id:DevisId,prices:prices},
              success:function(data){
                 // alert(data);
                  var json = JSON.parse(data);
                  var status = json.status;
                  if(status == 'success'){
-                     location.href='devis-view.php?sc=sucadd';
+                     location.href='devis-view.php?sc=sucupd';
                  }
              }
          });
@@ -1239,6 +1242,7 @@ $(document).ready(function () {
         // alert(0);
         if($("#devis_id").val()!="" && tableData.length != 0){
             tableData = JSON.stringify(tableData);
+            // console.log(tableData);
             var client_id = $('#client_id').val(),
             devis_id = $('#devis_id').val(),
             devis_comment = $("#devis_comment").val(),
@@ -1278,17 +1282,17 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt,tva_checked:tva_checked,brkId:brkId},
                 success:function(data){
-                    // alert(data);
+                    // alert((data));
                     // alert('az');
                     var json = JSON.parse(data);
                     var status = json.status;
-
+                    
                     dBrk_id = json.dBrk_id;
                     devis_id = json.devis_id;
                     
                     // if(status == 'success'){
-                    //     location.href='devis-view.php?sc=sucupd';
-                    // }
+                        //     location.href='devis-view.php?sc=sucupd';
+                        // }
                     if(status == 'success' && dBrk_id!=0){
                             
                         // if(selectedDevisBroker){
@@ -1350,7 +1354,7 @@ $(document).ready(function () {
                     brkRowTotal();
 
                 }
-                location.href='devis-view.php?sc=sucadd';
+               
 
                 },
                 errro:function(err){
@@ -1367,6 +1371,7 @@ $(document).ready(function () {
         }
     });
     $(document).on('click', '.btn_brk_devis_confirm_update', function() {
+
         if (dBrk_id != '') {
             let prices = [];
             $('#devisBrkShowTable tbody tr').each(function() {
@@ -1383,7 +1388,7 @@ $(document).ready(function () {
             // console.log(prices);
     
             $.ajax({
-                url:"devis_brk_dets_delete_add.php.php",
+                url:"devis_brk_dets_delete_add.php",
                 type: 'POST',
             data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
                 
@@ -1546,11 +1551,7 @@ $(document).ready(function () {
         "pagingType": "input",
     });
 
-    // make services unique
-    // $(document).on('click','.viewDevisBtn',function(){
-    //     alert('lkjfd')
-    // })
-
+   
     //client approve devis & invoice click
     $(document).on('click','.btn-client-approve',function(){
         var doc_id = $(this).data('id');
@@ -1575,9 +1576,8 @@ $(document).ready(function () {
                     $('#devisShowTable tr#'+doc_id).addClass('approved_row');
                     $('#devisShowTableBrk tr#'+doc_id).addClass('approved_row');
                    // Refresh the page after a specific time delay (e.g., 2000 milliseconds or 2 seconds)
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
+                   
+                   setTimeout(()=>$(".loader-wrapper").remove(),1000);
 
                     // btn.closest("tr").css("background"," #bcf5bc");
                     // btn.css("display","none");
@@ -1593,7 +1593,7 @@ $(document).ready(function () {
     $(document).on("click",".btn-cancel-client-approve",function(){
         const doc_id = $(this).data('id');
         var srv_unique_id = $(this).data('srv_unique_id');
-        console.log(srv_unique_id);
+        // console.log(srv_unique_id);
         var btn=$(this);
         lunchLoader();
         $.ajax({
@@ -1612,9 +1612,8 @@ $(document).ready(function () {
                     $('#devisShowTable tr#'+doc_id).removeClass('approved_row');
                     $('#devisShowTableBrk tr#'+doc_id).removeClass('approved_row');
                     // Refresh the page after a specific time delay (e.g., 2000 milliseconds or 2 seconds)
-                            setTimeout(function() {
-                                location.reload();
-                            },1000);
+                    setTimeout(()=>$(".loader-wrapper").remove(),1000);
+
 
                     // btn.css("display","none");
                     // $(".btn-client-approve").css("display","inline-block");
@@ -1673,9 +1672,9 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,client_type:client_type,invoice_number:invoice_number,invoice_comment:invoice_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelInvoiceTotal:labelInvoiceTotal,tva_checked:tva_checked,invoice_payment:invoice_payment,payment_method:payment_method,invoice_pay_giver:invoice_pay_giver,due_date:due_date,objet_name:objet_name,located_txt:located_txt},
                 success:function(data){ 
+                    // alert(data);
                     console.log(data);                  
                     location.href='invoice-list.php?sc=sucadd'; 
-                    // alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
                     if(status == 'success'){
@@ -2154,7 +2153,7 @@ $(document).ready(function () {
         setTimeout(function(){
             $(".loader-wrapper").addClass("loader-hidden")
             setTimeout(()=>$(".loader-wrapper").remove(),2000);
-        },5000);
+        },1000);
     }
     
     $(document).on("click","#add-user",function(){
@@ -3169,6 +3168,7 @@ $(document).ready(function () {
 
     $(document).on('click','.btnConvertToFacture',function(){
         let devis_id = $("#devis_id").val();
+        // console.log(devis_id);
         
         function makeRequest(){
             lunchLoader();

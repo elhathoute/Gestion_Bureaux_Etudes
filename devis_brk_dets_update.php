@@ -9,6 +9,7 @@ $prices = $_POST['prices'];
 // $discounts = $_POST['discounts'];
 // $service_unique_ids = $_POST['service_unique_ids'];
 $res ='';
+// die(var_dump($devis_broker_id));
 foreach ($prices as $price) {
     // die(var_dump($price));
     $_price=$price["price"];
