@@ -90,6 +90,7 @@ if ($exist) {
     <!-- chartJS CDN-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    
 </head>
 
 <body onload="total_R()">
@@ -222,12 +223,23 @@ if ($exist) {
 
         <ul class="sidebar-nav" id="sidebar-nav">
 
+        <?php
+            if(!empty( $_SESSION["user_id"])){
+
+                $user_id = $_SESSION["user_id"];
+            }
+            $user_role = getUserRole($user_id);
+            if($user_role['role_name'] != "assistant")
+            {
+            ?>
             <li class="nav-item">
                 <a class="nav-link <?= $page == 'dashboard.php' ? 'active' : '' ?> " href="dashboard.php">
                     <i class="bi bi-grid"></i>
                     <span>Tableau de bord</span>
                 </a>
             </li><!-- End Dashboard Nav -->
+
+            <?php }?>
 
             <li class="nav-item <?= ($role->hasPerm('show client') || $role->hasPerm('create client')) ? "" : "hide-element" ?> ">
                 <a class="nav-link collapsed <?= $page == 'customer-add.php' || $page == 'customer-view.php' ? 'active' : '' ?> " data-bs-target="#customers-nav" data-bs-toggle="collapse" href="#">

@@ -134,7 +134,7 @@
             for ($i=0; $i < $splitRows ; $i++) {
                 
             
-            $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id' LIMIT $offset,12";
+            $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id' GROUP BY `empl` LIMIT $offset,12 ";
             $res = mysqli_query($cnx, $query);
             $row = mysqli_fetch_all($res);
             

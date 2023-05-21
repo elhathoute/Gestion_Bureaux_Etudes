@@ -10,7 +10,15 @@ $period = array($curDate,$weekAgo);
 
 ?>
 
+<?php
+if(!empty( $_SESSION["user_id"])){
 
+    $user_id = $_SESSION["user_id"];
+}
+  $user_role = getUserRole($user_id);
+  if($user_role['role_name'] != "assistant")
+  {
+?>
 <div class="pagetitle">
     <div class="row">
         <div class="col-md-9">
@@ -29,6 +37,7 @@ $period = array($curDate,$weekAgo);
 
 </div>
 <!--End of Page Title-->
+
 <section class="section dashboard">
     <div class="row">
         <div class="col-lg-12">
@@ -183,6 +192,15 @@ $period = array($curDate,$weekAgo);
     <!-- chart section -->
 
 </section>
+<?php } else{
+    $userInfo=getUser($_SESSION["user_id"]);
+    ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i>&nbsp;
+        <span ></span>Bonjour </span> <strong class="ms-3 fw-bold"><?= ucfirst(str_split($userInfo["prenom"])[0]) . '.' . ucfirst($userInfo['nom']);?></strong> 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php } ?>
 
 <script>
     //     const DATA_COUNT = 7;

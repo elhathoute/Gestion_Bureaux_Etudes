@@ -5,12 +5,16 @@
     if($_POST){
 
     $devis_id = $_POST['devis_id'];
+
     $devis = getDevisById($devis_id);
+
     
     $details_devis = getApprovedDevisDetails($devis_id);
-   
+       
     
     if(count($details_devis)>0){
+
+        
 
         $invoice_number = sprintf("%03d", getInvoiceNumber()) . '/' . date('Y');
         $client_id = $devis['id_client'];
@@ -48,6 +52,9 @@
         $query = "INSERT INTO `notifications`(`id_document`, `date`) VALUES ('$last_id','$current_date')";
         $res = mysqli_query($cnx,$query);
     
+         // update devis set devis is converted to facture
+         $query2 = "UPDATE `devis` SET `is_facture`='1' WHERE id=$devis_id";
+         $res2 = mysqli_query($cnx,$query2);
         
         if($res){
             $data = array('status'=>'success','invoice_id'=>$last_id,'client_id'=>$client_id);

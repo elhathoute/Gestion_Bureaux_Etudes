@@ -36,7 +36,13 @@ function br2nl($string)
     
     <div class="col-md-4 <?= ($role->hasPerm('export devis')) ? "":"hide-element" ?> <?= (strtoupper($devis['type'])==strtoupper("Approved"))? '' :  "hide-element";?>">
         <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&client_id=<?=$_GET['client_id']?>' class="btn btn-primary float-end" title="Imprimer Devis"><i class="bi bi-download"></i> Export</a>
-        <button class="btn btn-secondary float-end me-2 btnConvertToFacture">Convertir en Facture</button>
+       <?php if(getDevisById($_GET['id'])['is_facture']=='0'){?>
+       <button class="btn btn-secondary float-end me-2 btnConvertToFacture">Convertir en Facture </button> 
+       <?php } else {?>
+
+        <button class="btn btn-secondary float-end me-2 btnConvertToFacture" disabled>Déjà converti </button> 
+
+        <?php } ?>
     </div>
 </div>
 <div class="row">
@@ -209,7 +215,7 @@ function br2nl($string)
                                     <div class="row my-2">
                                         <div class="col-sm-6">
                                             <label class="form-check-label fw-light" for="tvaCheckbox">Enlever TVA&nbsp</label>
-                                            <input type="checkbox" class="form-check-input removeTva removeTvaClient"  name="" id="tvaCheckbox" <?= $devis['remove_tva']=='1'?'checked':"";?> disabled>
+                                            <input type="checkbox" class="form-check-input removeTva removeTvaClient"  name="" id="tvaCheckbox" <?= $devis['remove_tva']=='1'?'checked':"";?> >
                                         </div>
 
                                     </div>

@@ -296,12 +296,14 @@ function viewBrokerDevisServices(){
             $html .= '<td class="input-group"><input disabled type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input disabled type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
             $html .= '<td><input type="text" name="" disabled class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
             $html .= '<td><input type="number" disabled min="0" name="" class="form-control py-1 px-1 rowBrkServiceQte"  value="'.$val[4].'" placeholder="Quantité"></td>';
-            $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 serviceBrkPrice"  value="'.$val[19].'" placeholder="0.00"></td>';
-            $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[20].'" class="form-control py-1 serviceBrkDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
+            $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 serviceBrkPrice"  value="'.$val[20].'" placeholder="0.00"></td>';
+            $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[21].'" class="form-control py-1 serviceBrkDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceBrkTotal" value="'.$montant.'" disabled placeholder="0"></td>';
             $html .= '<td><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
             $html .= '</tr>';
         }
+        $html .= '<input type="hidden" name="devis_broker_id" id="devis_broker_id" class="form-control py-1 devis_broker_id"  value="'.$val[18].'">';
+
         return $html;
     }
 }
@@ -1812,7 +1814,7 @@ function countDevisRows($id){
         exit();
     }
 
-    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id'";
+    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id' GROUP BY `empl`";
     $res = mysqli_query($cnx, $query);
     $rows = mysqli_num_rows($res);
     return $rows;
@@ -1997,7 +1999,7 @@ function getApprovedDevisDetails($devis_id){
         exit();
     }
 
-    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `confirmed`='1'";
+    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `confirmed`='1' GROUP BY `empl` ";
     $res = mysqli_query($cnx,$query);
     $rows = mysqli_fetch_all($res);
     return $rows;
