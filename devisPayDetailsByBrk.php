@@ -33,7 +33,9 @@ while ($row = mysqli_fetch_assoc($res)) {
     $subarray[] = $row['client'];
     $subarray[] = ($row['N_dossier'] != NULL) ? $row['N_dossier'] : '-';
     $subarray[] = $row['service_name'];
-    $subarray[] = 'Qte=' . $row['quantity'] . ' count_dossier=' . getCountDossierService($row['srv_id']);
+    // $subarray[] = 'Qte=' . $row['quantity'] . ' count_dossier=' . getCountDossierService($row['srv_id']);
+    $subarray[] =$row['quantity'] ;
+
     $subarray[] = $row['srv_prix'];
     $subarray[] = $row['solde'];
     $subarray[] = '<input type="checkbox" name="ids[]" class="CBPaymentByClient" value="'.$row["srv_id"].'"><input type="checkbox" name="devis[]" class="DevisCheckBox d-none " value="'.$row["id"].'"><input type="checkbox" name="dossiers[]" class="DossierCheckBox d-none" value="'.$row["id_dossier"].'">';

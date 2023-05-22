@@ -352,7 +352,7 @@ function br2nl($string)
                                                 <th>Prix</th>
                                                 <th>Discount</th>
                                                 <th>Montant</th>
-                                                <th>Uniquee_Srv_id</th>
+                                                <!-- <th>Uniquee_Srv_id</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>

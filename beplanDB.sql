@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : dim. 21 mai 2023 à 18:41
+-- Généré le : lun. 22 mai 2023 à 02:49
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -281,13 +281,6 @@ CREATE TABLE `broker` (
   `sold` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `broker`
---
-
-INSERT INTO `broker` (`id`, `nom`, `prenom`, `phone`, `address`, `sold`) VALUES
-(7, 'mustapha', 'Elhathout', '0630258502', 'Marrakech', 0.00);
-
 -- --------------------------------------------------------
 
 --
@@ -299,14 +292,6 @@ CREATE TABLE `broker_devis` (
   `id_broker` int(11) NOT NULL,
   `id_devis` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `broker_devis`
---
-
-INSERT INTO `broker_devis` (`id`, `id_broker`, `id_devis`) VALUES
-(168, 7, 203),
-(169, 7, 204);
 
 -- --------------------------------------------------------
 
@@ -321,16 +306,6 @@ CREATE TABLE `client` (
   `date` datetime NOT NULL,
   `type` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `client`
---
-
-INSERT INTO `client` (`id`, `id_client`, `remove`, `date`, `type`) VALUES
-(24, 22, 0, '2023-05-19 14:31:26', 'individual'),
-(25, 10, 0, '2023-05-19 14:32:17', 'entreprise'),
-(26, 23, 0, '2023-05-19 21:32:09', 'individual'),
-(27, 11, 0, '2023-05-20 16:27:24', 'entreprise');
 
 -- --------------------------------------------------------
 
@@ -348,14 +323,6 @@ CREATE TABLE `client_entreprise` (
   `solde` decimal(10,0) NOT NULL,
   `delete_status` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `client_entreprise`
---
-
-INSERT INTO `client_entreprise` (`id`, `nom`, `ICE`, `email`, `tel`, `address`, `solde`, `delete_status`) VALUES
-(10, 'Youcode', ' Youcode12345', 'youcode@gmail.com', '0630258502', ' ', 0, 0),
-(11, 'ocp', ' ocp12343', 'ocp@gmail.com', '0630258502', ' YOUSSOUFIA', 0, 0);
 
 --
 -- Déclencheurs `client_entreprise`
@@ -395,14 +362,6 @@ CREATE TABLE `client_individual` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `client_individual`
---
-
-INSERT INTO `client_individual` (`id`, `prenom`, `nom`, `email`, `tel`, `address`, `solde`, `delete_status`) VALUES
-(22, 'ABDELAZIZ', 'ELHATHOUT', '', '0630258502', 'ESBIAAT YOUSSOUFIA', 0, 0),
-(23, 'ADMDI', 'MOUAD', '', '0630258502', 'AGADIR', 0, 0);
-
---
 -- Déclencheurs `client_individual`
 --
 DELIMITER $$
@@ -436,15 +395,6 @@ CREATE TABLE `detail_broker_devis` (
   `new_discount` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `detail_broker_devis`
---
-
-INSERT INTO `detail_broker_devis` (`id`, `id_broker_devis`, `srv_unique_id`, `new_prix`, `new_discount`) VALUES
-(138, 168, 204, 5.00, 66),
-(139, 169, 205, 12.00, 84),
-(140, 169, 206, 12.00, 98);
-
 -- --------------------------------------------------------
 
 --
@@ -469,18 +419,6 @@ CREATE TABLE `detail_devis` (
   `srv_notif` tinyint(1) NOT NULL DEFAULT 0,
   `empl` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `detail_devis`
---
-
-INSERT INTO `detail_devis` (`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`, `unit`, `ref`, `srv_unique_id`, `approved`, `confirmed`, `paid_srv`, `srv_avance`, `payment_made`, `srv_notif`, `empl`) VALUES
-(428, 203, 'Velit deserunt Nam ', 5.00, 3, 66.00, '03-Jan-1987', 'eaz', 204, 0, 0, 0, 0.00, 0, 0, 1),
-(429, 203, 'Velit deserunt Nam ', 5.00, 3, 66.00, '03-Jan-1987', 'eaz', 204, 0, 0, 0, 0.00, 0, 0, 1),
-(430, 203, 'Velit deserunt Nam ', 5.00, 3, 66.00, '03-Jan-1987', 'eaz', 204, 0, 0, 0, 0.00, 0, 0, 1),
-(444, 204, 'Esse sed ut quisqua', 9.00, 2, 84.00, '10-Sep-2002', 'AZZAE', 205, 0, 0, 0, 0.00, 0, 0, 1),
-(445, 204, 'Esse sed ut quisqua', 9.00, 2, 84.00, '10-Sep-2002', 'AZZAE', 205, 0, 0, 0, 0.00, 0, 0, 1),
-(446, 204, 'Minima minus veritat', 11.00, 1, 98.00, '30-Dec-2013', 'AZEAZ', 206, 0, 1, 0, 0.00, 0, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -521,16 +459,9 @@ CREATE TABLE `devis` (
   `client_approve` tinyint(1) NOT NULL DEFAULT 0,
   `comment` text NOT NULL,
   `objet` text NOT NULL,
-  `located` text NOT NULL
+  `located` text NOT NULL,
+  `is_facture` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `devis`
---
-
-INSERT INTO `devis` (`id`, `number`, `id_client`, `type`, `date_creation`, `date_validation`, `sub_total`, `discount`, `net_total`, `remove`, `status`, `remove_tva`, `client_approve`, `comment`, `objet`, `located`) VALUES
-(203, '730', 26, 'Approved', '2023-05-21 16:22:32', '2023-05-21 16:22:32', 5.10, 9.90, 5.10, 1, 'accepter', 1, 0, 'Quia quis sit labori', 'Dolor alias in minim', 'Voluptate eveniet q'),
-(204, '148', 24, 'Approved', '2023-05-21 16:28:07', '2023-05-21 16:28:07', 3.10, 25.90, 3.72, 0, 'accepter', 0, 0, 'Duis qui maiores in ', 'Iste sed et voluptat', 'Quo harum dolore nec');
 
 -- --------------------------------------------------------
 
@@ -646,50 +577,6 @@ CREATE TABLE `notifications` (
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `notifications`
---
-
-INSERT INTO `notifications` (`id`, `id_document`, `date`, `active`) VALUES
-(186, 168, '2023-05-19 15:35:40', 1),
-(187, 169, '2023-05-19 15:36:51', 1),
-(188, 170, '2023-05-19 15:46:13', 1),
-(189, 171, '2023-05-19 15:50:39', 1),
-(190, 30, '2023-05-19 16:54:46', 1),
-(191, 172, '2023-05-19 17:49:10', 1),
-(192, 173, '2023-05-19 17:50:22', 1),
-(193, 174, '2023-05-19 17:51:43', 1),
-(194, 175, '2023-05-19 17:53:01', 1),
-(195, 176, '2023-05-19 17:56:36', 1),
-(196, 177, '2023-05-19 17:57:20', 1),
-(197, 178, '2023-05-19 18:01:42', 1),
-(198, 179, '2023-05-19 22:34:47', 1),
-(199, 180, '2023-05-19 22:36:29', 1),
-(200, 181, '2023-05-19 22:37:56', 1),
-(201, 182, '2023-05-19 22:40:30', 1),
-(202, 183, '2023-05-20 17:55:07', 1),
-(203, 184, '2023-05-20 17:56:04', 1),
-(204, 185, '2023-05-20 17:58:00', 1),
-(205, 186, '2023-05-20 18:01:18', 1),
-(206, 187, '2023-05-20 18:02:25', 1),
-(207, 188, '2023-05-20 18:03:25', 1),
-(208, 189, '2023-05-20 18:06:56', 1),
-(209, 190, '2023-05-20 18:08:27', 1),
-(210, 191, '2023-05-20 18:10:06', 1),
-(211, 192, '2023-05-20 18:14:20', 1),
-(212, 193, '2023-05-20 18:16:34', 1),
-(213, 194, '2023-05-20 18:18:10', 1),
-(214, 195, '2023-05-21 11:49:22', 1),
-(215, 196, '2023-05-21 15:38:24', 1),
-(216, 197, '2023-05-21 15:40:47', 1),
-(217, 198, '2023-05-21 16:44:52', 1),
-(218, 199, '2023-05-21 16:47:16', 1),
-(219, 200, '2023-05-21 16:49:07', 1),
-(220, 201, '2023-05-21 17:03:06', 1),
-(221, 202, '2023-05-21 17:19:06', 1),
-(222, 203, '2023-05-21 17:22:32', 1),
-(223, 204, '2023-05-21 17:28:07', 1);
 
 -- --------------------------------------------------------
 
@@ -932,8 +819,14 @@ CREATE TABLE `service` (
 --
 
 INSERT INTO `service` (`id`, `title`, `ref`, `prix`) VALUES
-(29, 'create website', 'cw4', 0.00),
-(30, 'create Logo', 'cL3', 0.00);
+(31, 'Attestaion de stabilité.', 'ATS', 0.00),
+(32, 'Attestaion de la notice de sécurité', 'ATN', 0.00),
+(33, 'Etablissement des plans', 'ET', 0.00),
+(34, 'Visa et controle', 'VS', 0.00),
+(35, 'Attestaion de fin de dravaux', 'ATF', 0.00),
+(36, 'Att de :Incendie et la panique', 'ATI', 0.00),
+(37, 'Att de :Instalation electrique', 'ATINS', 0.00),
+(38, 'Att de :Travaux de plomberie', 'ATB', 0.00);
 
 -- --------------------------------------------------------
 
@@ -962,13 +855,6 @@ CREATE TABLE `supplier` (
   `cat_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `supplier`
---
-
-INSERT INTO `supplier` (`id`, `full_name`, `address`, `phone`, `sold`, `cat_id`) VALUES
-(6, 'Jocelyn Kirby', 'Ducimus aliquam exc', '67', 0.00, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -987,8 +873,7 @@ CREATE TABLE `supp_category` (
 
 INSERT INTO `supp_category` (`id`, `title`, `type`) VALUES
 (1, 'Bureau d\'étude', 'Bureau d\'étude'),
-(4, 'Bureau de contrôle', 'Bureau de contrôle'),
-(5, 'Bureau d\'étude2', 'Bureau d\'étude');
+(4, 'Bureau de contrôle', 'Bureau de contrôle');
 
 -- --------------------------------------------------------
 
@@ -1014,10 +899,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `prenom`, `nom`, `email`, `tel`, `username`, `password`, `date`, `last_login`, `status`) VALUES
-(1, 'user1', 'user1', 'user1@test.com', '06176726', 'owner', 'admin123', '2022-11-05 03:17:09', '2023-05-21 16:46:29', 1),
-(2, 'test', 'test', 'test@test.test', '0909090909', 'admin2', 'admin123', '2022-11-26 01:55:54', '2023-05-17 22:07:36', 1),
-(4, 'assistant', 'test', 'test@test.test', '12121212', 'assist', 'admin123', '2023-02-01 16:38:04', '2023-05-17 23:07:20', 1),
-(5, 'user1', 'user2', 'user2@gmail.com', '0630234455', 'assistant2', 'admin123', '2023-05-16 10:58:31', '2023-05-16 12:06:41', 1);
+(1, 'user1', 'user1', 'user1@test.com', '06176726', 'owner', 'admin123', '2022-11-05 03:17:09', '2023-05-22 01:54:14', 1),
+(2, 'test', 'test', 'test@test.test', '0909090909', 'admin2', 'admin123', '2022-11-26 01:55:54', '2023-05-22 02:48:18', 1),
+(4, 'assistant', 'test', 'test@test.test', '12121212', 'assist', 'admin123', '2023-02-01 16:38:04', '2023-05-22 02:32:27', 1),
+(5, 'user1', 'user2', 'user2@gmail.com', '0630234455', 'assistant2', 'admin123', '2023-05-16 10:58:31', '2023-05-22 00:44:34', 1);
 
 -- --------------------------------------------------------
 
@@ -1055,7 +940,9 @@ INSERT INTO `user_broker` (`id_user`, `broker`, `action`, `date`) VALUES
 (1, 'Consectetur libero  Aliquid est aut vel ', 'Add', '2023-05-17 14:15:08'),
 (1, 'madani said', 'Update', '2023-05-17 14:15:48'),
 (1, 'Sed quia magni eu te Optio quaerat illo ', 'Add', '2023-05-17 16:30:09'),
-(1, 'mustapha Elhathout', 'Add', '2023-05-19 14:31:46');
+(1, 'mustapha Elhathout', 'Add', '2023-05-19 14:31:46'),
+(1, 'Brahim ADMDi', 'Update', '2023-05-21 21:23:10'),
+(1, 'Broker Mohammed', 'Add', '2023-05-21 21:31:34');
 
 -- --------------------------------------------------------
 
@@ -1131,83 +1018,6 @@ CREATE TABLE `user_devis` (
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `is_vue` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `user_devis`
---
-
-INSERT INTO `user_devis` (`id_user`, `id_devis`, `action`, `date`, `is_vue`) VALUES
-(1, 203, 'Add', '2023-05-21 16:22:32', 0),
-(1, 203, 'Update', '2023-05-21 16:22:54', 0),
-(1, 203, 'Update', '2023-05-21 16:25:15', 0),
-(1, 203, 'Devis Approved', '2023-05-21 16:27:11', 0),
-(1, 203, 'Devis Approved', '2023-05-21 16:27:37', 0),
-(1, 204, 'Add', '2023-05-21 16:28:07', 0),
-(1, 204, 'Devis Approved', '2023-05-21 16:29:33', 0),
-(1, 204, 'Devis canceled', '2023-05-21 16:34:24', 0),
-(1, 204, 'Devis Approved', '2023-05-21 16:35:56', 0),
-(1, 204, 'Devis canceled', '2023-05-21 16:36:00', 0),
-(1, 204, 'Update', '2023-05-21 16:36:51', 0),
-(1, 204, 'Devis Approved', '2023-05-21 16:49:04', 0),
-(1, 204, 'Devis Approved', '2023-05-21 16:49:20', 0),
-(1, 204, 'Devis canceled', '2023-05-21 16:49:24', 0),
-(1, 204, 'Devis canceled', '2023-05-21 16:49:25', 0),
-(1, 204, 'Devis Approved', '2023-05-21 16:57:48', 0),
-(1, 204, 'Devis Approved', '2023-05-21 16:58:10', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:00:37', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:01:01', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:01:13', 0),
-(1, 204, 'Update', '2023-05-21 17:04:33', 0),
-(1, 204, 'Update', '2023-05-21 17:06:55', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:07:59', 0),
-(1, 203, 'Delete', '2023-05-21 17:08:21', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:09:54', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:10:04', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:10:06', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:12:37', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:13:05', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:14:25', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:14:42', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:15:43', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:17:51', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:18:03', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:21:32', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:21:54', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:22:01', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:22:06', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:22:08', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:22:10', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:24:11', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:24:13', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:24:17', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:24:22', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:24:50', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:24:53', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:28:50', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:28:55', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:28:57', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:28:59', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:29:01', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:29:33', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:29:36', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:29:37', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:30:42', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:30:46', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:30:57', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:33:23', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:33:26', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:33:29', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:33:48', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:33:51', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:34:14', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:34:19', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:34:21', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:34:26', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:35:03', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:35:05', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:35:45', 0),
-(1, 204, 'Devis Approved', '2023-05-21 17:36:05', 0),
-(1, 204, 'Devis canceled', '2023-05-21 17:36:08', 0);
 
 -- --------------------------------------------------------
 
@@ -1367,7 +1177,25 @@ INSERT INTO `user_service` (`id_user`, `service`, `action`, `date`) VALUES
 (1, 'Adsence1', 'Update', '2023-05-17 16:29:53'),
 (1, 'create website', 'Add', '2023-05-19 14:32:31'),
 (1, 'create website', 'Update', '2023-05-19 14:32:52'),
-(1, 'create Logo', 'Add', '2023-05-19 14:33:17');
+(1, 'create Logo', 'Add', '2023-05-19 14:33:17'),
+(1, 'create website', 'Delete', '2023-05-21 21:19:15'),
+(1, 'create Logo', 'Delete', '2023-05-21 21:19:18'),
+(1, 'Attestaion de stabilité', 'Add', '2023-05-21 21:19:37'),
+(1, 'Attestaion de la notice de sécurité', 'Add', '2023-05-21 21:20:07'),
+(1, 'Etablissement des plans', 'Add', '2023-05-21 21:20:28'),
+(1, 'Visa et controle', 'Add', '2023-05-21 21:20:45'),
+(1, 'Attestaion de fin de dravaux', 'Add', '2023-05-21 21:21:04'),
+(1, 'Att de :Incendie et la panique', 'Add', '2023-05-21 21:21:50'),
+(1, 'Att de :Instalation electrique', 'Add', '2023-05-21 21:22:17'),
+(1, 'Att de :Travaux de plomberie', 'Add', '2023-05-21 21:22:48'),
+(1, 'Attestaion de stabilité.', 'Update', '2023-05-21 21:23:26'),
+(1, 'Attestaion de stabilité.', 'Update', '2023-05-21 21:25:42'),
+(1, 'Attestaion de stabilité.', 'Update', '2023-05-21 21:26:22'),
+(1, 'Attestaion de stabilité.', 'Update', '2023-05-21 21:26:34'),
+(1, 'Attestaion de stabilité.', 'Update', '2023-05-21 21:27:09'),
+(1, 'Attestaion de stabilité.', 'Update', '2023-05-21 21:27:57'),
+(1, 'Attestaion de stabilité.', 'Update', '2023-05-21 21:29:01'),
+(1, 'Attestaion de la notice de sécurité', 'Update', '2023-05-21 21:29:12');
 
 --
 -- Index pour les tables déchargées
@@ -1591,13 +1419,13 @@ ALTER TABLE `user_service`
 -- AUTO_INCREMENT pour la table `broker`
 --
 ALTER TABLE `broker`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `broker_devis`
 --
 ALTER TABLE `broker_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
 
 --
 -- AUTO_INCREMENT pour la table `client`
@@ -1621,43 +1449,43 @@ ALTER TABLE `client_individual`
 -- AUTO_INCREMENT pour la table `detail_broker_devis`
 --
 ALTER TABLE `detail_broker_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=259;
 
 --
 -- AUTO_INCREMENT pour la table `detail_devis`
 --
 ALTER TABLE `detail_devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=447;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4323;
 
 --
 -- AUTO_INCREMENT pour la table `detail_invoice`
 --
 ALTER TABLE `detail_invoice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
 
 --
 -- AUTO_INCREMENT pour la table `devis`
 --
 ALTER TABLE `devis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=215;
 
 --
 -- AUTO_INCREMENT pour la table `devis_payments`
 --
 ALTER TABLE `devis_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=783;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=786;
 
 --
 -- AUTO_INCREMENT pour la table `dossier`
 --
 ALTER TABLE `dossier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT pour la table `invoice`
 --
 ALTER TABLE `invoice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT pour la table `invoice_payments`
@@ -1669,7 +1497,7 @@ ALTER TABLE `invoice_payments`
 -- AUTO_INCREMENT pour la table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=252;
 
 --
 -- AUTO_INCREMENT pour la table `permissions`
@@ -1687,7 +1515,7 @@ ALTER TABLE `purchase`
 -- AUTO_INCREMENT pour la table `receipt`
 --
 ALTER TABLE `receipt`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=800;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=803;
 
 --
 -- AUTO_INCREMENT pour la table `roles`
@@ -1699,7 +1527,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT pour la table `service`
 --
 ALTER TABLE `service`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT pour la table `situation`
