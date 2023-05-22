@@ -64,7 +64,7 @@ function br2nl($string)
                             </div>
                             <div class="col-md-5">
                                 <label class="fw-bold">À</label>
-                                <?php var_dump($devis)?>
+                                <!-- <?php var_dump($devis)?> -->
                                 <fieldset class="border-dashed">
                                     <div class="input-group">
                                         <input type="hidden" id="client_id" name="client_id" value="<?php echo $devis['id_client'] ;?>">
@@ -327,7 +327,7 @@ function br2nl($string)
                                                             <th>Prix</th>
                                                             <th>Discount</th>
                                                             <th>Montant</th>
-                                                            <th>Uniquee_Srv_id</th>
+                                                            <!-- <th>Uniquee_Srv_id</th> -->
 
                                                         </tr>
                                                     </thead>
