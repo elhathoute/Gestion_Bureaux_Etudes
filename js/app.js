@@ -3140,24 +3140,68 @@ $(document).ready(function () {
                     }
                     $(".loader-wrapper").addClass("loader-hidden");
                     $(".dsTableContent").html(html);
-                    // setTimeout(()=>{
-                    //     $('#dsBrokerTable').DataTable({
-                    //         'info':false,
-                    //         'responsive':true,
-                    //         'processing':true,
-                    //         "pagingType": "input"
-                    //     });
-                    //     stylePagination();
-                    // },500)
                 }
             });
         }
         //add this on success 
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
     });
+    //client
+    $(document).on("change","#clientSelectid",function(){
+        
+        const clientid = $("#clientSelectid").val();
+        if(clientid != null || clientid != ""){
+            lunchLoader();
+            $.ajax({
+                url:"getallDossierByclient.php",
+                data : {clientid:clientid},
+                type:"POST",
+                success:function(data){
+                    // alert(data);
+                    var json = JSON.parse(data)["data"];
+                    var html =``;
+                    if(json.length != 0){
+                        //initializing table
+                        html += `<table id="clientSelectid" class="table table-hover table-bordered table-striped" style="width:100%">`;
+                        html += `<thead><tr>`;
+                        html += `<th><a href="#">N°</a></th>`;
+                        html += `<th><a href="#">N°Devis</a></th>`;
+                        html += `<th><a href="#">Objet</a></th>`;
+                        html += `<th><a href="#">Service name</a></th>`;
+                        html += `<th><a href="#">Date creation</a></th>`;
+                        html += `<th><a href="#">Action</a></th>`;
+                        html += `</thead></tr>`;
+                        html += `<tbody>`;
+                        json.forEach(row => {
+                            html += `<tr>`;
+                            html += `<td>${row[0]}</td>`;
+                            html += `<td><a target="_blank" href="devis-show.php?id=${row[1]}&client_id=${row[2]}" title="Afficher Devis Detail">${row[3]}</a></td>`;
+                            html += `<td>${row[4]}</td>`;
+                            html += `<td>${row[5]}</td>`;
+                            html += `<td>${row[7]}</td>`;
+                            html += `<td class="text-center"><a href="dossier-show.php?s_id=${row[6]}" class="btn btn-secondary btn-sm" title="Afficher Dossier detail" ><span><i class="bi bi-eye"></i></span></a></td>`;
+                            html += `</tr>`;
+                        });
+                    }else{
+                        html += `<tr><td colspan="7" class="text-center"><strong>No Data Available</strong></td></tr>`;
+                    }
+                    $(".loader-wrapper").addClass("loader-hidden");
+                    $(".dsTableContent").html(html);
+                    
+                }
+            });
+        }
+        //add this on success 
+        setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    });
+    
     $(document).on("click","#dsResetBtn",function(){
         const brokerId = $("#brokerSelect").val();
         if(brokerId != null ){
+            location.reload();
+        }
+        const clientId = $("#clientSelectid").val();
+        if(clientId != null ){
             location.reload();
         }
     });
