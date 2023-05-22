@@ -30,14 +30,14 @@ $clientRes = mysqli_query($cnx, $query);
                             </select>
                         </div>
                         <div class="col-md-5 my-1">
-                            <select class="form-select" id="brokerSelect">
+                            <select class="form-select" id="clientSelectid">
                                 <option value="" selected disabled>Veuillez choisir un Maître d'ouvrage </option>
                                 <?php
-                                    while ($row = mysqli_fetch_assoc($brokerRes)) {
-                                        $brokerFullName = ucfirst($row["nom"]) .' '. ucfirst($row["prenom"]);
-                                        echo '<option value=' . $row["id"] . '>' . $brokerFullName . '</option>';
+                                    while ($row = mysqli_fetch_assoc($clientRes)) {
+                                        $clientName = fetchClientName($row['type'], $row['id_client']);
+                                        echo '<option value=' . $row["id"] . '>' . $clientName . '</option>';
                                     }
-                                ?>
+                                 ?>
                             </select>
                         </div>
                         <div class="col-md-2 my-1">
