@@ -16,7 +16,7 @@ $clientRes = mysqli_query($cnx, $query);
 
 <section class="section">
     <div class="row">
-        <form action="payment-add.php" id="invoicePaymentClient" method="POST" >
+        <form action="payment-add2.php" id="invoicePaymentClient" method="POST" >
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">

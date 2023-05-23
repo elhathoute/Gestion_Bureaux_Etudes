@@ -935,18 +935,34 @@ function payInvoice($invoice_id,$price,$pay_method){
 }
 
 //insert data to devis_payments
-function payDevis($devis_id,$price,$pay_method){
+function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$price,$montant_paye){
+    // var_dump($N_dossier);
+    // die();
     $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
     if (mysqli_connect_errno()) {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
     $user_id = $_SESSION['user_id'];
-    $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `prix`, `pay_method`,`user_id`) VALUES (null,'$devis_id','$price','$pay_method','$user_id')";
+    $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `pay_method`,`user_id`,`devis_id`,`payment_giver`,`dossier_id`, `prix`,`montant_paye`) VALUES (null,'$service_id','$pay_method','$user_id','$devis_id','$payment_giver','$dossier_id','$price','$montant_paye')";
     mysqli_query($cnx,$query);
     $last_id = mysqli_insert_id($cnx);
     return $last_id;
     
+}
+//get payment detail by service id to check fo avance
+function getPaymentDetails($service_id){
+    $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
+    if (mysqli_connect_errno()) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    // $query = "SELECT * FROM `devis_payments` WHERE id_devis=$service_id";
+    $query = "SELECT sum(devis_payments.montant_paye) as avanceSum FROM `devis_payments` WHERE id_devis=$service_id";
+    $result=mysqli_query($cnx,$query);
+    $row = mysqli_fetch_assoc($result);
+    return $row;
+
 }
 
 
