@@ -10,6 +10,7 @@
     $allDisplayedServicesId = $_POST["invoiceId"];
     $payment = floatval($_POST["paymentClientPrice"]); // floatval => Get float value of a variable → the price that the client pay
     
+    // var_dump($payment);
     
 if(isset($_POST['ids'])){       //if any of the services is checked
     $dossiers_id = $_POST["dossiers"];
@@ -22,10 +23,10 @@ if(isset($_POST['ids'])){       //if any of the services is checked
         $res =mysqli_query($cnx,$query);
         $row = mysqli_fetch_assoc($res);
         $selected_detail = getDetailDevisById($dev_id); //=> "SELECT * FROM `detail_devis` WHERE `id`='$dev_id'
-        $service_price = $selected_detail['prix']; // price of the service
+        $service_price =($selected_detail['discount']==0)? $selected_detail['prix']:$selected_detail['prix']-(($selected_detail['prix']*$selected_detail['discount'])/100);
         $devisRow = getDevisById($row['id_devis']); //=> SELECT * FROM `devis` WHERE `id`='$id';
-        $detail_price = ($devisRow['remove_tva'] != 1) ? round(($service_price*0.2) + $service_price , 2) : round($service_price , 2);//price of the service depending of there is a tva or not
-        $price = $payment>=$detail_price?$detail_price:$payment;
+        $detail_price = ($devisRow['remove_tva'] != 1) ? round(($service_price*0.2) + $service_price , 2):round($service_price , 2);//price of the service depending of there is a tva or not
+        // $price = $payment>=$detail_price?$detail_price:$payment;
         $devis_id=$selected_detail['id_devis'];
         $dossier_id =$dossiers_id[$index];
         $servicePaymentDetails=getPaymentDetails($dev_id);
@@ -37,7 +38,6 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye);
             }else if($payment < $detail_price){
                 if($payment==0){
-                    // die();
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
@@ -46,7 +46,6 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 if($avanceSum<=$detail_price){
                     $montant_paye= $payment;
                     payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye);
-                    // die();
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
@@ -61,20 +60,20 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment=$payment-$detail_price;
                 $montant_paye=$detail_price;
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye);
+                if($payment==0 || $payment <$detail_price){    //this when we are in the last checked service and pyament =0 or still has amount
+                    header("Location: payments.php?message=" . urlencode($message));
+                    exit();
+                }
             }else if($payment < $detail_price){
                 if($payment==0){
-                    // die();
-                 // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
-
                 }
                 $montant_paye = $payment;  
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye);
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
-                // die();
             }
         }             
     }
@@ -90,10 +89,11 @@ if(isset($_POST['ids'])){       //if any of the services is checked
         $res =mysqli_query($cnx,$query);
         $row = mysqli_fetch_assoc($res);
         $selected_detail = getDetailDevisById($dev_id); //=> "SELECT * FROM `detail_devis` WHERE `id`='$dev_id'
-        $service_price = $selected_detail['prix']; // price of the service
+        // $service_price = $selected_detail['prix']; // price of the service
+        $service_price =($selected_detail['discount']==0)? $selected_detail['prix']:$selected_detail['prix']-(($selected_detail['prix']*$selected_detail['discount'])/100);
         $devisRow = getDevisById($row['id_devis']); //=> SELECT * FROM `devis` WHERE `id`='$id';
         $detail_price = ($devisRow['remove_tva'] != 1) ? round(($service_price*0.2) + $service_price , 2) : round($service_price , 2);//price of the service depending of there is a tva or not
-        $price = $payment>=$detail_price?$detail_price:$payment;
+        // $price = $payment>=$detail_price?$detail_price:$payment;
         $devis_id=$selected_detail['id_devis'];
         // $dossier_id =$dossiers_id[$index];
         $servicePaymentDetails=getPaymentDetails($dev_id);
@@ -105,9 +105,7 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye);
             }else if($payment < $detail_price){
                 if($payment==0){
-                    // die();
                     // -----success mesaage
-
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
                 }
@@ -115,7 +113,6 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 if($avanceSum<=$detail_price){
                     $montant_paye= $payment;
                     payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye);
-                    // die();
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
@@ -132,14 +129,12 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye);
             }else if($payment < $detail_price){
                 if($payment==0){
-                    // die();
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
                 }
                 $montant_paye = $payment;  
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye);
-                // die();
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
