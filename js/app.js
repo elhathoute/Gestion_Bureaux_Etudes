@@ -551,6 +551,13 @@ $(document).ready(function () {
         }
         
     });
+    $(document).on('click','#dev_add',function(){
+    if($('#devisSrvTbl tbody tr').length == 0){
+     
+        alert('veuillez selection au mois une service ?');
+
+    }
+    });
     // edit service editServiceBtn
     // $(document).on('input','.servRef_update',function(){
     
@@ -919,8 +926,7 @@ $(document).ready(function () {
 
     // send data to devis-add on create devis button click
     $(document).on('submit','#devisForm',function(e){
-        // e.preventDefault();
-
+        
         if(submitServiceForm){
             return false;
         }
@@ -1064,7 +1070,9 @@ $(document).ready(function () {
             if(selectedDevisBroker){
                 return false;
             }
+                      $("#devisSrvTbl tbody tr").remove();
         }
+                      $("#devisSrvTbl tbody tr").remove();
     });
 
 

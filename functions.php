@@ -1,16 +1,19 @@
 <?php
 
-// function getAllDevisServicesNotPayed($id_devis){
-//     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
-//     if(mysqli_connect_errno()){
-//         echo "Failed to connect to MySQL: " . mysqli_connect_error();
-//         exit();
-//     }
-//     $query = "SELECT detail_devis.* FROM detail_devis  WHERE detail_devis.id_devis=$id_devis and detail_devis.confirmed=1 and((detail_devis.prix)*(detail_devis.quantity)>(detail_devis.srv_avance)||detail_devis.srv_avance=0)";
-//     $res = mysqli_query($cnx,$query);
-//     $rows=mysqli_fetch_all($res);
-//     return $rows;
-// }
+
+
+
+function getAllServicesByClient($client_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT detail_devis.* FROM `devis` INNER JOIN detail_devis on devis.id = detail_devis.id_devis where devis.id_client=$client_id";
+    $res = mysqli_query($cnx,$query);
+    // $rows=mysqli_fetch_assoc($res);
+    return $res;
+}
 
 //fetch individual client data
 // get count service in dossier
@@ -99,7 +102,7 @@ function fill_service_dropDown(){
     $output = '';
     while($row = mysqli_fetch_assoc($res)){
         $title = $row["title"];
-        $output .= '<option id='.$row['id'].' class="servicesTitleOption" value ="'.$title.'" ></option>';
+        $output .= '<option id='.$row['id'].' class="servicesTitleOption" value ="'.mysqli_real_escape_string($cnx,$title).'" ></option>';
     }
     return $output;
 }

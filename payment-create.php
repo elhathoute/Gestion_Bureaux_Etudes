@@ -109,7 +109,7 @@ $clientRes = mysqli_query($cnx, $query);
                                         </div>
                                         <div class="col-sm-6">
                                             <label class="labelClientPaymentTotal float-end fs-4 fw-bold" id="labelClientPaymentTotal">0.00 DH</label>
-                                            <input type="hidden" name="" id="hiddenTotal">
+                                            <input type="hidden" name="hiddenTotal" id="hiddenTotal">
                                             <input type="hidden" name="hiddenTotalValue" id="hiddenTotalValue">
                                             <input type="hidden" name="clientId" id="clientId">
                                             <input type="hidden" name="brokerId" id="brokerId">
