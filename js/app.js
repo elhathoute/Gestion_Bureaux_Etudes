@@ -1215,6 +1215,44 @@ $(document).ready(function () {
 
 
     //************************* */
+    // check number of doddier of a service 
+  
+    $(document).on("input",".rowServiceQte",function(e){
+        let qte = ($(this).val());
+        let devis_id = $('#devis_id').val();
+        let unique_service_id = $(this).closest('tr').find('.serviceUniqueId').val();
+    //    console.log(unique_service_id);
+    let input = $(this);
+        $.ajax({
+            url:'check-count-dossier.php',
+            type:"POST",
+            data:{qte:qte,devis_id:devis_id,unique_service_id:unique_service_id},
+            success:function(data){
+                let json = JSON.parse(data);
+                if(json.status=="success"){
+                    if(qte < json.count || qte==0){
+                        $('#dev_upd').attr('disabled',true);
+                        $(input).closest('tr').addClass('bg-warning');
+                        setTimeout(function(){
+                        alert(`Cette Service Avoir `+(json.count)+` Dossiers Veuillez choisir une autre Quantité Supérieur à `+(json.count));
+                        },200)
+
+                    }else{
+                        $('#dev_upd').attr('disabled',false);
+                        $(input).closest('tr').removeClass('bg-warning');
+
+
+                    }
+                    
+                }
+            },
+            error:function(err){
+                console.log(error);
+            }
+            });
+
+    });
+
     //devis update
 
     $(document).on("submit","#devisEditForm",function(e){
@@ -1234,7 +1272,9 @@ $(document).ready(function () {
             price = $('.servicePrice',this).val(),
             discount = $(".serviceDiscount",this).val(),
             unit = $(".serviceUnit",this).val(),
-            serviceUniqueId=$('.serviceUniqueId',this).val();
+            serviceUniqueId=$('.serviceUniqueId',this).val(),
+            confirmed = $('.confirmed',this).val()
+
         
             tableData[row] = {
                 "serviceName":service_name,
@@ -1243,7 +1283,8 @@ $(document).ready(function () {
                 "discount":discount,
                 "unit":unit,
                 "srvRef":srvRef,
-                "serviceUniqueId":serviceUniqueId
+                "serviceUniqueId":serviceUniqueId,
+                "confirmed":confirmed
             }
             row++;
         });
@@ -1290,14 +1331,11 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt,tva_checked:tva_checked,brkId:brkId},
                 success:function(data){
-                    // alert((data));
-                    // alert('az');
                     var json = JSON.parse(data);
                     var status = json.status;
                     
                     dBrk_id = json.dBrk_id;
                     devis_id = json.devis_id;
-                    
                     // if(status == 'success'){
                         //     location.href='devis-view.php?sc=sucupd';
                         // }
@@ -1363,7 +1401,7 @@ $(document).ready(function () {
 
 
                 }else{
-                    location.href = 'devis-view.php?sc=sucadd';
+                    location.href = 'devis-view.php?sc=sucupd';
                 }
                
 
@@ -1382,7 +1420,7 @@ $(document).ready(function () {
         }
     });
     $(document).on('click', '.btn_brk_devis_confirm_update', function() {
-
+            console.log(dBrk_id);
         if (dBrk_id != '') {
             let prices = [];
             $('#devisBrkShowTable tbody tr').each(function() {
@@ -1401,10 +1439,10 @@ $(document).ready(function () {
             $.ajax({
                 url:"devis_brk_dets_delete_add.php",
                 type: 'POST',
-            data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
+                data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
                 
                 success: function(data) {
-                    // alert(data);
+                    alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
                     if (status == 'success') {
@@ -1569,6 +1607,8 @@ $(document).ready(function () {
         var srv_unique_id = $(this).data('srv_unique_id');
         // console.log($(this).data());
         var doc_type = $("#doc_type").val();
+        // 
+        confirmed = $('.confirmed',this).val()
         
         var btn=$(this);
         lunchLoader();

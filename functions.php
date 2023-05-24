@@ -1,6 +1,31 @@
 <?php
 
-
+// get count of dossierService
+function getCountServiceDossier($devis_id,$unique_service_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    
+    $query = "SELECT COUNT(approved) as count FROM detail_devis where id_devis=$devis_id and srv_unique_id=$unique_service_id and approved=1 GROUP by empl";
+    $res = mysqli_query($cnx, $query);
+    $row = mysqli_fetch_assoc($res);
+    $count = $row['count'];
+    return $count;
+}
+ function getConfirmedApprovedService($devis_id,$srv_unique_id)
+{
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = " SELECT confirmed,approved FROM `detail_devis`  where  id_devis=$devis_id and srv_unique_id=$srv_unique_id GROUP BY empl";
+    $res = mysqli_query($cnx,$query);
+    $row = mysqli_fetch_assoc($res);
+    return $row;
+}
 
 
 function getAllServicesByClient($client_id){
@@ -242,7 +267,7 @@ function viewDevisServices(){
             $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice"  value="'.$val[3].'" placeholder="0.00"></td>';
             $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[5].'" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
-            $html .= '<td><input type="hidden" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
+            $html .= '<td><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
 
             $html .= '</tr>';
         }
@@ -2028,6 +2053,23 @@ function getDevisAllDetails($devis_id){
     }
 
     $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id'";
+    $res = mysqli_query($cnx,$query);
+    $services = array();
+    while($row = mysqli_fetch_assoc($res)){
+        $services[] = $row;
+    }
+
+    return $services;
+}
+// 
+function getDevisAllDetailsDistinct($devis_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' GROUP BY `empl`";
     $res = mysqli_query($cnx,$query);
     $services = array();
     while($row = mysqli_fetch_assoc($res)){
