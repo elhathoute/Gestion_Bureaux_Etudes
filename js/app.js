@@ -1331,12 +1331,12 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt,tva_checked:tva_checked,brkId:brkId},
                 success:function(data){
-                    alert(data);
+                    // alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
                     
                     dBrk_id = json.dBrk_id;
-                    alert(dBrk_id);
+                    // alert(dBrk_id);
                     devis_id = json.devis_id;
                     // if(status == 'success'){
                         //     location.href='devis-view.php?sc=sucupd';
@@ -1376,7 +1376,10 @@ $(document).ready(function () {
                     let devisTableData = JSON.parse(tableData);
                     // console.log(devisTableData);
                     for (let i = 0; i < devisTableData.length; i++) {
+                        devis_id=$('#devis_id').val();
                         uniqueSrvice_id=parseInt(devis_id)+i+1;
+                        // console.log(devis_id.);
+                        // alert(uniqueSrvice_id);
                         if(devisTableData[i]["srvRef"] != ""){
                             // console.log(devisTableData[i]["unit"]);
                             html += `<tr>`;
@@ -1387,7 +1390,7 @@ $(document).ready(function () {
                             html += `<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice serviceBrkPrice"  value="${devisTableData[i]["price"]}" placeholder="0.00"  ></td>`;
                             html += `<td><div class="input-group"><span style="width: 30px;" class="input-group-text py-1"><i class="bi bi-percent"></i></span><input style="width: 38px;" type="number"  min="0" name="" value="${devisTableData[i]["discount"]}" class="form-control py-1 serviceDiscount serviceBrkDiscount" placeholder="Enter % (ex: 10%)" ></div></td>`;
                             html += `<td><input type="text" name="" class="form-control py-1 rowServiceTotal rowServiceBrkTotal" value="${devisTableData[i]["montant"]}" disabled placeholder="0" disabled></td>`;
-                           html += `<td ><input type="hidden" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled value="`+(uniqueSrvice_id)+`"></td>`;
+                           html += `<td ><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled value="`+(uniqueSrvice_id)+`"></td>`;
 
                             html += `</tr>`;
                         }
@@ -1403,7 +1406,7 @@ $(document).ready(function () {
 
 
                 }else{
-                    location.href = 'devis-view.php?sc=sucupd';
+                    location.href = 'devis-view.php';
                 }
                
 
@@ -1422,11 +1425,11 @@ $(document).ready(function () {
         }
     });
     $(document).on('click', '.btn_brk_devis_confirm_update', function() {
-         
+     
         if (dBrk_id != '') {
             let prices = [];
             $('#devisBrkShowTable tbody tr').each(function() {
-                console.log($('.serviceUniqueId', this));
+                // console.log($('.serviceUniqueId', this));
                 var price = {
                     "price": $('.servicePrice', this).val(),
                     "discount": $('.serviceDiscount', this).val(),
@@ -1448,6 +1451,7 @@ $(document).ready(function () {
                     alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
+                    // alert(status);
                     if (status == 'success') {
                         location.href = 'devis-view.php?sc=sucadd';
                     }

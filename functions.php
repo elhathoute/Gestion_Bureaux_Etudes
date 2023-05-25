@@ -1,5 +1,23 @@
 <?php
 
+function getAllServiceAfterDeletedService($devis_id,$key){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    $query = "SELECT srv_unique_id,empl FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `empl`>$key GROUP BY `srv_unique_id` ";
+    $res = mysqli_query($cnx,$query);
+    $srv_unique_id=array();
+    while($row = mysqli_fetch_assoc($res)){
+        $srv_unique_id[] = $row;
+    }
+
+
+    return array_column($srv_unique_id,'srv_unique_id');
+} 
+
 // get count of dossierService
 function getCountServiceDossier($devis_id,$unique_service_id){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
@@ -21,7 +39,7 @@ function getCountServiceDossier($devis_id,$unique_service_id){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-    $query = " SELECT confirmed,approved FROM `detail_devis`  where  id_devis=$devis_id and srv_unique_id=$srv_unique_id GROUP BY empl";
+    $query = " SELECT confirmed,approved,empl FROM `detail_devis`  where  id_devis=$devis_id and srv_unique_id=$srv_unique_id GROUP BY empl";
     $res = mysqli_query($cnx,$query);
     $row = mysqli_fetch_assoc($res);
     return $row;
@@ -207,10 +225,12 @@ function getSelectedDevisServices(){
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_all($res);
         // print_r($row);
+        $opacity='';
         $html = '';
         foreach ($row as $key=>$val) {
             $html .= '<tr>';
-            $html .= '<td><i class="bi bi-trash fs-5 deleteRowBtn" ></i></td>';
+            ($val[10]==1) ? ($opacity=0) : ($opacity=100);
+            $html .= '<td><i class="bi bi-trash fs-5 opacity-'.$opacity.' deleteRowBtn" ></i></td>';
             $html .= '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
             $html .= '<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte"  value="'.$val[4].'" placeholder="Quantité"></td>';
@@ -2063,14 +2083,14 @@ function getDevisAllDetails($devis_id){
     return $services;
 }
 // 
-function getDevisAllDetailsDistinct($devis_id){
+function getDevisAllDetailsDistinct($devis_id,$srv_unique_id){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
 
-    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' GROUP BY `empl`";
+    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `srv_unique_id`=$srv_unique_id GROUP BY `empl`";
     $res = mysqli_query($cnx,$query);
     $services = array();
     while($row = mysqli_fetch_assoc($res)){
@@ -2078,6 +2098,22 @@ function getDevisAllDetailsDistinct($devis_id){
     }
 
     return $services;
+}
+function getAllServiceUniqueIdDevis($devis_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    $query = "SELECT srv_unique_id FROM `detail_devis` WHERE `id_devis`='$devis_id' GROUP BY `srv_unique_id` ";
+    $res = mysqli_query($cnx,$query);
+    $srv_unique_id=array();
+    while($row = mysqli_fetch_assoc($res)){
+        $srv_unique_id[] = $row;
+    }
+
+    return array_column($srv_unique_id,'srv_unique_id');
 }
 
 //check if devis is bind to a broker
