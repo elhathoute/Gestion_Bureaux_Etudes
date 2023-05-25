@@ -15,7 +15,17 @@
     $allDisplayedServicesId = $_POST["servicesId"];
     $payment = floatval($_POST["paymentClientPrice"]); // floatval => Get float value of a variable → the price that the client pay
     
-    
+if(isset($_POST['supplierCheckbox']) && $_POST['supplier'] != '' && $_POST['paymentSupplier'] != '' && is_numeric($_POST['paymentSupplier']))
+                    {
+                        $supplier_id = $_POST['supplier'];
+                        $supplier = getSupplierById($supplier_id);
+                        $category = getSuppCatById($supplier['cat_id']);
+                        if($category['type'] == 'Bureau de contrôle'){
+                            $amount = $_POST['paymentSupplier'] + $supplier['sold'];
+                            updateSupplierSold($supplier_id,$amount);
+                            unset($_POST['supplierCheckbox']);
+                        }
+                    }
 if(isset($_POST['ids'])){       //if any of the services is checked
     $dossiers_id = $_POST["dossiers"];
     $allCheckedServicesId = $_POST["ids"];
@@ -50,7 +60,7 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment=$payment - $priceLeft;
                 $montant_paye =$priceLeft;
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
-                if ($index+1 == count($allDisplayedServicesId)){    //if this is the last service and still have $payment
+                if ($index+1 == count($allCheckedServicesId)){    //if this is the last service and still have $payment
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
                 }
@@ -72,7 +82,7 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment =$payment -$priceLeft;
                 $montant_paye = $priceLeft;  
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
-                if ($index+1 == count($allDisplayedServicesId)){    //if this is the last service and still have $payment
+                if ($index+1 == count($allCheckedServicesId)){    //if this is the last service and still have $payment
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
                 }
@@ -82,7 +92,7 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment=$payment-$detail_price;
                 $montant_paye=$detail_price;
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
-                if($payment==0 || $payment <$detail_price){    //this when we are in the last checked service and pyament =0 or still has amount
+                if($payment==0 || $index+1 == count($allCheckedServicesId)){    //this when we are in the last checked service and pyament =0 or still has amount
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
                 }
@@ -186,4 +196,5 @@ if(isset($_POST['ids'])){       //if any of the services is checked
         }
     }
 }
+
 ?>
