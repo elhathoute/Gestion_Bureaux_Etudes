@@ -100,14 +100,16 @@
                 }
 
         }
-
-        if($res){
-            $data = array('status'=>'success');
-            echo json_encode($data);
-        }else{
-            $data = array('status'=>'failed');
-            echo json_encode($data);
-        }
+        $dBrk_id=getBroker_devisData($devis_id)['id'];
+         $dBrk_id ? $dBrk_id : '';
+         die(var_dump('brk'.$dBrk_id));
+        // if($res){
+        //     $data = array('status'=>'success','dBrk_id'=>$dBrk_id);
+        //     echo json_encode($data);
+        // }else{
+        //     $data = array('status'=>'failed');
+        //     echo json_encode($data);
+        // }
 
         // foreach($originalServices as $index => $originalService){
         //     $updated_service = $updatedServices[$index];

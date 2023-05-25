@@ -301,6 +301,7 @@ function viewBrokerDevisServices(){
 
         }
         $html = '';
+        var_dump($row);
         foreach ($row as $key=>$val) {
             // var_dump($val);
             $html .='<input type="hidden" disabled min="0" name="broker_devis" class="form-control py-1 px-1 broker_id" id="broker_id"  value="'.$val[17].'" >';

@@ -1331,10 +1331,12 @@ $(document).ready(function () {
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt,tva_checked:tva_checked,brkId:brkId},
                 success:function(data){
+                    alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
                     
                     dBrk_id = json.dBrk_id;
+                    alert(dBrk_id);
                     devis_id = json.devis_id;
                     // if(status == 'success'){
                         //     location.href='devis-view.php?sc=sucupd';
@@ -1420,10 +1422,11 @@ $(document).ready(function () {
         }
     });
     $(document).on('click', '.btn_brk_devis_confirm_update', function() {
-            console.log(dBrk_id);
+         
         if (dBrk_id != '') {
             let prices = [];
             $('#devisBrkShowTable tbody tr').each(function() {
+                console.log($('.serviceUniqueId', this));
                 var price = {
                     "price": $('.servicePrice', this).val(),
                     "discount": $('.serviceDiscount', this).val(),
@@ -1434,7 +1437,7 @@ $(document).ready(function () {
             devis_id=$('#devis_id').val()
             // console.log();
 
-            // console.log(prices);
+            console.log(prices);
     
             $.ajax({
                 url:"devis_brk_dets_delete_add.php",

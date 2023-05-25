@@ -18,8 +18,9 @@ if ($_POST) {
             $_price = $price["price"];
             $_discount = $price["discount"];
             $_service_unique_id = $price["service_unique_id"];
+            die($_service_unique_id);
+            $query = "INSERT INTO `detail_broker_devis`(`id`, `id_broker_devis`, `new_prix`, `srv_unique_id`, `new_discount`) VALUES (null, '".$devis_broker_id."', '".$_price."', '".$_service_unique_id."', '".$_discount."')";
 
-            $query = "INSERT INTO `detail_broker_devis`(`id`, `id_broker_devis`, `new_prix`, `srv_unique_id`, `new_discount`) VALUES (null, '$devis_broker_id', $_price, $_service_unique_id, $_discount)";
             $res = mysqli_query($cnx, $query);
         }
 
