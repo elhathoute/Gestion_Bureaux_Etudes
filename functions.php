@@ -348,7 +348,6 @@ function getDetailDevisById($detailId){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-
     $query = "SELECT * FROM `detail_devis` WHERE `id`='$detailId'";
     $res = mysqli_query($cnx,$query);
     $row = mysqli_fetch_assoc($res);
@@ -935,7 +934,7 @@ function payInvoice($invoice_id,$price,$pay_method){
 }
 
 //insert data to devis_payments
-function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$price,$montant_paye){
+function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$price,$montant_paye,$broker_commission){
     // var_dump($N_dossier);
     // die();
     $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
@@ -944,13 +943,13 @@ function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$
         exit();
     }
     $user_id = $_SESSION['user_id'];
-    $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `pay_method`,`user_id`,`devis_id`,`payment_giver`,`dossier_id`, `prix`,`montant_paye`) VALUES (null,'$service_id','$pay_method','$user_id','$devis_id','$payment_giver','$dossier_id','$price','$montant_paye')";
+    $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `pay_method`,`user_id`,`devis_id`,`payment_giver`,`dossier_id`, `prix`,`montant_paye`,`broker_commission`) VALUES (null,'$service_id','$pay_method','$user_id','$devis_id','$payment_giver','$dossier_id','$price','$montant_paye','$broker_commission')";
     mysqli_query($cnx,$query);
     $last_id = mysqli_insert_id($cnx);
     return $last_id;
     
 }
-//get payment detail by service id to check fo avance
+//get payment detail by service id to check for avance
 function getPaymentDetails($service_id){
     $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
     if (mysqli_connect_errno()) {
@@ -2067,6 +2066,18 @@ function checkBroker_devis($devis_id){
 
 // Fetching broker_devis Data
 
+function getBrokerdetails($service_UI,$devis_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    $query = "SELECT * FROM `broker_devis` JOIN detail_broker_devis on broker_devis.id = detail_broker_devis.id_broker_devis WHERE id_devis=$devis_id and srv_unique_id = $service_UI;";
+    $res = mysqli_query($cnx,$query);
+    $row = mysqli_fetch_assoc($res);
+    return $row;
+}
 function getBroker_devisData($devis_id){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){

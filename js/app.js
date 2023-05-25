@@ -1985,7 +1985,7 @@ $(document).ready(function () {
     $(document).on('change','.CBPaymentByClient',function(e){
     //    $('.DevisCheckBox').click(); 
     // $(this).closest('td').children('.DevisCheckBox,.DossierCheckBox').click();
-    $(this).closest('td').children('.DevisCheckBox, .DossierCheckBox').click();
+    $(this).closest('td').children('.DevisCheckBox, .DossierCheckBox , .serviceUICheckBox').click();
     // $(this).closest('td').children('.DossierCheckBox').click();
     })
 
