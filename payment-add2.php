@@ -109,8 +109,7 @@ if(isset($_POST['ids'])){       //if any of the services is checked
             }
         }             
     }
-}elseif($_POST){
-    //select the devis id of the services depending on detai_devis.id and pay them
+}elseif($_POST){    //select the devis id of the services depending on detai_devis.id and pay them
     $dossiers_id = $_POST["Dossiers"];
     $allDisplayedServicesId = $_POST["servicesId"];
     $services_UId =$_POST["uniqueIds"];
@@ -122,11 +121,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
         $res =mysqli_query($cnx,$query);
         $row = mysqli_fetch_assoc($res);
         $selected_detail = getDetailDevisById($dev_id); //=> "SELECT * FROM `detail_devis` WHERE `id`='$dev_id'
-        // $service_price = $selected_detail['prix']; // price of the service
         $service_price =($selected_detail['discount']==0)? $selected_detail['prix']:$selected_detail['prix']-(($selected_detail['prix']*$selected_detail['discount'])/100);
         $devisRow = getDevisById($row['id_devis']); //=> SELECT * FROM `devis` WHERE `id`='$id';
         $detail_price = ($devisRow['remove_tva'] != 1) ? round(($service_price*0.2) + $service_price , 2) : round($service_price , 2);//price of the service depending of there is a tva or not
-        // $price = $payment>=$detail_price?$detail_price:$payment;
         $devis_id=$selected_detail['id_devis'];
         $dossier_id =$dossiers_id[$index];
         $servicePaymentDetails=getPaymentDetails($dev_id);
