@@ -6,11 +6,18 @@ $query = "SELECT * FROM `client` WHERE 'remove'=0";
 $clientRes = mysqli_query($cnx, $query);
 ?>
 
-<div class="row py-4">
-    <div class="col-md-4">
+<div class="row py-4 justify-content-between">
+    <div class="col-md-4 ">
         <a href='javascript:void(0)' class="btn btn-outline-secondary btnChangePaymentClient" title="Sélectionner un autre Client">
             <i class="bi bi-plus-circle"></i>&nbsp;Change Maître d'ouvrage
         </a>
+    </div>
+    <!--client filter for the broker-->
+    <div class="col-md-3">
+        <select id="selectBrokerClient" class="form-control d-none">
+            <option value="" selected disabled>Select Client</option>
+        </select>
+        <input type="hidden" name="BrokerID" id="BrokerID">
     </div>
 </div>
 

@@ -1889,13 +1889,12 @@ $(document).ready(function () {
                 type:"POST",
                 data:{clientId:clientId},
                 success:function(data){
+                    $("#selectBrokerClient").addClass("d-none"); //to hide the client filter in the payment-create
                     var json = JSON.parse(data)["data"];
-                    console.log(json);
                     var html =``;
                     var total=0,
                     solde = 0;
                     if(json.length != 0){
-
                         json.forEach(row => {
                             html += `<tr>`;
                             // html += `<td>${row[0]}${row[8]}</td>`;
@@ -1930,6 +1929,7 @@ $(document).ready(function () {
             });
         }
         var broker_id = $("#selectBrokerModal").val();
+        $("#BrokerID").val(broker_id);
         if(broker_id != null){
             lunchLoader();
             $('#filter_type').val('broker');
@@ -1938,15 +1938,14 @@ $(document).ready(function () {
                 type:"POST",
                 data:{broker_id:broker_id},
                 success:function(data){
+                    $("#selectBrokerClient").removeClass("d-none"); //to hide the client filter in the payment-create
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     var total=0,
                     solde = 0;
                     if(json.length != 0){
-
                         json.forEach(row => {
                             html += `<tr>`;
-                            // html += `<td>${row[0]}${row[8]}</td>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
@@ -1962,12 +1961,97 @@ $(document).ready(function () {
                     }else{
                         html += `<tr><td colspan="7" class="text-center"><strong>No Data Available</strong></td></tr>`;
                     }
+            //---------------------------------
+
+                    $.ajax({
+                        url: "selectBrokerClient.php",
+                        type: "POST",
+                        data: { broker_id: broker_id },
+                        success: function(client) {
+                            var json = JSON.parse(client)["client"];
+                            var options =``;
+                            if(json.length != 0){
+
+                                json.forEach(row => {
+                                    options += `<option class="" value="${row[0]}">${row[1]}</option>`;
+                                });
+                            }else{
+                                options += `<option value="">error</option>`;
+                            }
+                            $("#selectBrokerClient").html(options);
+                        }
+                    });
+
+            //------------------------------
 
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#paymentByClientTable tbody").html(html);
                     // $('#clientId').val((json.length!=0)? json[0][8]:"");
                     $('#brokerId').val(broker_id);
+                    
+                    $("#labelClientPaymentTotal").text(`${(total - solde).toFixed(2)} DH`);
+                    $("#hiddenTotal").val((total - solde).toFixed(2));
+                    $("#hiddenTotalValue").val($("#labelClientPaymentTotal").text().split(' ')[0]);
+                    $('#paymentByClientModal').modal('hide');
+                    //Reset client and broker select to initiale value
+                    $("#selectClientModal").val($("#selectClientModal option:first").val());
+                    $("#selectBrokerModal").val($("#selectClientModal option:first").val());
+                }
+            });
+        }
+        setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    });
 
+    $(document).on('change','.CBPaymentByClient',function(e){ //for checking the hidden checkboxes if the mean one is checked
+    //    $('.DevisCheckBox').click(); 
+    // $(this).closest('td').children('.DevisCheckBox,.DossierCheckBox').click();
+    $(this).closest('td').children('.DevisCheckBox, .DossierCheckBox , .serviceUICheckBox').click();
+    // $(this).closest('td').children('.DossierCheckBox').click();
+    })
+
+
+// for the client filter on the payment-create page borker side 
+$(document).on("change","#selectBrokerClient",function(){
+    var broker_id = $("#BrokerID").val();
+    var clientId = $("#selectBrokerClient").val();
+    // console.log(clientid);
+        if(clientId != null){
+            lunchLoader();
+            $('#filter_type').val('broker');
+            $.ajax({
+                url:"devisPayDetailsByBrkClient.php",
+                type:"POST",
+                data:{clientId:clientId,broker_id:broker_id},
+                success:function(data){
+                    // console.log(broker_id);
+                    // console.log(clientId);
+                    var json = JSON.parse(data)["data"];
+                    // console.log(json);
+                    var html =``;
+                    var total=0,
+                    solde = 0;
+                    if(json.length != 0){
+
+                        json.forEach(row => {
+                            html += `<tr>`;
+                            html += `<td>${row[0]}</td>`;
+                            html += `<td>${row[1]}</td>`;
+                            html += `<td>${row[2]}</td>`;
+                            html += `<td>${row[3]}</td>`;
+                            html += `<td>${row[4]}</td>`;
+                            html += `<td class="totalRow">${row[5]} DH</td>`;
+                            html += `<td class="soldeRow">${row[6]} DH</td>`;
+                            html += `<td class="text-center">${row[7]}</td>`;
+                            html += `</tr>`;
+                            total += parseFloat(row[5]);
+                            solde += parseFloat(row[6]);
+                        });
+                    }else{
+                        html += `<tr><td colspan="7" class="text-center"><strong>No Data Available</strong></td></tr>`;
+                    }
+                    $(".loader-wrapper").addClass("loader-hidden");
+                    $("#paymentByClientTable tbody").html(html);
+                    $('#clientId').val(clientId);
                     $("#labelClientPaymentTotal").text(`${(total - solde).toFixed(2)} DH`);
                     $("#hiddenTotal").val((total - solde).toFixed(2));
                     $("#hiddenTotalValue").val($("#labelClientPaymentTotal").text().split(' ')[0]);
@@ -1979,18 +2063,7 @@ $(document).ready(function () {
                 }
             });
         }
-        setTimeout(()=>$(".loader-wrapper").remove(),2000);
-    });
-
-    $(document).on('change','.CBPaymentByClient',function(e){
-    //    $('.DevisCheckBox').click(); 
-    // $(this).closest('td').children('.DevisCheckBox,.DossierCheckBox').click();
-    $(this).closest('td').children('.DevisCheckBox, .DossierCheckBox , .serviceUICheckBox').click();
-    // $(this).closest('td').children('.DossierCheckBox').click();
-    })
-
-
-
+})
     // $(document).on("click","#searchClientPayment",function(e){
     //     e.preventDefault();
     //     var clientId = $("#selectClientModal").val();
