@@ -50,7 +50,11 @@ if(isset($_POST['ids'])){       //if any of the services is checked
             $service_UI=$services_UId[$index];
             $brokerdetails= getBrokerdetails($service_UI,$devis_id);
             $brokerSrvP=($brokerdetails['new_discount']===0)?$brokerdetails['new_prix']:$brokerdetails['new_prix']-(($brokerdetails['new_prix']*$brokerdetails['new_discount'])/100);
-            $broker_commission= $detail_price - $brokerSrvP;
+            if($filter_type=='broker'){
+                $broker_commission= -($detail_price - $brokerSrvP);
+            }else{
+                $broker_commission= $detail_price - $brokerSrvP;
+            }
         }else{
             $broker_commission=0;
         }
@@ -132,7 +136,11 @@ if(isset($_POST['ids'])){       //if any of the services is checked
             $service_UI=$services_UId[$index];
             $brokerdetails= getBrokerdetails($service_UI,$devis_id);
             $brokerSrvP=($brokerdetails['new_discount']===0)?$brokerdetails['new_prix']:$brokerdetails['new_prix']-(($brokerdetails['new_prix']*$brokerdetails['new_discount'])/100);
-            $broker_commission= $detail_price - $brokerSrvP;
+            if($filter_type=='broker'){
+                $broker_commission= -($detail_price - $brokerSrvP);
+            }else{
+                $broker_commission= $detail_price - $brokerSrvP;
+            }
         }else{
             $broker_commission=0;
         }

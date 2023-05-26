@@ -77,7 +77,6 @@ ORDER BY total_montant_paye DESC, devis.date_creation";
 $res = mysqli_query($cnx, $query);
 $data = array();
 while ($row = mysqli_fetch_assoc($res)) {
-    // $avance =floatval($row['total_montant_paye']);
     $avance =number_format($row['total_montant_paye'], 2);
     $subarray = array();
     $subarray[] = $row['number'];

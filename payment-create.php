@@ -13,9 +13,9 @@ $clientRes = mysqli_query($cnx, $query);
         </a>
     </div>
     <!--client filter for the broker-->
-    <div class="col-md-3">
-        <select id="selectBrokerClient" class="form-control d-none">
-            <option value="" selected disabled>Select Client</option>
+    <div class="col-md-3 d-none" id="selectBrokerClientContainer">
+        <select id="selectBrokerClient" class="form-control">
+            <option value="" selected disabled>Sélectionner un Maître d'ouvrage</option>
         </select>
         <input type="hidden" name="BrokerID" id="BrokerID">
     </div>
@@ -72,9 +72,9 @@ $clientRes = mysqli_query($cnx, $query);
                                                 <th>
                                                     <a href="#">Service</a>
                                                 </th>
-                                                <th>
+                                                <!-- <th>
                                                     <a href="#">Qte</a>
-                                                </th>
+                                                </th> -->
                                                 <th>
                                                     <a href="#">Prix</a>
                                                 </th>

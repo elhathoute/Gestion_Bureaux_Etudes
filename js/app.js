@@ -1889,7 +1889,7 @@ $(document).ready(function () {
                 type:"POST",
                 data:{clientId:clientId},
                 success:function(data){
-                    $("#selectBrokerClient").addClass("d-none"); //to hide the client filter in the payment-create
+                    $("#selectBrokerClientContainer").addClass("d-none"); //to hide the client filter in the payment-create
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     var total=0,
@@ -1902,7 +1902,7 @@ $(document).ready(function () {
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td>${row[4]}</td>`;
+                            // html += `<td>${row[4]}</td>`;
                             html += `<td class="totalRow">${row[5]} DH</td>`;
                             html += `<td class="soldeRow">${row[6]} DH</td>`;
                             html += `<td class="text-center">${row[7]}</td>`;
@@ -1938,7 +1938,7 @@ $(document).ready(function () {
                 type:"POST",
                 data:{broker_id:broker_id},
                 success:function(data){
-                    $("#selectBrokerClient").removeClass("d-none"); //to hide the client filter in the payment-create
+                    $("#selectBrokerClientContainer").removeClass("d-none"); //to hide the client filter in the payment-create
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     var total=0,
@@ -1950,7 +1950,7 @@ $(document).ready(function () {
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td>${row[4]}</td>`;
+                            // html += `<td>${row[4]}</td>`;
                             html += `<td class="totalRow">${row[5]} DH</td>`;
                             html += `<td class="soldeRow">${row[6]} DH</td>`;
                             html += `<td class="text-center">${row[7]}</td>`;
@@ -1969,7 +1969,7 @@ $(document).ready(function () {
                         data: { broker_id: broker_id },
                         success: function(client) {
                             var json = JSON.parse(client)["client"];
-                            var options =``;
+                            var options =`<option value="" selected disabled>Sélectionner un Maître d'ouvrage</option>`;
                             if(json.length != 0){
 
                                 json.forEach(row => {
@@ -2023,10 +2023,7 @@ $(document).on("change","#selectBrokerClient",function(){
                 type:"POST",
                 data:{clientId:clientId,broker_id:broker_id},
                 success:function(data){
-                    // console.log(broker_id);
-                    // console.log(clientId);
                     var json = JSON.parse(data)["data"];
-                    // console.log(json);
                     var html =``;
                     var total=0,
                     solde = 0;
@@ -2038,7 +2035,7 @@ $(document).on("change","#selectBrokerClient",function(){
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td>${row[4]}</td>`;
+                            // html += `<td>${row[4]}</td>`;
                             html += `<td class="totalRow">${row[5]} DH</td>`;
                             html += `<td class="soldeRow">${row[6]} DH</td>`;
                             html += `<td class="text-center">${row[7]}</td>`;
