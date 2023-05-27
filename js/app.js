@@ -1440,7 +1440,7 @@ $(document).ready(function () {
             devis_id=$('#devis_id').val()
             // console.log();
 
-            console.log(prices);
+            // console.log(prices);
     
             $.ajax({
                 url:"devis_brk_dets_delete_add.php",
@@ -1448,7 +1448,7 @@ $(document).ready(function () {
                 data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
                 
                 success: function(data) {
-                    alert(data);
+                    // alert(data);
                     var json = JSON.parse(data);
                     var status = json.status;
                     // alert(status);
@@ -1457,7 +1457,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert(error);
+                    // alert(error);
                 }
             });
         }
