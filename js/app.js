@@ -1976,7 +1976,7 @@ $(document).ready(function () {
                                     options += `<option class="" value="${row[0]}">${row[1]}</option>`;
                                 });
                             }else{
-                                options += `<option value="">error</option>`;
+                                options += `<option value="" class="text-center" disabled>No Data Available</option>`;
                             }
                             $("#selectBrokerClient").html(options);
                         }
