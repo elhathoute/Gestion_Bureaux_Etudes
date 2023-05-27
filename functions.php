@@ -1,16 +1,62 @@
 <?php
 
-// function getAllDevisServicesNotPayed($id_devis){
-//     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
-//     if(mysqli_connect_errno()){
-//         echo "Failed to connect to MySQL: " . mysqli_connect_error();
-//         exit();
-//     }
-//     $query = "SELECT detail_devis.* FROM detail_devis  WHERE detail_devis.id_devis=$id_devis and detail_devis.confirmed=1 and((detail_devis.prix)*(detail_devis.quantity)>(detail_devis.srv_avance)||detail_devis.srv_avance=0)";
-//     $res = mysqli_query($cnx,$query);
-//     $rows=mysqli_fetch_all($res);
-//     return $rows;
-// }
+function getAllServiceAfterDeletedService($devis_id,$key){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    $query = "SELECT srv_unique_id,empl FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `empl`>$key GROUP BY `srv_unique_id` ";
+    $res = mysqli_query($cnx,$query);
+    $srv_unique_id=array();
+    while($row = mysqli_fetch_assoc($res)){
+        $srv_unique_id[] = $row;
+    }
+
+
+    return array_column($srv_unique_id,'srv_unique_id');
+} 
+
+// get count of dossierService
+function getCountServiceDossier($devis_id,$unique_service_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    
+    $query = "SELECT COUNT(approved) as count FROM detail_devis where id_devis=$devis_id and srv_unique_id=$unique_service_id and approved=1 GROUP by empl";
+    $res = mysqli_query($cnx, $query);
+    $row = mysqli_fetch_assoc($res);
+    $count = $row['count'];
+    return $count;
+}
+ function getConfirmedApprovedService($devis_id,$srv_unique_id)
+{
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = " SELECT confirmed,approved,empl FROM `detail_devis`  where  id_devis=$devis_id and srv_unique_id=$srv_unique_id GROUP BY empl";
+    $res = mysqli_query($cnx,$query);
+    $row = mysqli_fetch_assoc($res);
+    return $row;
+}
+
+
+function getAllServicesByClient($client_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT detail_devis.* FROM `devis` INNER JOIN detail_devis on devis.id = detail_devis.id_devis where devis.id_client=$client_id";
+    $res = mysqli_query($cnx,$query);
+    // $rows=mysqli_fetch_assoc($res);
+    return $res;
+}
 
 //fetch individual client data
 // get count service in dossier
@@ -99,7 +145,7 @@ function fill_service_dropDown(){
     $output = '';
     while($row = mysqli_fetch_assoc($res)){
         $title = $row["title"];
-        $output .= '<option id='.$row['id'].' class="servicesTitleOption" value ="'.$title.'" ></option>';
+        $output .= '<option id='.$row['id'].' class="servicesTitleOption" value ="'.mysqli_real_escape_string($cnx,$title).'" ></option>';
     }
     return $output;
 }
@@ -179,10 +225,12 @@ function getSelectedDevisServices(){
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_all($res);
         // print_r($row);
+        $opacity='';
         $html = '';
         foreach ($row as $key=>$val) {
             $html .= '<tr>';
-            $html .= '<td><i class="bi bi-trash fs-5 deleteRowBtn" ></i></td>';
+            ($val[10]==1) ? ($opacity=0) : ($opacity=100);
+            $html .= '<td><i class="bi bi-trash fs-5 opacity-'.$opacity.' deleteRowBtn" ></i></td>';
             $html .= '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
             $html .= '<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte"  value="'.$val[4].'" placeholder="Quantité"></td>';
@@ -239,7 +287,7 @@ function viewDevisServices(){
             $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice"  value="'.$val[3].'" placeholder="0.00"></td>';
             $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[5].'" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
-            $html .= '<td><input type="hidden" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
+            $html .= '<td><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
 
             $html .= '</tr>';
         }
@@ -273,6 +321,7 @@ function viewBrokerDevisServices(){
 
         }
         $html = '';
+        var_dump($row);
         foreach ($row as $key=>$val) {
             // var_dump($val);
             $html .='<input type="hidden" disabled min="0" name="broker_devis" class="form-control py-1 px-1 broker_id" id="broker_id"  value="'.$val[17].'" >';
@@ -2047,6 +2096,39 @@ function getDevisAllDetails($devis_id){
     }
 
     return $services;
+}
+// 
+function getDevisAllDetailsDistinct($devis_id,$srv_unique_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `srv_unique_id`=$srv_unique_id GROUP BY `empl`";
+    $res = mysqli_query($cnx,$query);
+    $services = array();
+    while($row = mysqli_fetch_assoc($res)){
+        $services[] = $row;
+    }
+
+    return $services;
+}
+function getAllServiceUniqueIdDevis($devis_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    $query = "SELECT srv_unique_id FROM `detail_devis` WHERE `id_devis`='$devis_id' GROUP BY `srv_unique_id` ";
+    $res = mysqli_query($cnx,$query);
+    $srv_unique_id=array();
+    while($row = mysqli_fetch_assoc($res)){
+        $srv_unique_id[] = $row;
+    }
+
+    return array_column($srv_unique_id,'srv_unique_id');
 }
 
 //check if devis is bind to a broker

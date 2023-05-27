@@ -15,8 +15,9 @@ foreach ($prices as $price) {
     $_price=$price["price"];
     $_discount=$price["discount"];
     $_service_unique_id=$price["service_unique_id"];
+   
     // die(var_dump('pr'.$price['price'].'disc'.$price['discount'].'srv_unique'.$price['service_unique_id']));
-    $query = "UPDATE detail_broker_devis set new_prix=$_price ,new_discount=$_discount where id_broker_devis=$devis_broker_id and srv_unique_id=$_service_unique_id;";
+    $query = "UPDATE detail_broker_devis set new_prix=$_price ,new_discount=$_discount where id_broker_devis=$devis_broker_id and srv_unique_id=$_service_unique_id";
 
     // $query = "INSERT INTO `detail_broker_devis`(`id`, `id_broker_devis`, `new_prix`,`srv_unique_id`,`new_discount`) VALUES (null,'$devis_broker_id',$_price,$_service_unique_id,$_discount)";
     $res = mysqli_query($cnx,$query);

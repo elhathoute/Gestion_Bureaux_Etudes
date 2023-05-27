@@ -23,7 +23,7 @@
         // die(var_dump($_POST));
         $srv_unique_id=$_POST['srv_unique_id'];
 
-        $query = "UPDATE `detail_devis` SET `confirmed`='1' WHERE `srv_unique_id`='$srv_unique_id' ";
+        $query = "UPDATE `detail_devis` SET `confirmed`='1' WHERE `id_devis`=$devis_id AND `srv_unique_id`='$srv_unique_id' ";
         $res= mysqli_query($cnx,$query);
     
         if($res){
