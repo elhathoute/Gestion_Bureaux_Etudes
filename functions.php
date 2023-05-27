@@ -984,8 +984,6 @@ function payInvoice($invoice_id,$price,$pay_method){
 
 //insert data to devis_payments
 function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$price,$montant_paye,$broker_commission){
-    // var_dump($N_dossier);
-    // die();
     $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
     if (mysqli_connect_errno()) {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -1143,7 +1141,17 @@ function getPaymentsInfo(){
     return $html;
 }
 
-
+//add payment to notification 
+function paymentNoti($id){
+    $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
+    if (mysqli_connect_errno()) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $current_date = date('Y-m-d H:i:s');
+    $query = "INSERT INTO `notifications`(`id_document`, `date`) VALUES ('$id','$current_date')";
+    mysqli_query($cnx,$query);
+}
 
 //accept payment function
 function acceptPayment($devis_id){

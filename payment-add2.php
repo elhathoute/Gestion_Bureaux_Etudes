@@ -64,6 +64,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment=$payment - $priceLeft;
                 $montant_paye =$priceLeft;
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                paymentNoti($dev_id);
                 if ($index+1 == count($allCheckedServicesId)){    //if this is the last service and still have $payment
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
@@ -78,6 +81,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 if($avanceSum<=$detail_price){
                     $montant_paye= $payment;
                     payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                    $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                    paymentNoti($dev_id);
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
@@ -86,6 +92,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment =$payment -$priceLeft;
                 $montant_paye = $priceLeft;  
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                paymentNoti($dev_id);
                 if ($index+1 == count($allCheckedServicesId)){    //if this is the last service and still have $payment
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
@@ -96,6 +105,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment=$payment-$detail_price;
                 $montant_paye=$detail_price;
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                paymentNoti($dev_id);
                 if($payment==0 || $index+1 == count($allCheckedServicesId)){    //this when we are in the last checked service and pyament =0 or still has amount
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
@@ -107,6 +119,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 }
                 $montant_paye = $payment;  
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                paymentNoti($dev_id);
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
@@ -150,6 +165,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment=$payment - $priceLeft;
                 $montant_paye =$priceLeft;
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                paymentNoti($dev_id);
                 if ($index+1 == count($allDisplayedServicesId)){    //if this is the last service and still have $payment
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
@@ -164,6 +182,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 if($avanceSum<=$detail_price){
                     $montant_paye= $payment;
                     payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                    $user_id = $_SESSION['user_id'];
+                    userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                    paymentNoti($dev_id);
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
@@ -172,6 +193,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment =$payment -$priceLeft;
                 $montant_paye = $priceLeft;  
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                paymentNoti($dev_id);
                 if ($index+1 == count($allDisplayedServicesId)){    //if this is the last service and still have $payment
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
@@ -182,6 +206,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $payment=$payment-$detail_price;
                 $montant_paye=$detail_price;
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                paymentNoti($dev_id);
                 if ($index+1 == count($allDisplayedServicesId)){    //if this is the last service and still have $payment
                     header("Location: payments.php?message=" . urlencode($message));
                     exit();
@@ -194,6 +221,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 }
                 $montant_paye = $payment;  
                 payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $user_id = $_SESSION['user_id'];
+                userDevis_history($user_id,$devis_id,"Paiement Effectué");
+                paymentNoti($dev_id);
                  // -----success mesaage
                 header("Location: payments.php?message=" . urlencode($message));
                 exit();
