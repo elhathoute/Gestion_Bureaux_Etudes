@@ -2405,7 +2405,83 @@ $(document).on("change","#selectBrokerClient",function(){
     });
 
     let globalServices = [];
-    //situation onchange event
+    //situation onchange event get situation depend on client id
+    $(document).on("change","#situationSelect",function(){
+        $("#situationTable tbody tr").remove();
+        $("#expSitBtn a").remove();
+        const clientID = $("#situationSelect").val();
+        lunchLoader();
+        if(clientID != null || clientID != ""){
+            $.ajax({
+                url:"st_info.php",
+                data : {clientID:clientID},
+                type:"POST",
+                success:function(data){
+                    
+                    var json = JSON.parse(data)["data"];
+                    var html =``;
+                    let services = [];
+                    let options = ``;
+                    if(json.length != 0){
+
+                        json.forEach(row => {
+                            html += `<tr>`;
+                            html += `<td>${row[0]}</td>`;
+                            html += `<td>${row[1]}</td>`;
+                            html += `<td>${row[2]}</td>`;
+                            html += `<td>${row[3]}</td>`;
+                            html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+                            html += `<td>${row[5]} DH</td>`;
+                            html += `<td>${row[6]}</td>`;
+                            html += `<td class="text-center">${row[7]}</td>`;
+                            html += `</tr>`;
+                            services.push(row[3]);
+                        });
+                        let uniqueSrv = [...new Set(services)];
+                        uniqueSrv.forEach(srv => {
+                            options += `<option value="${srv}">${srv}</option>`;
+                        });
+                        $("#expSitBtn").html(`
+                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clearFilter"></i></button>
+                            <select name="" id="" class="form-select srvFilter">
+                                <option value="" selected disabled>services</option>
+                                ${options}
+                            </select>
+                            <select name="" id="" class="form-select mx-2 statusFilter">
+                                <option value="" selected disabled>Status</option>
+                                <option value="0">Non Payé</option>
+                                <option value="1">Payé</option>
+                                <option value="2">Avance</option>
+                            </select>
+                            <div class="btn-group BtnExportSt" role="group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Export
+                                </button>
+                                <ul class="dropdown-menu">
+                                <li><a class="dropdown-item st_exp_pdf" target="_blank" href='situation_export.php?cl_id=${clientID}'>PDF</a></li>
+                                <li><a class="dropdown-item st_exp_excel" target="_blank" href='situation_excel_export.php?cl_id=${clientID}'>Excel</a></li>
+                                </ul>
+                            </div>
+                        `);
+                        globalServices = services;
+                    }else{
+                        html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+                        $("#expSitBtn").html('');
+                    }
+                    $(".loader-wrapper").addClass("loader-hidden");
+                    $("#situationTable tbody").html(html);
+                    // $("#expSitBtn").html(`<a target="_blank" href='situation_export.php?cl_id=${clientID}' class="btn btn-primary float-end" title="Imprimer Facture"><i class="bi bi-download "></i> Export</a>`);
+                    
+                }
+            });
+        }
+        //add this on success 
+        setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    });
+
+
+    // -----------------------------------start offilter with broker-----------------
+
     $(document).on("change","#situationSelect",function(){
         $("#situationTable tbody tr").remove();
         $("#expSitBtn a").remove();
@@ -2454,24 +2530,19 @@ $(document).on("change","#selectBrokerClient",function(){
                         });
                         let uniqueSrv = [...new Set(services)];
                         uniqueSrv.forEach(srv => {
-                            // li += `<li>
-                            //             <a class="dropdown-item" href="#">${srv}</a>
-                            //         </li>`
-                                    
                             options += `<option value="${srv}">${srv}</option>`;
                         });
                         $("#expSitBtn").html(`
                             <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clearFilter"></i></button>
                             <select name="" id="" class="form-select srvFilter">
-                                <option value="" selected disabled></option>
+                                <option value="" selected disabled>services</option>
                                 ${options}
                             </select>
                             <select name="" id="" class="form-select mx-2 statusFilter">
-                                <option value="" selected disabled></option>
+                                <option value="" selected disabled>Status</option>
                                 <option value="0">Non Payé</option>
                                 <option value="1">Payé</option>
-                                
-                               
+                                <option value="2">Avance</option>
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -2498,6 +2569,9 @@ $(document).on("change","#selectBrokerClient",function(){
         //add this on success 
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
     });
+
+
+    // -----------------------------------end of filter with broker-----------------
 
 
     /**
@@ -2574,11 +2648,11 @@ $(document).on("change","#selectBrokerClient",function(){
                         $("#expSitBtn").html(`
                             <button class="btn border-0"><i class="bi bi-x-circle fs-5 clearFilter"></i></button>
                             <select name="" id="" class="form-select srvFilter">
-                                <option value="" selected disabled></option>
+                                <option value="" selected disabled>Services</option>
                                 ${options}
                             </select>
                             <select name="" id="" class="form-select mx-2 statusFilter">
-                                <option value="" selected disabled></option>
+                                <option value="" selected disabled>Status</option>
                                 <option value="0">Non Payé</option>
                                 <option value="1">Payé</option>
                                
@@ -2673,11 +2747,11 @@ $(document).on("change","#selectBrokerClient",function(){
                         $("#expSitBtn").html(`
                             <button class="btn border-0"><i class="bi bi-x-circle fs-5 clearFilter"></i></button>
                             <select name="" id="" class="form-select srvFilter">
-                                <option value="" selected disabled></option>
+                                <option value="" selected disabled>Services</option>
                                 ${options}
                             </select>
                             <select name="" id="" class="form-select mx-2 statusFilter">
-                                <option value="" selected disabled></option>
+                                <option value="" selected disabled>Status</option>
                                 <option value="0">Non Payé</option>
                                 <option value="1">Payé</option>
                                 <option value="2">Avance</option>
@@ -2708,6 +2782,246 @@ $(document).on("change","#selectBrokerClient",function(){
             console.log('error occurred');
         }
     });
+
+
+// --------------------
+
+$(document).on("click",".clear_Filter",function(){
+    location.reload()
+});
+// --------------------------get all situations ------------------
+
+$.ajax({
+      url: 'getAllSituation.php', 
+      method: 'GET',
+      success: function(data) {
+          var json = JSON.parse(data)["data"];
+        var html =``;
+        let services = [];
+        let options = ``;
+        if(json.length != 0){
+
+            json.forEach(row => {
+            //   alert($row[5]);
+                html += `<tr>`;
+                html += `<td>${row[0]}</td>`;
+                html += `<td>${row[1]}</td>`;
+                html += `<td>${row[2]}</td>`;
+                html += `<td>${row[3]}</td>`;
+                html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+                html += `<td>${row[5]} DH</td>`;
+                html += `<td>${row[6]}</td>`;
+                html += `<td class="text-center">${row[7]}</td>`;
+                html += `</tr>`;
+                services.push(row[3]);
+            });
+            let uniqueSrv = [...new Set(services)];
+            uniqueSrv.forEach(srv => {
+                options += `<option value="${srv}">${srv}</option>`;
+            });
+            $("#expSitBtn").html(`
+                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clear_Filter"></i></button>
+                            <select name="" id="" class="form-select allsrvFilter">
+                                <option value="" selected disabled>Services</option>
+                                ${options}
+                            </select>
+                            <select name="" id="" class="form-select mx-2 allSrvstatusFilter">
+                                <option value="" selected disabled>Status</option>
+                                <option value="0">Non Payé</option>
+                                <option value="1">Payé</option>
+                                <option value="2">Avance</option>
+                            </select>
+                        `);
+                        globalServices = services;
+        }else{
+            html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+            $('.BtnExportSt').addClass('invisible');
+        }
+        $(".loader-wrapper").addClass("loader-hidden");
+        $("#situationTable tbody").html(html);
+        setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    },
+      error: function() {
+        console.log('Error occurred while retrieving data.');
+      }
+    });
+
+// ----------------------- status Filter for all Services-------------------------
+
+$(document).on('change','.allSrvstatusFilter',function(){
+    const paid_status = $(this).val();
+    console.log(paid_status);
+    let srv_name = "";
+    // let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
+    // let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
+    function makeRequest(){
+        lunchLoader();
+        if($(".allsrvFilter").val() != null){
+            srv_name = $(".allsrvFilter").val();
+            // hrefs for pdf && excel
+            // st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            return $.ajax({
+                url:'st_info_both.php',
+                type:'POST',
+                data:{paid_status:paid_status,srv_name:srv_name}
+            });
+        }else{
+            // st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
+            // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
+            return $.ajax({
+                url:'st_info_status.php',
+                type:'POST',
+                data:{paid_status:paid_status}
+            });
+        }
+    }
+    $.when(makeRequest()).then(function successHandler(data){
+        
+        // alert(data);
+        console.log(data);
+        var json = JSON.parse(data)["data"];
+                var html =``;
+                let services = globalServices;
+                let options = ``;
+                if(json.length != 0){
+
+                    json.forEach(row => {
+                    html += `<tr>`;
+                    html += `<td>${row[0]}</td>`;
+                    html += `<td>${row[1]}</td>`;
+                    html += `<td>${row[2]}</td>`;
+                    html += `<td>${row[3]}</td>`;
+                    html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+                    html += `<td>${row[5]} DH</td>`;
+                    html += `<td>${row[6]}</td>`;
+                    html += `<td class="text-center">${row[7]}</td>`;
+                    html += `</tr>`;
+            });
+            let uniqueSrv = [...new Set(services)];
+            uniqueSrv.forEach(srv => {
+                options += `<option value="${srv}">${srv}</option>`;
+            });
+            $("#expSitBtn").html(`
+                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clear_Filter"></i></button>
+                            <select name="" id="" class="form-select allsrvFilter">
+                                <option value="" selected disabled>Services</option>
+                                ${options}
+                            </select>
+                            <select name="" id="" class="form-select mx-2 allSrvstatusFilter">
+                                <option value="" selected disabled>Status</option>
+                                <option value="0">Non Payé</option>
+                                <option value="1">Payé</option>
+                                <option value="2">Avance</option>
+                            </select>
+                        `);
+                    $(".allSrvstatusFilter").val(paid_status);
+                    $(".allsrvFilter").val(srv_name);
+                    $('.BtnExportSt').removeClass('invisible');
+                }else{
+                    html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+                    // $("#expSitBtn").html('');
+                    $('.BtnExportSt').addClass('invisible');
+                }
+                $(".loader-wrapper").addClass("loader-hidden");
+                $("#situationTable tbody").html(html);
+                setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    }),
+    function errorHandler(){
+        console.log('error occurred');
+    }
+});
+
+// -------------------------------end of status filter --------------------
+
+
+//------------------------------------- service filter for all services -------------
+$(document).on('change','.allsrvFilter',function(){
+    // const clientID = $("#situationSelect").val();
+    const srv_name = $(this).val();
+    let paid_status = "";
+    // let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
+    // let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
+    function makeRequest(){
+        lunchLoader();
+        if($(".allSrvstatusFilter").val() != null){
+            
+            paid_status = $(".allSrvstatusFilter").val();
+            // st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            return $.ajax({
+                url:'st_info_both.php',
+                type:'POST',
+                data:{paid_status:paid_status,srv_name:srv_name}
+            });
+        }else{
+            // st_pdf_href = `situation_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            return $.ajax({
+                url:'st_info_srv.php',
+                type:'POST',
+                data:{srv_name:srv_name}
+            });
+        }
+    }
+    $.when(makeRequest()).then(function successHandler(data){
+        console.log(data);
+            var json = JSON.parse(data)["data"];
+            var html =``;
+            let services = globalServices;
+            let options = ``;
+            if(json.length != 0){
+
+                json.forEach(row => {
+                html += `<tr>`;
+                html += `<td>${row[0]}</td>`;
+                html += `<td>${row[1]}</td>`;
+                html += `<td>${row[2]}</td>`;
+                html += `<td>${row[3]}</td>`;
+                html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+                html += `<td>${row[5]} DH</td>`;
+                html += `<td>${row[6]}</td>`;
+                html += `<td class="text-center">${row[7]}</td>`;
+                html += `</tr>`;
+            });
+            let uniqueSrv = [...new Set(services)];
+            uniqueSrv.forEach(srv => {
+                options += `<option value="${srv}">${srv}</option>`;
+            });
+            $("#expSitBtn").html(`
+                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clear_Filter"></i></button>
+                            <select name="" id="" class="form-select allsrvFilter">
+                                <option value="" selected disabled>services</option>
+                                ${options}
+                            </select>
+                            <select name="" id="" class="form-select mx-2 allSrvstatusFilter">
+                                <option value="" selected disabled>Status</option>
+                                <option value="0">Non Payé</option>
+                                <option value="1">Payé</option>
+                                <option value="2">Avance</option>
+                            </select>
+                        `);
+                        $(".allSrvstatusFilter").val(paid_status);
+                        $(".allsrvFilter").val(srv_name);
+                    $('.BtnExportSt').removeClass('invisible');
+                }else{
+                    html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+                    // $("#expSitBtn").html('');
+                    $('.BtnExportSt').addClass('invisible');
+                }
+                $(".loader-wrapper").addClass("loader-hidden");
+                $("#situationTable tbody").html(html);
+                setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    }),
+    function errorHandler(){
+        console.log('error occurred');
+    }
+});
+
+// -------------------------------end of service filter --------------------
+
+
+
 
 
     /**

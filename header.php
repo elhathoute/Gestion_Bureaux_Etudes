@@ -417,7 +417,7 @@ if ($exist) {
 
             <!-- Stitutation -->
             <li class="nav-item">
-                <a class="nav-link collapsed <?= $page == 'situation-list.php' ? 'active' : '' ?> <?= ($role->hasPerm('show situation')) ? "" : "hide-element" ?>" href="situation-list.php">
+                <a id="getAllDevisSituation" class="nav-link collapsed <?= $page == 'situation-list.php' ? 'active' : '' ?> <?= ($role->hasPerm('show situation')) ? "" : "hide-element" ?>" href="situation-list.php">
                     <i class="bi bi-list-columns-reverse"></i>
                     <span>Situation</span>
                 </a>

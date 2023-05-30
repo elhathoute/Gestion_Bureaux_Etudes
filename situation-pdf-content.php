@@ -142,18 +142,18 @@
                 <tbody> -->
                     <table class="table table-bordered">
                     <tr class="text-center text-bold">
-                        <td colspan="3">Facture</td>
+                        <td colspan="3">Factures</td>
                         <td rowspan="2" class="align-middle">Maitre D'ouvrage</td>
-                        <td colspan="4">Montant</td>
+                        <td colspan="4">Montants</td>
                     </tr>
                     <tr class="text-bold">
                         <td>N°</td>
                         <td>Date</td>
-                        <td>Ref</td>
+                        <td>Réf</td>
                         <td>Prix</td>
-                        <td>Regle</td>
+                        <td>Régle</td>
                         <td>payé</td>
-                        <td>Reste</td>
+                        <td>Réste</td>
                     </tr>
                     <!-- <tr>
                         <td>1</td>
@@ -179,14 +179,14 @@
                                 $date = new DateTime($row[6]);
                                 $formated_date = $date->format('d/m/Y');
                                 $html .= '<tr>';
-                                $html .= '<td>'.$num++.'</td>';
-                                $html .= '<td>'.$formated_date.'</td>';
-                                $html .= '<td>'.$row[3].'</td>';
-                                $html .= '<td>'.$row[7].'</td>';
-                                $html .= '<td>'.sprintf('%05.2f',round($price,2)).'</td>';
-                                $html .= '<td>'.$status.'</td>';
-                                $html .= '<td>'.sprintf('%05.2f',round($row[9],2)).'</td>';
-                                $html .= '<td>'.sprintf('%05.2f',round($price - $row[9],2)).'</td>';
+                                $html .= '<td>'.$num++.'</td>';     //NUMBER
+                                $html .= '<td>'.$formated_date.'</td>'; //DATE 
+                                $html .= '<td>'.$row[3].'</td>';  //REF
+                                $html .= '<td>'.$row[7].'</td>'; //CLIENT
+                                $html .= '<td>'.sprintf('%05.2f',round($price,2)).'</td>'; //PRIX
+                                $html .= '<td>'.$status.'</td>';  //STATUS
+                                $html .= '<td>'.sprintf('%05.2f',round($row[9],2)).'</td>'; //PEYE
+                                $html .= '<td>'.sprintf('%05.2f',round($price - $row[9],2)).'</td>'; //REST
                                 $html .='</tr>';
                                 
     

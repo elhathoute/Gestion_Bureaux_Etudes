@@ -1,8 +1,10 @@
 <?php
 include 'header.php';
+$brokerRes = getBrokerData();
 
 $query = "SELECT * FROM `client` WHERE 'remove'=0";
 $clientRes = mysqli_query($cnx, $query);
+
 
 ?>
 
@@ -28,12 +30,12 @@ $clientRes = mysqli_query($cnx, $query);
                         </select>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" id="brokersituationSelect">
+                        <select class="form-select" id="brokerSelectsituation">
                             <option value="" selected disabled>Veuillez choisir un intermédiaire </option>
                             <?php
-                                while ($row = mysqli_fetch_assoc($clientRes)) {
-                                    $clientName = fetchClientName($row['type'], $row['id_client']);
-                                    echo '<option value=' . $row["id"] . '>' . $clientName . '</option>';
+                                while ($row = mysqli_fetch_assoc($brokerRes)) {
+                                    $brokerFullName = ucfirst($row["nom"]) .' '. ucfirst($row["prenom"]);
+                                    echo '<option value=' . $row["id"] . '>' . $brokerFullName . '</option>';
                                 }
                             ?>
                         </select>
@@ -89,7 +91,9 @@ $clientRes = mysqli_query($cnx, $query);
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <?php
+                                    // echo getAllSituation();
+                                    ?>
                                     </tbody>
                                 </table>
                             </div>
