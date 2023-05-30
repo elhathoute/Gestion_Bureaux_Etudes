@@ -2480,20 +2480,21 @@ $(document).on("change","#selectBrokerClient",function(){
     });
 
 
-    // -----------------------------------start offilter with broker-----------------
+    // -----------------------------------start of filter with broker-----------------
 
-    $(document).on("change","#situationSelect",function(){
+    $(document).on("change","#brokerSelectsituation",function(){
         $("#situationTable tbody tr").remove();
         $("#expSitBtn a").remove();
-        const clientID = $("#situationSelect").val();
+        const brokerId = $("#brokerSelectsituation").val();
+        // alert(brokerId);
         lunchLoader();
-        if(clientID != null || clientID != ""){
+        if(brokerId != null || brokerId != ""){
             $.ajax({
-                url:"st_info.php",
-                data : {clientID:clientID},
+                url:"stbr_info.php",
+                data : {brokerId:brokerId},
                 type:"POST",
                 success:function(data){
-                    
+                    console.log(data);
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     let services = [];
@@ -2501,29 +2502,14 @@ $(document).on("change","#selectBrokerClient",function(){
                     if(json.length != 0){
 
                         json.forEach(row => {
-                            let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
-
-                        //   var status = row[6] == '1' ? '<span class="badge text-bg-success">Payé</span>' :
-                        //     row[6] == '2' ? '<span class="badge avance-color">Avance</span>' :
-                        //     row[6] == '0' ? '<span class="badge bg-danger">Non Payé</span>' :
-                        //     '';
-                        var status;
-                        if(price.toFixed(2)==row[5]){
-                            status= '<span class="badge text-bg-success">Payé</span>'
-                        }else if(price.toFixed(2) !=row[5] && row[5]!=0.00){
-                             status='<span class="badge avance-color">Avance</span>';
-                        }else if(row[5]==0.00){ 
-                             status='<span class="badge bg-danger">Non Payé</span>';
-                        }
-
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td>${price.toFixed(2)} DH</td>`;
+                            html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
                             html += `<td>${row[5]} DH</td>`;
-                            html += `<td>${status} </td>`;
+                            html += `<td>${row[6]}</td>`;
                             html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
                             services.push(row[3]);
@@ -2544,15 +2530,6 @@ $(document).on("change","#selectBrokerClient",function(){
                                 <option value="1">Payé</option>
                                 <option value="2">Avance</option>
                             </select>
-                            <div class="btn-group BtnExportSt" role="group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Export
-                                </button>
-                                <ul class="dropdown-menu">
-                                <li><a class="dropdown-item st_exp_pdf" target="_blank" href='situation_export.php?cl_id=${clientID}'>PDF</a></li>
-                                <li><a class="dropdown-item st_exp_excel" target="_blank" href='situation_excel_export.php?cl_id=${clientID}'>Excel</a></li>
-                                </ul>
-                            </div>
                         `);
                         globalServices = services;
                     }else{
@@ -2561,7 +2538,6 @@ $(document).on("change","#selectBrokerClient",function(){
                     }
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#situationTable tbody").html(html);
-                    // $("#expSitBtn").html(`<a target="_blank" href='situation_export.php?cl_id=${clientID}' class="btn btn-primary float-end" title="Imprimer Facture"><i class="bi bi-download "></i> Export</a>`);
                     
                 }
             });
@@ -2616,33 +2592,29 @@ $(document).on("change","#selectBrokerClient",function(){
                     if(json.length != 0){
 
                         json.forEach(row => {
-                           
-                            let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
-                            var status;
-                            if(price.toFixed(2)==row[5]){
-                                status= '<span class="badge text-bg-success">Payé</span>'
-                            }else if(price.toFixed(2) !=row[5] && row[5]!=0.00){
-                                 status='<span class="badge avance-color">Avance</span>';
-                            }else if(row[5]==0.00){ 
-                                 status='<span class="badge bg-danger">Non Payé</span>';
-                            }
+                            // let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
+                            // var status;
+                            // if(price.toFixed(2)==row[5]){
+                            //     status= '<span class="badge text-bg-success">Payé</span>'
+                            // }else if(price.toFixed(2) !=row[5] && row[5]!=0.00){
+                            //      status='<span class="badge avance-color">Avance</span>';
+                            // }else if(row[5]==0.00){ 
+                            //      status='<span class="badge bg-danger">Non Payé</span>';
+                            // }
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td>${price.toFixed(2)} DH</td>`;
+                            html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
                             html += `<td>${row[5]} DH</td>`;
-                            html += `<td>${status}</td>`;
+                            html += `<td>${row[6]}</td>`;
                             html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
                             // services.push(row[3]);
                         });
                         let uniqueSrv = [...new Set(services)];
                         uniqueSrv.forEach(srv => {
-                            // li += `<li>
-                            //             <a class="dropdown-item" href="#">${srv}</a>
-                            //         </li>`;
                             options += `<option value="${srv}">${srv}</option>`;
                         });
                         $("#expSitBtn").html(`
@@ -2655,8 +2627,7 @@ $(document).on("change","#selectBrokerClient",function(){
                                 <option value="" selected disabled>Status</option>
                                 <option value="0">Non Payé</option>
                                 <option value="1">Payé</option>
-                               
-                              
+                                <option value="2">Avance</option>
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -2723,25 +2694,22 @@ $(document).on("change","#selectBrokerClient",function(){
                     if(json.length != 0){
 
                         json.forEach(row => {
-                            var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge avance-color">Avance</span>' ;
-                            let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
+                            // var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge avance-color">Avance</span>' ;
+                            // let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
-                            html += `<td>${price.toFixed(2)} DH</td>`;
+                            html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
                             html += `<td>${row[5]} DH</td>`;
-                            html += `<td>${status}</td>`;
+                            html += `<td>${row[6]}</td>`;
                             html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
                             // services.push(row[3]);
                         });
                         let uniqueSrv = [...new Set(services)];
                         uniqueSrv.forEach(srv => {
-                            // li += `<li>
-                            //             <a class="dropdown-item" href="#">${srv}</a>
-                            //         </li>`;
                             options += `<option value="${srv}">${srv}</option>`;
                         });
                         $("#expSitBtn").html(`
@@ -2831,6 +2799,14 @@ $.ajax({
                                 <option value="1">Payé</option>
                                 <option value="2">Avance</option>
                             </select>
+                            <div class="btn-group BtnExportSt" role="group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Export
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href="allSituation_export.php">PDF</a></li>
+                            </ul>
+                        </div>
                         `);
                         globalServices = services;
         }else{
@@ -2859,7 +2835,7 @@ $(document).on('change','.allSrvstatusFilter',function(){
         if($(".allsrvFilter").val() != null){
             srv_name = $(".allsrvFilter").val();
             // hrefs for pdf && excel
-            // st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            st_pdf_href = `allSituation_export.php?pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
             // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
             return $.ajax({
                 url:'st_info_both.php',
@@ -2867,7 +2843,7 @@ $(document).on('change','.allSrvstatusFilter',function(){
                 data:{paid_status:paid_status,srv_name:srv_name}
             });
         }else{
-            // st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
+            st_pdf_href = `allSituation_export.php?pd_st=${paid_status}`;
             // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
             return $.ajax({
                 url:'st_info_status.php',
@@ -2914,6 +2890,14 @@ $(document).on('change','.allSrvstatusFilter',function(){
                                 <option value="1">Payé</option>
                                 <option value="2">Avance</option>
                             </select>
+                            <div class="btn-group BtnExportSt" role="group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Export
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+                            </ul>
+                        </div>
                         `);
                     $(".allSrvstatusFilter").val(paid_status);
                     $(".allsrvFilter").val(srv_name);
@@ -2947,7 +2931,7 @@ $(document).on('change','.allsrvFilter',function(){
         if($(".allSrvstatusFilter").val() != null){
             
             paid_status = $(".allSrvstatusFilter").val();
-            // st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            st_pdf_href = `allSituation_export.php?pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
             // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
             return $.ajax({
                 url:'st_info_both.php',
@@ -2955,7 +2939,7 @@ $(document).on('change','.allsrvFilter',function(){
                 data:{paid_status:paid_status,srv_name:srv_name}
             });
         }else{
-            // st_pdf_href = `situation_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            st_pdf_href = `allSituation_export.php?srv_name=${srv_name.replaceAll(' ',"%20")}`;
             // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
             return $.ajax({
                 url:'st_info_srv.php',
@@ -3000,6 +2984,14 @@ $(document).on('change','.allsrvFilter',function(){
                                 <option value="1">Payé</option>
                                 <option value="2">Avance</option>
                             </select>
+                            <div class="btn-group BtnExportSt" role="group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Export
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+                            </ul>
+                        </div>
                         `);
                         $(".allSrvstatusFilter").val(paid_status);
                         $(".allsrvFilter").val(srv_name);

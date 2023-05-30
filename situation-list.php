@@ -4,8 +4,6 @@ $brokerRes = getBrokerData();
 
 $query = "SELECT * FROM `client` WHERE 'remove'=0";
 $clientRes = mysqli_query($cnx, $query);
-
-
 ?>
 
 <div class="pagetitle">

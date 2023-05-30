@@ -123,7 +123,8 @@
             <div class="my-5">
                 <div style="margin:auto;width:fit-content;text-align:center;font-weight:600;font-size:1.3rem">
                     <span>DE</span><br>
-                    <span><?= strtoupper($data_rows[0][7]); ?></span><br>
+                    <!-- <span><?= strtoupper($data_rows[0][7]); ?></span><br> -->
+                    <span><?= strtoupper($data_rows[0][9]); ?></span><br>
                     <span style="text-decoration:underline">Situation N°<?=$Situation_number;?></span>
                 </div>
             </div>
@@ -171,22 +172,29 @@
                             $totalAdvance = 0;
                             $totalRemain = 0;
                             foreach($data_rows as $row){
-                                $price = $row[2] == '0'? $row[5] * 1.2 : $row[5];
-                                $totalPrice += $price;
-                                $totalAdvance += $row[9];
-                                $totalRemain += ($price - $row[9]);
-                                $status = $row[10] == '1' ? "Payé" : "Non payé";
+                                $fprice = $row[3] == '0'? $row[7] * 1.2 : $row[7];
+                                $lprice=$fprice -($fprice*($row[8])/100);
+                                $totalPrice += floatval($lprice);
+                                $totalAdvance += floatval($row[11]);
+                                $totalRemain += (floatval($lprice) - floatval($row[11]));
+                                if($row[11]==0){
+                                    $status='Non Payé';
+                                }elseif($row[11]<$lprice && $row[11] != 0){
+                                    $status='Avance';
+                                }else{
+                                    $status= 'Payé';
+                                }
                                 $date = new DateTime($row[6]);
                                 $formated_date = $date->format('d/m/Y');
                                 $html .= '<tr>';
                                 $html .= '<td>'.$num++.'</td>';     //NUMBER
                                 $html .= '<td>'.$formated_date.'</td>'; //DATE 
-                                $html .= '<td>'.$row[3].'</td>';  //REF
-                                $html .= '<td>'.$row[7].'</td>'; //CLIENT
-                                $html .= '<td>'.sprintf('%05.2f',round($price,2)).'</td>'; //PRIX
+                                $html .= '<td>'.$row[4].'</td>';  //REF
+                                $html .= '<td>'.$row[9].'</td>'; //CLIENT
+                                $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice),2)).'</td>'; //PRIX
                                 $html .= '<td>'.$status.'</td>';  //STATUS
-                                $html .= '<td>'.sprintf('%05.2f',round($row[9],2)).'</td>'; //PEYE
-                                $html .= '<td>'.sprintf('%05.2f',round($price - $row[9],2)).'</td>'; //REST
+                                $html .= '<td>'.sprintf('%05.2f',round(floatval($row[11]),2)).'</td>'; //PEYE
+                                $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice) - floatval($row[11]),2)).'</td>'; //REST
                                 $html .='</tr>';
                                 
     
