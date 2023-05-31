@@ -707,7 +707,7 @@ include 'header.php';
             html += '<td><input type="text" name="" class="form-control py-1 serviceUnit" placeholder="Unité" required></td>';
             html += '<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte" value="1" placeholder="Quantité"></td>';
             html += '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice" placeholder="0.00"></td>';
-            html += '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number" min="0" max="100" name="" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
+            html += '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent" ></i></span><input type="number" min="0" max="100" name="" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             html += '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
             html += '</tr>';
             $('.servicesTable tbody').append(html);

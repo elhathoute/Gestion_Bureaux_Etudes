@@ -16,7 +16,7 @@ $clientRes = mysqli_query($cnx, $query);
         <div class="col-lg-12">
             <div class="card rounded-4">
                 <div class="card-body">
-                    <div class="card-title py-2">Choisir un intermédiaire: </div>
+                    <div class="card-title py-2">Filter: </div>
                     <div class="row">
                         <div class="col-md-5 my-1">
                             <select class="form-select" id="brokerSelect">

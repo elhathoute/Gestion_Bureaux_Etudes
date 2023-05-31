@@ -1390,7 +1390,7 @@ $(document).ready(function () {
                             html += `<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice serviceBrkPrice"  value="${devisTableData[i]["price"]}" placeholder="0.00"  ></td>`;
                             html += `<td><div class="input-group"><span style="width: 30px;" class="input-group-text py-1"><i class="bi bi-percent"></i></span><input style="width: 38px;" type="number"  min="0" name="" value="${devisTableData[i]["discount"]}" class="form-control py-1 serviceDiscount serviceBrkDiscount" placeholder="Enter % (ex: 10%)" ></div></td>`;
                             html += `<td><input type="text" name="" class="form-control py-1 rowServiceTotal rowServiceBrkTotal" value="${devisTableData[i]["montant"]}" disabled placeholder="0" disabled></td>`;
-                           html += `<td ><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled value="`+(uniqueSrvice_id)+`"></td>`;
+                           html += `<td ><input type="hidden" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled value="`+(uniqueSrvice_id)+`"></td>`;
 
                             html += `</tr>`;
                         }
@@ -2400,8 +2400,11 @@ $(document).on("change","#selectBrokerClient",function(){
     });
 
 
-    $(document).on("click",".clearFilter",function(){
-        $('#situationSelect').trigger('change');
+    // $(document).on("click",".clearFilter",function(){
+    //     $('#situationSelect').trigger('change');
+    // });
+    $(document).on("click",".situationreload",function(){
+        location.reload();
     });
 
     let globalServices = [];
@@ -2442,7 +2445,6 @@ $(document).on("change","#selectBrokerClient",function(){
                             options += `<option value="${srv}">${srv}</option>`;
                         });
                         $("#expSitBtn").html(`
-                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clearFilter"></i></button>
                             <select name="" id="" class="form-select srvFilter">
                                 <option value="" selected disabled>services</option>
                                 ${options}
@@ -2519,17 +2521,24 @@ $(document).on("change","#selectBrokerClient",function(){
                             options += `<option value="${srv}">${srv}</option>`;
                         });
                         $("#expSitBtn").html(`
-                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clearFilter"></i></button>
-                            <select name="" id="" class="form-select srvFilter">
+                            <select name="" id="" class="form-select brsrvFilter">
                                 <option value="" selected disabled>services</option>
                                 ${options}
                             </select>
-                            <select name="" id="" class="form-select mx-2 statusFilter">
+                            <select name="" id="" class="form-select mx-2 brstatusFilter">
                                 <option value="" selected disabled>Status</option>
                                 <option value="0">Non Payé</option>
                                 <option value="1">Payé</option>
                                 <option value="2">Avance</option>
                             </select>
+                            <div class="btn-group BtnExportSt" role="group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Export
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href='situation_export.php?br_id=${brokerId}'>PDF</a></li>
+                            </ul>
+                        </div>
                         `);
                         globalServices = services;
                     }else{
@@ -2547,7 +2556,188 @@ $(document).on("change","#selectBrokerClient",function(){
     });
 
 
-    // -----------------------------------end of filter with broker-----------------
+                //---------------------------------------------------------------------
+                //--------------------start of filter broker with service name-------
+                //---------------------------------------------------------------------
+
+$(document).on('change','.brsrvFilter',function(){
+    const brokerId = $("#brokerSelectsituation").val();
+    const srv_name = $(this).val();
+    let paid_status = "";
+    let st_pdf_href = `situation_export.php?br_id=${brokerId}`;
+    function makeRequest(){
+        lunchLoader();
+        if($(".brstatusFilter").val() != null){
+            paid_status = $(".brstatusFilter").val();
+            st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            return $.ajax({
+                url:'st_info_both.php',
+                type:'POST',
+                data:{brokerId:brokerId,paid_status:paid_status,srv_name:srv_name}
+            });
+        }else{
+            st_pdf_href = `situation_export.php?br_id=${brokerId}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+            return $.ajax({
+                url:'st_info_srv.php',
+                type:'POST',
+                data:{brokerId:brokerId,srv_name:srv_name}
+            });
+        }
+    }
+    $.when(makeRequest()).then(function successHandler(data){
+        
+        var json = JSON.parse(data)["data"];
+                var html =``;
+                let services = globalServices;
+                let options = ``;
+                if(json.length != 0){
+
+                    json.forEach(row => {
+                        html += `<tr>`;
+                        html += `<td>${row[0]}</td>`;
+                        html += `<td>${row[1]}</td>`;
+                        html += `<td>${row[2]}</td>`;
+                        html += `<td>${row[3]}</td>`;
+                        html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+                        html += `<td>${row[5]} DH</td>`;
+                        html += `<td>${row[6]}</td>`;
+                        html += `<td class="text-center">${row[7]}</td>`;
+                        html += `</tr>`;
+                        // services.push(row[3]);
+                    });
+                    let uniqueSrv = [...new Set(services)];
+                    uniqueSrv.forEach(srv => {
+                        options += `<option value="${srv}">${srv}</option>`;
+                    });
+                    $("#expSitBtn").html(`
+                        <select name="" id="" class="form-select brsrvFilter">
+                            <option value="" selected disabled>Services</option>
+                            ${options}
+                        </select>
+                        <select name="" id="" class="form-select mx-2 brstatusFilter">
+                            <option value="" selected disabled>Status</option>
+                            <option value="0">Non Payé</option>
+                            <option value="1">Payé</option>
+                            <option value="2">Avance</option>
+                        </select>
+                        <div class="btn-group BtnExportSt" role="group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Export
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+                        </ul>
+                    </div>
+                    `);
+                    $(".brsrvFilter").val(srv_name);
+                    $(".brstatusFilter").val(paid_status);
+                    $('.BtnExportSt').removeClass('invisible');
+                }else{
+                    html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+                    // $("#expSitBtn").html('');
+                    $('.BtnExportSt').addClass('invisible');
+                }
+                $(".loader-wrapper").addClass("loader-hidden");
+                $("#situationTable tbody").html(html);
+                setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    }),
+    function errorHandler(){
+        console.log('error occurred');
+    }
+});
+
+                //---------------------------------------------------------------------
+                //------------------start of filter broker with paid status------------ 
+                //---------------------------------------------------------------------
+
+    $(document).on('change','.brstatusFilter',function(){
+        const brokerId = $("#brokerSelectsituation").val();
+        const paid_status = $(this).val();
+        let srv_name = "";
+        // let st_pdf_href = `situation_export.php?br_id=${brokerId}`;
+        function makeRequest(){
+            lunchLoader();
+            if($(".brsrvFilter").val() != null){
+                srv_name = $(".brsrvFilter").val();
+                st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+                return $.ajax({
+                    url:'st_info_both.php',
+                    type:'POST',
+                    data:{brokerId:brokerId,paid_status:paid_status,srv_name:srv_name}
+                });
+            }else{
+                st_pdf_href = `situation_export.php?br_id=${brokerId}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+                return $.ajax({
+                    url:'st_info_status.php',
+                    type:'POST',
+                    data:{brokerId:brokerId,paid_status:paid_status}
+                });
+            }
+        }
+        $.when(makeRequest()).then(function successHandler(data){
+            console.log(data)
+            var json = JSON.parse(data)["data"];
+                    var html =``;
+                    let services = globalServices;
+                    let options = ``;
+                    if(json.length != 0){
+                        json.forEach(row => {
+                            html += `<tr>`;
+                            html += `<td>${row[0]}</td>`;
+                            html += `<td>${row[1]}</td>`;
+                            html += `<td>${row[2]}</td>`;
+                            html += `<td>${row[3]}</td>`;
+                            html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+                            html += `<td>${row[5]} DH</td>`;
+                            html += `<td>${row[6]}</td>`;
+                            html += `<td class="text-center">${row[7]}</td>`;
+                            html += `</tr>`;
+                        });
+                        let uniqueSrv = [...new Set(services)];
+                        uniqueSrv.forEach(srv => {
+                            options += `<option value="${srv}">${srv}</option>`;
+                        });
+                        $("#expSitBtn").html(`
+                            <select name="" id="" class="form-select brsrvFilter">
+                                <option value="" selected disabled>Services</option>
+                                ${options}
+                            </select>
+                            <select name="" id="" class="form-select mx-2 brstatusFilter">
+                                <option value="" selected disabled>Status</option>
+                                <option value="0">Non Payé</option>
+                                <option value="1">Payé</option>
+                                <option value="2">Avance</option>
+                            </select>
+                            <div class="btn-group BtnExportSt" role="group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Export
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+                                </ul>
+                            </div>
+                            
+                        `);
+                        $(".brsrvFilter").val(srv_name);
+                        $(".brstatusFilter").val(paid_status);
+                        $('.BtnExportSt').removeClass('invisible');
+                    }else{
+                        html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+                        // $("#expSitBtn").html('');
+                        $('.BtnExportSt').addClass('invisible');
+                    }
+                    $(".loader-wrapper").addClass("loader-hidden");
+                    $("#situationTable tbody").html(html);
+                    setTimeout(()=>$(".loader-wrapper").remove(),2000);
+        }),
+        function errorHandler(){
+            console.log('error occurred');
+        }
+    });
+
+                //---------------------------------------------------------------------
+                //------------------end of filter broker with paid status------------ 
+                //---------------------------------------------------------------------
 
 
     /**
@@ -2557,7 +2747,7 @@ $(document).on("change","#selectBrokerClient",function(){
     $(document).on('change','.statusFilter',function(){
         const clientID = $("#situationSelect").val();
         const paid_status = $(this).val();
-        console.log('statu'+paid_status);
+        // console.log('statu'+paid_status);
         let srv_name = "";
         let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
         let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
@@ -2592,15 +2782,6 @@ $(document).on("change","#selectBrokerClient",function(){
                     if(json.length != 0){
 
                         json.forEach(row => {
-                            // let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
-                            // var status;
-                            // if(price.toFixed(2)==row[5]){
-                            //     status= '<span class="badge text-bg-success">Payé</span>'
-                            // }else if(price.toFixed(2) !=row[5] && row[5]!=0.00){
-                            //      status='<span class="badge avance-color">Avance</span>';
-                            // }else if(row[5]==0.00){ 
-                            //      status='<span class="badge bg-danger">Non Payé</span>';
-                            // }
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
@@ -2618,7 +2799,6 @@ $(document).on("change","#selectBrokerClient",function(){
                             options += `<option value="${srv}">${srv}</option>`;
                         });
                         $("#expSitBtn").html(`
-                            <button class="btn border-0"><i class="bi bi-x-circle fs-5 clearFilter"></i></button>
                             <select name="" id="" class="form-select srvFilter">
                                 <option value="" selected disabled>Services</option>
                                 ${options}
@@ -2713,7 +2893,6 @@ $(document).on("change","#selectBrokerClient",function(){
                             options += `<option value="${srv}">${srv}</option>`;
                         });
                         $("#expSitBtn").html(`
-                            <button class="btn border-0"><i class="bi bi-x-circle fs-5 clearFilter"></i></button>
                             <select name="" id="" class="form-select srvFilter">
                                 <option value="" selected disabled>Services</option>
                                 ${options}
@@ -2753,10 +2932,6 @@ $(document).on("change","#selectBrokerClient",function(){
 
 
 // --------------------
-
-$(document).on("click",".clear_Filter",function(){
-    location.reload()
-});
 // --------------------------get all situations ------------------
 
 $.ajax({
@@ -2788,7 +2963,6 @@ $.ajax({
                 options += `<option value="${srv}">${srv}</option>`;
             });
             $("#expSitBtn").html(`
-                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clear_Filter"></i></button>
                             <select name="" id="" class="form-select allsrvFilter">
                                 <option value="" selected disabled>Services</option>
                                 ${options}
@@ -2879,7 +3053,6 @@ $(document).on('change','.allSrvstatusFilter',function(){
                 options += `<option value="${srv}">${srv}</option>`;
             });
             $("#expSitBtn").html(`
-                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clear_Filter"></i></button>
                             <select name="" id="" class="form-select allsrvFilter">
                                 <option value="" selected disabled>Services</option>
                                 ${options}
@@ -2973,7 +3146,6 @@ $(document).on('change','.allsrvFilter',function(){
                 options += `<option value="${srv}">${srv}</option>`;
             });
             $("#expSitBtn").html(`
-                            <button class="btn border-0 "><i class="bi bi-x-circle fs-5 clear_Filter"></i></button>
                             <select name="" id="" class="form-select allsrvFilter">
                                 <option value="" selected disabled>services</option>
                                 ${options}
@@ -3307,7 +3479,7 @@ $(document).on('change','.allsrvFilter',function(){
     });
 
 
-    //Dossier onchange event
+    //Dossier onchange event (dossier client filter)
     $(document).on("change","#dossierClientSelect",function(){
         $("#dossierClTable tbody tr").remove();
         const clientID = $("#dossierClientSelect").val();
@@ -3321,9 +3493,7 @@ $(document).on('change','.allsrvFilter',function(){
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     if(json.length != 0){
-
                         json.forEach(row => {
-                            
                             html += `<tr data-id="${row[6]}">`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${row[1]}</td>`;
@@ -3344,8 +3514,46 @@ $(document).on('change','.allsrvFilter',function(){
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
     });
 
+
+//create dossier broker filter
+$(document).on("change","#dossierBrokerSelect",function(){
+    $("#dossierClTable tbody tr").remove();
+    const BrokerId = $("#dossierBrokerSelect").val();
+    // $("#dossierClientSelect").val()='';
+    lunchLoader();
+    if(BrokerId != null || BrokerId != ""){
+        $.ajax({
+            url:"dv_info.php",
+            data : {BrokerId:BrokerId},
+            type:"POST",
+            success:function(data){
+                console.log(data);
+                var json = JSON.parse(data)["data"];
+                var html =``;
+                if(json.length != 0){
+                    json.forEach(row => {
+                        html += `<tr data-id="${row[6]}">`;
+                        html += `<td>${row[0]}</td>`;
+                        html += `<td>${row[1]}</td>`;
+                        html += `<td>${row[2]}</td>`;
+                        html += `<td>${row[3]}</td>`;
+                        html += `<td class="text-center">${row[4]}${row[5]}</td>`;
+                        html += `</tr>`;
+                    });
+                }else{
+                    html += `<tr><td colspan="7" class="text-center"><strong>No Data Available</strong></td></tr>`;
+                }
+                $(".loader-wrapper").addClass("loader-hidden");
+                $("#dossierClTable tbody").html(html);
+            }
+        });
+    }
+    //add this on success 
+    setTimeout(()=>$(".loader-wrapper").remove(),2000);
+});
+ 
     //on dossier table tr double click    //when i double click on the row of the table 
-    $(document).on("click","#dossierClTable tbody tr button",function(){
+$(document).on("click","#dossierClTable tbody tr button",function(){
         
         const devisId = $(this).closest('tr').data('id');
         if(devisId != undefined || devisId != null){
@@ -3389,10 +3597,10 @@ $(document).on('change','.allsrvFilter',function(){
     // check if reference exist or not in dossier
     $(document).on("input",".refTxt",function (e) {
        var ref_dossier=$(this).val();
-       
+       let ds_ref =$('#ds_ref').text();
        $.ajax({
         url:"check_ref_dossier.php",
-        data:{ref_dossier:ref_dossier},
+        data:{ref_dossier:ref_dossier,ds_ref:ds_ref},
         type:"POST",
         success:function(data){
            
@@ -3425,6 +3633,7 @@ $(document).on('change','.allsrvFilter',function(){
     $(document).on("click",".dsServiceItem",function(){
         const d_devis_id = $(this).closest('div').data('d_id');
         $("#dossierClientSelect").prop("disabled",true);
+        $("#dossierBrokerSelect").prop("disabled",true);
         if(d_devis_id != ""){
             $("#showDvSrvDs").modal("hide");
             lunchLoader();
@@ -3488,6 +3697,8 @@ $(document).on('change','.allsrvFilter',function(){
     $(document).on("click","#btn_createDs",function(){
         const srv_id = $("#srv_id").val();
         let refTxt = $(".refTxt");
+        let ds_ref =$('#ds_ref').text();
+        // alert(ds_ref);
         if(refTxt.val() == ""){
             refTxt.addClass("border-danger");
             return false;
@@ -3500,7 +3711,7 @@ $(document).on('change','.allsrvFilter',function(){
             $.ajax({
                 url:"srv_aprv.php",
                 type:"POST",
-                data:{"srv_id":srv_id,"n_dossier":refTxt.val()},
+                data:{"srv_id":srv_id,"n_dossier":refTxt.val(),"ds_ref":ds_ref},
                 success:function(data){
                     let json = JSON.parse(data);
                     const status = json.status;

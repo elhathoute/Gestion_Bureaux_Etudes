@@ -8,14 +8,14 @@
         //declaring Vars
         $devis_number = $_POST["devis_number"];
         $client_id = getClientId($_POST["client_id"],$_POST["client_type"]);
-        $devis_comment = $_POST['devis_comment'];
+        $devis_comment = mysqli_real_escape_string($cnx,$_POST['devis_comment']);
         $label_subTotal = floatval(trim(str_replace('DH',"",$_POST['labelSubTotal'])));
         // $label_discount = $_POST['labelDiscount'];
         $label_discount = floatval(trim(str_replace('DH',"",$_POST['labelDiscount'])));
         $label_netTotal = floatval(trim(str_replace('DH',"",$_POST['labelDevisTotal'])));
         $tva_checked = $_POST['tva_checked']=='true'?1:0;
         
-        $objet_name = $_POST['objet_name'];
+        $objet_name = mysqli_real_escape_string($cnx,$_POST['objet_name']);
         $located_txt = $_POST['located_txt'];
         if(isset($_POST['brkId'])){
             $brkId = $_POST['brkId'];

@@ -16,7 +16,7 @@ LEFT JOIN (
     FROM devis_payments
     GROUP BY id_devis
 ) dp ON dd.id = dp.id_devis
-WHERE d.remove = 0
+WHERE d.remove = 0 AND dd.confirmed=1
 ORDER BY d.date_creation;";
 $result =mysqli_query($cnx,$query);
 

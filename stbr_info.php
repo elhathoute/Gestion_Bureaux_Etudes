@@ -16,7 +16,7 @@ LEFT JOIN (
     FROM devis_payments
     GROUP BY id_devis
 ) dp ON dd.id = dp.id_devis
-WHERE d.remove = 0 and bd.id_broker =$brokerId
+WHERE d.remove = 0 and bd.id_broker =$brokerId AND dd.confirmed=1
 ORDER BY d.date_creation;";
 $result =mysqli_query($cnx,$query);
 $data = array();
@@ -39,7 +39,7 @@ while($row=mysqli_fetch_assoc($result)){
     $subarray[] = $prix;
     $subarray[] = $row['total_montant_paye'];
     $subarray[] = $status;
-    $subarray[] = '<a target="_blank" href="devis_export.php?id='.$row['id'].'&client_id=" class="btn btn-secondary btn-sm" title="Afficher Devis" ><span><i class="bi bi-eye"></i></span></a>';
+    $subarray[] = '<a target="_blank" href="devis_export.php?id='.$row['id'].'&client_id='.$row['id_client'].'" class="btn btn-secondary btn-sm" title="Afficher Devis" ><span><i class="bi bi-eye"></i></span></a>';
     $data[] = $subarray;
     $number++;
 }

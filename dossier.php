@@ -1,6 +1,6 @@
 <?php
 include 'header.php';
-
+$brokerRes = getBrokerData();
 $query = "SELECT * FROM `client` WHERE 'remove'=0";
 $clientRes = mysqli_query($cnx, $query);
 
@@ -14,17 +14,30 @@ $clientRes = mysqli_query($cnx, $query);
     <div class="row">
         <div class="col-lg-12">
             <div class="card rounded-4">
-                <div class="card-body">
-                    <div class="card-title py-2">Choisir un client: </div>
-                    <select class="form-select" id="dossierClientSelect">
-                        <option value="" selected disabled>Veuillez choisir un client </option>
-                        <?php
-                        while ($row = mysqli_fetch_assoc($clientRes)) {
-                            $clientName = fetchClientName($row['type'], $row['id_client']);
-                            echo '<option value=' . $row["id"] . '>' . $clientName . '</option>';
-                        }
-                        ?>
-                    </select>
+                <div class="card-body row justify-content-around">
+                    <div class="card-title py-2">Filter: </div>
+                    <div class="col-5">
+                        <select class="form-select" id="dossierClientSelect">
+                            <option value="" selected disabled>Veuillez choisir un Maître d'ouvrage </option>
+                            <?php
+                            while ($row = mysqli_fetch_assoc($clientRes)) {
+                                $clientName = fetchClientName($row['type'], $row['id_client']);
+                                echo '<option value=' . $row["id"] . '>' . $clientName . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-5">
+                        <select class="form-select" id="dossierBrokerSelect">
+                            <option value="" selected disabled>Veuillez choisir un intermédiaire </option>
+                            <?php
+                                while ($row = mysqli_fetch_assoc($brokerRes)) {
+                                    $brokerFullName = ucfirst($row["nom"]) .' '. ucfirst($row["prenom"]);
+                                    echo '<option value=' . $row["id"] . '>' . $brokerFullName . '</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,7 +112,7 @@ $clientRes = mysqli_query($cnx, $query);
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Devis services</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Devis services</h1>   
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 

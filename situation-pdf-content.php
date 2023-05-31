@@ -80,26 +80,113 @@
     <?php
     //bring the code from st_info.php and retrieve invoice data with getInvoiceById() function ...
         if($_GET){
-            $clientId = $_GET["cl_id"];
-
-            $query = "CALL `sp_getDevisSituation`('".$clientId."');";
-
-            // Check if the URI Hold the specific vars to excute the Right Procedure else will excute the default _SP_
-            if(isset($_GET["pd_st"]) && isset($_GET["srv_name"])){
-
-                $paid_status = $_GET["pd_st"];
-                $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
-                $query = "CALL `sp_getDevisSituationBoth`('".$clientId."','".$paid_status."','".$srv_name."');";
-            }elseif (isset($_GET["pd_st"])) {
-
-                $paid_status = $_GET["pd_st"];
-                $query = "CALL `sp_getDevisSituationStatus`('".$clientId."','".$paid_status."');";
-            }elseif (isset($_GET["srv_name"])){
-
-                $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
-                $query = "CALL `sp_getDevisSituationSrv`('".$clientId."','".$srv_name."');";
+            if(isset($_GET["cl_id"])){
+                $clientId = $_GET["cl_id"];
+                $brokerName=NULL;
+                $query = "CALL `sp_getDevisSituation`('".$clientId."');";
+                if(isset($_GET["pd_st"]) && isset($_GET["srv_name"])){
+                    $paid_status = $_GET["pd_st"];
+                    $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
+                    $query = "CALL `sp_getDevisSituationBoth`('".$clientId."','".$paid_status."','".$srv_name."');";
+                }elseif (isset($_GET["pd_st"])) {
+                    $paid_status = $_GET["pd_st"];
+                    $query = "CALL `sp_getDevisSituationStatus`('".$clientId."','".$paid_status."');";
+                }elseif (isset($_GET["srv_name"])){
+                    $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
+                    $query = "CALL `sp_getDevisSituationSrv`('".$clientId."','".$srv_name."');";
+                }
+                $Situation_number = addSituation($clientId);
+            }elseif(isset($_GET["br_id"])){
+                $brokerId = $_GET["br_id"];
+                $Situation_number = addSituation($brokerId);
+                $brokerName =getBrokerById($brokerId);
+                $query = "SELECT d.id, d.id_client, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation,dd.prix,dd.discount ,
+                CASE
+                    WHEN c.type = 'individual' THEN (SELECT CONCAT(ci.prenom, ' ', UPPER(ci.nom)) AS Client FROM client_individual ci WHERE c.id_client = ci.id)
+                    WHEN c.type = 'entreprise' THEN (SELECT UPPER(ce.nom) FROM client_entreprise ce WHERE c.id_client = ce.id)
+                END AS client,
+                d.objet, COALESCE(dp.total_montant_paye, 0) AS total_montant_paye
+                FROM devis d
+                INNER JOIN client c ON d.id_client = c.id
+                INNER JOIN detail_devis dd ON d.id = dd.id_devis
+                INNER JOIN broker_devis bd ON d.id = bd.id_devis
+                LEFT JOIN (
+                    SELECT id_devis,SUM(montant_paye) AS total_montant_paye
+                    FROM devis_payments
+                    GROUP BY id_devis
+                ) dp ON dd.id = dp.id_devis
+                WHERE d.remove = 0 and bd.id_broker =$brokerId AND dd.confirmed=1
+                ORDER BY d.date_creation;";
+                if(isset($_GET["pd_st"]) && isset($_GET["srv_name"])){
+                    $paid_status = $_GET["pd_st"];
+                    $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
+                    $query = "SELECT d.id, d.id_client, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation,dd.prix,dd.discount ,
+                    CASE
+                        WHEN c.type = 'individual' THEN (SELECT CONCAT(ci.prenom, ' ', UPPER(ci.nom)) AS Client FROM client_individual ci WHERE c.id_client = ci.id)
+                        WHEN c.type = 'entreprise' THEN (SELECT UPPER(ce.nom) FROM client_entreprise ce WHERE c.id_client = ce.id)
+                    END AS client,
+                    d.objet, COALESCE(dp.total_montant_paye, 0) AS total_montant_paye
+                    FROM devis d
+                    INNER JOIN client c ON d.id_client = c.id
+                    INNER JOIN detail_devis dd ON d.id = dd.id_devis
+                    INNER JOIN broker_devis bd ON d.id = bd.id_devis
+                    LEFT JOIN (
+                        SELECT id_devis,prix,SUM(montant_paye) AS total_montant_paye
+                        FROM devis_payments
+                        GROUP BY id_devis
+                    ) dp ON dd.id = dp.id_devis
+                    WHERE d.remove = 0 AND 
+                        (
+                            ($paid_status = 0 AND COALESCE(dp.total_montant_paye, 0) = 0) OR
+                            ($paid_status = 1 AND COALESCE(dp.total_montant_paye, 0) = dp.prix) OR
+                            ($paid_status =2  AND COALESCE(dp.total_montant_paye, 0) > 0 AND COALESCE(dp.total_montant_paye, 0) < dp.prix)
+                        ) AND dd.service_name = '$srv_name' AND dd.confirmed=1 AND bd.id_broker =$brokerId 
+                    ORDER BY dd.service_name;";
+                }elseif (isset($_GET["pd_st"])) {
+                    $paid_status = $_GET["pd_st"];
+                    $query = "SELECT d.id, d.id_client, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation,dd.prix,dd.discount ,
+                    CASE
+                        WHEN c.type = 'individual' THEN (SELECT CONCAT(ci.prenom, ' ', UPPER(ci.nom)) AS Client FROM client_individual ci WHERE c.id_client = ci.id)
+                        WHEN c.type = 'entreprise' THEN (SELECT UPPER(ce.nom) FROM client_entreprise ce WHERE c.id_client = ce.id)
+                    END AS client,
+                    d.objet, COALESCE(dp.total_montant_paye, 0) AS total_montant_paye
+                    FROM devis d
+                    INNER JOIN client c ON d.id_client = c.id
+                    INNER JOIN detail_devis dd ON d.id = dd.id_devis
+                    INNER JOIN broker_devis bd ON d.id = bd.id_devis
+                    LEFT JOIN (
+                        SELECT id_devis,prix,SUM(montant_paye) AS total_montant_paye
+                        FROM devis_payments
+                        GROUP BY id_devis
+                    ) dp ON dd.id = dp.id_devis
+                    WHERE d.remove = 0 AND 
+                        (
+                            ($paid_status = 0 AND COALESCE(dp.total_montant_paye, 0) = 0) OR
+                            ($paid_status = 1 AND COALESCE(dp.total_montant_paye, 0) = dp.prix) OR
+                            ($paid_status =2  AND COALESCE(dp.total_montant_paye, 0) > 0 AND COALESCE(dp.total_montant_paye, 0) < dp.prix)
+                        )  AND dd.confirmed=1 AND bd.id_broker =$brokerId 
+                    ORDER BY dd.service_name;');";
+                }elseif (isset($_GET["srv_name"])){
+                    $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
+                    $query = "SELECT d.id, d.id_client, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation,dd.prix,dd.discount ,
+                    CASE
+                        WHEN c.type = 'individual' THEN (SELECT CONCAT(ci.prenom, ' ', UPPER(ci.nom)) AS Client FROM client_individual ci WHERE c.id_client = ci.id)
+                        WHEN c.type = 'entreprise' THEN (SELECT UPPER(ce.nom) FROM client_entreprise ce WHERE c.id_client = ce.id)
+                    END AS client,
+                    d.objet, COALESCE(dp.total_montant_paye, 0) AS total_montant_paye
+                    FROM devis d
+                    INNER JOIN client c ON d.id_client = c.id
+                    INNER JOIN detail_devis dd ON d.id = dd.id_devis
+                    INNER JOIN broker_devis bd ON d.id = bd.id_devis
+                    LEFT JOIN (
+                        SELECT id_devis,prix,SUM(montant_paye) AS total_montant_paye
+                        FROM devis_payments
+                        GROUP BY id_devis
+                    ) dp ON dd.id = dp.id_devis
+                    WHERE d.remove = 0 AND dd.service_name = '$srv_name' AND dd.confirmed=1 AND bd.id_broker =$brokerId 
+                    ORDER BY dd.service_name;";
+                }
             }
-            $Situation_number = addSituation($clientId);
             // $query = "CALL `sp_getSituation`('".$clientId."');";
             $res = mysqli_query($cnx,$query);
             $data_rows = mysqli_fetch_all($res);
@@ -107,9 +194,6 @@
             $solde = 0;
             $total = 0;
             $html = '';
-          
-            
-        
     ?>
     <div class="container">
 
@@ -124,23 +208,14 @@
                 <div style="margin:auto;width:fit-content;text-align:center;font-weight:600;font-size:1.3rem">
                     <span>DE</span><br>
                     <!-- <span><?= strtoupper($data_rows[0][7]); ?></span><br> -->
-                    <span><?= strtoupper($data_rows[0][9]); ?></span><br>
+                    <span><?= $brokerName!=NULL?'Intermédiaire'.strtoupper('<br>'.$brokerName['nom'].'  '.$brokerName['prenom']):strtoupper($data_rows[0][9]); ?></span><br>
                     <span style="text-decoration:underline">Situation N°<?=$Situation_number;?></span>
                 </div>
             </div>
         </section>
 
         <section>
-            <!-- <table class="table">
-                <thead>
-                    <tr>
-                        <th>Libelle</th>
-                        <th>Prix</th>
-                        <th>Payée</th>
-                        <th>Avance</th>
-                    </tr>
-                </thead>
-                <tbody> -->
+
                     <table class="table table-bordered">
                     <tr class="text-center text-bold">
                         <td colspan="3">Factures</td>
@@ -156,16 +231,6 @@
                         <td>payé</td>
                         <td>Réste</td>
                     </tr>
-                    <!-- <tr>
-                        <td>1</td>
-                        <td>10/10/2010</td>
-                        <td>D53/11-2021</td>
-                        <td>Fati Fleur</td>
-                        <td>100.00</td>
-                        <td>Paye</td>
-                        <td>100.00</td>
-                        <td>0.00</td>
-                    </tr> -->
                     <?php
                             $num = 1;
                             $totalPrice = 0;
@@ -197,10 +262,8 @@
                                 $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice) - floatval($row[11]),2)).'</td>'; //REST
                                 $html .='</tr>';
                                 
-    
                             }
                             
-
                             $html .= '<tr>';
                             $html .= '<td colspan="4" style="text-align:center">TOTAUX</td>';
                             $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalPrice,2)).'</td>';

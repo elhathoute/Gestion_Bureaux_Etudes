@@ -16,8 +16,8 @@
         
         //service info 
         // $devisStatus = $_POST['devisStatus'];
-        $devis_comment = $_POST['devis_comment'];
-        $objet_name = $_POST['objet_name'];
+        $devis_comment =mysqli_real_escape_string($cnx,$_POST['devis_comment']);
+        $objet_name = mysqli_real_escape_string($cnx,$_POST['objet_name']);
         $located = $_POST['located_txt'];
         $label_subTotal = floatval(trim(str_replace('DH',"",$_POST['labelSubTotal'])));
         $label_discount = floatval(trim(str_replace('DH',"",$_POST['labelDiscount'])));
@@ -39,12 +39,11 @@
 
         $qte_update  = intval($updatedServices[$j]['quantity']);
         $service_unique_id_update = $updatedServices[$j]['serviceUniqueId'];
-        $service_name = $updatedServices[$j]['serviceName'];
+        $service_name =  mysqli_real_escape_string($cnx,$updatedServices[$j]['serviceName']);
         $price = $updatedServices[$j]['price'];
         $qte = $updatedServices[$j]['quantity'];
         $unit = $updatedServices[$j]['unit'];
         $ref = $updatedServices[$j]['srvRef'];
-
        $discount = $updatedServices[$j]['discount']==""?0:$updatedServices[$j]['discount'];
         $originalServices = getDevisAllDetailsDistinct($devis_id,$updatedServices[$j]['serviceUniqueId']);
 
@@ -57,10 +56,7 @@
         
         foreach($originalServices  as $index => $originalService ){
             $qte_origine = intval($originalService['quantity']);
-           
-         
-          
-           
+ 
             // if qte_origine=qte_update (UPDATE)
             if($qte_origine==$qte_update){
          

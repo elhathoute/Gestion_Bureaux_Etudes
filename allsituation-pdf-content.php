@@ -92,7 +92,7 @@
                 FROM devis_payments
                 GROUP BY id_devis
             ) dp ON dd.id = dp.id_devis
-            WHERE d.remove = 0
+            WHERE d.remove = 0 AND dd.confirmed=1
             ORDER BY dd.service_name;";
              if(isset($_GET["pd_st"]) && isset($_GET["srv_name"])){
                 $paid_status = $_GET["pd_st"];
@@ -116,7 +116,7 @@
                             ($paid_status = 0 AND COALESCE(dp.total_montant_paye, 0) = 0) OR
                             ($paid_status = 1 AND COALESCE(dp.total_montant_paye, 0) = dp.prix) OR
                             ($paid_status =2  AND COALESCE(dp.total_montant_paye, 0) > 0 AND COALESCE(dp.total_montant_paye, 0) < dp.prix)
-                        ) AND dd.service_name = '$srv_name'
+                        ) AND dd.service_name = '$srv_name' AND dd.confirmed=1
                     ORDER BY dd.service_name;";
             }elseif (isset($_GET["pd_st"])) {
 
@@ -141,7 +141,7 @@
                             ($paid_status = 0 AND COALESCE(dp.total_montant_paye, 0) = 0) OR
                             ($paid_status = 1 AND COALESCE(dp.total_montant_paye, 0) = dp.prix) OR
                             ($paid_status =2  AND COALESCE(dp.total_montant_paye, 0) > 0 AND COALESCE(dp.total_montant_paye, 0) < dp.prix)
-                        )
+                        ) AND dd.confirmed=1
                     ORDER BY dd.service_name;";
             }elseif (isset($_GET["srv_name"])){
 
@@ -160,7 +160,7 @@
                     FROM devis_payments
                     GROUP BY id_devis
                 ) dp ON dd.id = dp.id_devis
-                WHERE d.remove = 0 AND dd.service_name = '$srv_name'
+                WHERE d.remove = 0 AND dd.service_name = '$srv_name' AND dd.confirmed=1
                 ORDER BY dd.service_name;";
             }
             $Situation_number = 0;

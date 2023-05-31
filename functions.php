@@ -74,13 +74,13 @@ function getCountDossierService($id_service){
     return $row['service_count'];
 }
 // check ref dossier exist or not
-function CheckRefDossier($ref_dossier){
+function CheckRefDossier($ref_dossier,$ds_ref){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-    $query = "SELECT count(id) as count_ref from dossier WHERE N_dossier='$ref_dossier'  ";
+    $query = "SELECT count(id) as count_ref from dossier WHERE N_dossier='$ds_ref$ref_dossier'  ";
     $res = mysqli_query($cnx,$query);
     $row = mysqli_fetch_assoc($res);
     return $row['count_ref'];
@@ -225,19 +225,21 @@ function getSelectedDevisServices(){
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_all($res);
         // print_r($row);
-        $opacity='';
+        // $opacity='';
         $html = '';
         foreach ($row as $key=>$val) {
             $html .= '<tr>';
-            ($val[10]==1) ? ($opacity=0) : ($opacity=100);
-            $html .= '<td><i class="bi bi-trash fs-5 opacity-'.$opacity.' deleteRowBtn" ></i></td>';
+            // ($val[10]==1) ? ($opacity=0) : ($opacity=100);
+            $visibilty=($val[10]==1) ? 'd-none': '';
+            // $html .= '<td><i class="bi bi-trash fs-5 opacity-'.$opacity.' deleteRowBtn" ></i></td>';
+            $html .= '<td><i class="bi bi-trash fs-5 '.$visibilty.' deleteRowBtn" ></i></td>';
             $html .= '<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="'.$val[7].'" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover"><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="'.$val[2].'" class="form-control serviceDropdown" aria-describedby="srvRT"><datalist id="servicesList"> '.fill_service_dropDown().'</datalist></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 serviceUnit" value="'.$val[6].'"  placeholder="Unité"></td>';
             $html .= '<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte"  value="'.$val[4].'" placeholder="Quantité"></td>';
             $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice"  value="'.$val[3].'" placeholder="0.00"></td>';
             $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[5].'" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
-            $html .= '<td><input type="text" name="srv_unique_id" id="srv_unique_id_update" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
+            $html .= '<td><input type="hidden" name="srv_unique_id" id="srv_unique_id_update" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
 
             $html .= '</tr>';
         }
@@ -287,7 +289,7 @@ function viewDevisServices(){
             $html .= '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice"  value="'.$val[3].'" placeholder="0.00"></td>';
             $html .= '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number"  min="0" name="" value="'.$val[5].'" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             $html .= '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
-            $html .= '<td><input type="text" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
+            $html .= '<td><input type="hidden" name="srv_unique_id" id="srv_unique_id" class="form-control py-1 serviceUniqueId" disabled="" value="'.$val[8].'"></td>';
 
             $html .= '</tr>';
         }
@@ -1685,9 +1687,6 @@ function getAllDetailInvoice(){
     return $res;
 }
 
-
-
-
 //add Situation 
 function addSituation($client_id){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
@@ -1701,59 +1700,6 @@ function addSituation($client_id){
     return $id;
 }
 
-//get al devis situation 
-// function getAllSituation(){
-//     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
-//     if(mysqli_connect_errno()){
-//         echo "Failed to connect to MySQL: " . mysqli_connect_error();
-//         exit();
-//     }
-//     $query = "SELECT d.id, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation,dd.prix,dd.discount ,
-//     CASE
-//         WHEN c.type = 'individual' THEN (SELECT CONCAT(ci.prenom, ' ', UPPER(ci.nom)) AS Client FROM client_individual ci WHERE c.id_client = ci.id)
-//         WHEN c.type = 'entreprise' THEN (SELECT UPPER(ce.nom) FROM client_entreprise ce WHERE c.id_client = ce.id)
-//     END AS client,
-//     d.objet, COALESCE(dp.total_montant_paye, 0) AS total_montant_paye
-//     FROM devis d
-//     INNER JOIN client c ON d.id_client = c.id
-//     INNER JOIN detail_devis dd ON d.id = dd.id_devis
-//     LEFT JOIN (
-//         SELECT id_devis,SUM(montant_paye) AS total_montant_paye
-//         FROM devis_payments
-//         GROUP BY id_devis
-//     ) dp ON dd.id = dp.id_devis
-//     WHERE d.remove = 0
-//     ORDER BY d.date_creation;";
-//     $result =mysqli_query($cnx,$query);
-//     $number = 1;
-//     $html = '';
-    
-//     while($row = mysqli_fetch_assoc($result)){
-//         $prix_t =($row['remove_tva']==1)?$row['prix'] :$row['prix']+($row['prix']*0.2) ;
-//         $prix =($row['discount']>0)?$prix_t-($prix_t*($row['discount']/100)):$prix_t;
-//         if($row['total_montant_paye']==0){
-//             $status='<span class="badge text-bg-danger">Non Payé</span>';
-//         }elseif($row['total_montant_paye']<$prix && $row['total_montant_paye'] != 0){
-//             $status='<span class="badge avance-color">Avance</span>';
-//         }else{
-//             $status= '<span class="badge text-bg-success">Payé</span>';
-//         }
-//         $html .= '<tr>';
-//         $html .= '<td>'.$number.'</td>';
-//         $html .= '<td>'.$row['number'].'</td>';
-//         $html .= '<td>'.$row['objet'].'</td>';
-//         $html .= '<td>'.$row['service_name'].'</td>';
-//         $html .= '<td>'.$prix.' DH</td>';
-//         $html .= '<td>'.$row['total_montant_paye'].' DH</td>';
-//         $html .= '<td>'.$status.'</td>';
-//         $html .= '<td class="text-center"><a target="_blank" href="devis_export.php?id='.$row['id'].'" class="btn btn-secondary btn-sm" title="Afficher Devis" ><span><i class="bi bi-eye"></i></span></a></td>';
-//         $html .= '</tr>';
-        
-//         $number++;
-//     }
-    
-//     return $html;
-// }
 //count customers based on the period
 function countClientDash($period){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
@@ -2076,13 +2022,13 @@ function getBrokerByDevis($idDevis,$idBroker)
     
 }
 //insert to dossier table
-function saveDossier($serv_id,$N_dossier){
+function saveDossier($serv_id,$N_dossier,$ds_ref){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-    $query = "INSERT INTO `dossier`(`id_service`, `N_dossier`) VALUES ('$serv_id','$N_dossier')";
+    $query = "INSERT INTO `dossier`(`id_service`, `N_dossier`) VALUES ('$serv_id','$ds_ref$N_dossier')";
     mysqli_query($cnx,$query);
 }
 
