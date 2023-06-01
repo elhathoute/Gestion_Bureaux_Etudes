@@ -185,8 +185,8 @@
             <div class="my-5">
                 <div style="margin:auto;width:fit-content;text-align:center;font-weight:600;font-size:1.3rem">
                     <span>DE</span><br>
-                    <span><?= strtoupper("beplan"); ?></span><br>
-                    <span style="text-decoration:underline">Situation N°<?=$Situation_number;?></span>
+                    <span style="text-decoration:underline"><?= strtoupper("beplan"); ?></span><br>
+                    <!-- <span style="text-decoration:underline">Situation N°<?=$Situation_number;?></span> -->
                 </div>
             </div>
         </section>
