@@ -474,13 +474,11 @@ $(document).ready(function () {
             data:{id:service_deleted_id},
             type:'post',
             success:function(data){
-                alrt
                 var json = JSON.parse(data);
                 var status = json.status;
                 if(status == 'success'){
                     $('#servicesTable #'+service_deleted_row_id).closest('tr').remove();
                     $("#deleteServiceModal").modal('hide');
-                    // location.reload();
                 }else{
                     alert('Failed: connection with Database error');
                 }
