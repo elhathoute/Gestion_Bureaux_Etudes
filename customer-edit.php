@@ -8,11 +8,11 @@ include 'functions.php';
 
 $id = $_POST["id"];
 
-$prenom = $_POST["firstName"];
-$nom = $_POST["lastName"];
-$email = $_POST["email"];
-$phone = $_POST["phone"];
-$address = $_POST["address"];
+$prenom = mysqli_real_escape_string($cnx,$_POST["firstName"]);
+$nom = mysqli_real_escape_string($cnx,$_POST["lastName"]);
+$email = mysqli_real_escape_string($cnx,$_POST["email"]);
+$phone = mysqli_real_escape_string($cnx,$_POST["phone"]);
+$address = mysqli_real_escape_string($cnx,$_POST["address"]);
 
 
 $query = "UPDATE `client_individual` SET `prenom`='$prenom',`nom`='$nom',`email`='$email',`tel`='$phone',`address`='$address' WHERE id='$id'";

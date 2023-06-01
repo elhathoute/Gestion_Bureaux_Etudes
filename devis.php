@@ -83,7 +83,7 @@ include 'header.php';
                                         <input type="hidden" id="client_id" name="client_id">
                                         <input type="hidden" id="client_type" name="client_type">
                                         <input type="hidden" id="selectedBrkId" name="selectedBrkId">
-                                        <input type="text" class="form-control-plaintext fw-bold fs-6 py-0" placeholder="Client" name="" id="receiverName" disabled>
+                                        <input type="text" class="form-control-plaintext fw-bold fs-6 py-0" placeholder="Maître d'ouvrage" name="" id="receiverName" disabled>
                                     </div>
                                     <!-- <div class="input-group">
                                         <textarea class="form-control-plaintext fs-6 py-0  hidden" placeholder="Client Address" name="" id="receiverAdr" style='resize: none' disabled></textarea>

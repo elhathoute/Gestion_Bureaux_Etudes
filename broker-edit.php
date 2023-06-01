@@ -18,10 +18,10 @@ if(isset($_POST['montantPaye'])){
     }
 }else{
     $id = $_POST["id"];
-    $brkNom = $_POST["brkNom"];
-    $brkPrenom = $_POST["brkPrenom"];
-    $brkPhone = $_POST["brkPhone"];
-    $brkAdr = $_POST["brkAdr"];
+    $brkNom = mysqli_real_escape_string($cnx,$_POST["brkNom"]);
+    $brkPrenom = mysqli_real_escape_string($cnx,$_POST["brkPrenom"]);
+    $brkPhone = mysqli_real_escape_string($cnx,$_POST["brkPhone"]);
+    $brkAdr = mysqli_real_escape_string($cnx,$_POST["brkAdr"]);
     $query = "UPDATE `broker` SET `nom`='$brkNom',`prenom`='$brkPrenom',`phone`='$brkPhone',`address`='$brkAdr' WHERE id=$id";
     $res = mysqli_query($cnx,$query);
     $fullBrokerName = $brkNom .' '. $brkPrenom;

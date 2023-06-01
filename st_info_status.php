@@ -97,7 +97,7 @@ if(isset($_POST["clientID"])){
     echo json_encode($output);
 }else{
         if ($paid_status == 0) {
-            $test = 'COALESCE(dp.total_montant_paye, 0) = 0';
+            $test = 'COALESCE(dp.total_montant_paye, 0) = 0 AND dd.prix > 0';
         } elseif ($paid_status == 1) {
             $test = 'COALESCE(dp.total_montant_paye, 0) = dp.prix';
         } else {

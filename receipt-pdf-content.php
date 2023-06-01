@@ -100,6 +100,7 @@
                 <p>M.O : <strong><?=strtoupper($receiptInfo["client"]);?></strong></p>
                 <p>Service : <strong><?=strtoupper($receiptInfo["service_name"]);?></strong></p>
                 <p>La somme total de : <strong class="underline"><?=$receiptInfo["prix"];?> DHS</strong></p>
+                <p>Montant paye: <strong class="underline"><?=$receiptInfo["montant_paye"];?> DHS</strong></p>
                 <p>Pour : <span class="underline"><?=$receiptInfo["objet"];?>.<span></p>
                 <p>Mode de paiement : <?=ucfirst($receiptInfo['pay_method']);?></p>
                 <p>Date de paiement : <?=date("d/m/Y",strtotime($receiptInfo["pay_date"])) ;?>.</p>

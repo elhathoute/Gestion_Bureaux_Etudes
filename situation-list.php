@@ -18,7 +18,7 @@ $clientRes = mysqli_query($cnx, $query);
                     <div class="card-title py-2">Filter: </div>
                     <div class="col-md-5 my-1">
                         <select class="form-select" id="situationSelect">
-                            <option value="" selected disabled>Veuillez choisir un client </option>
+                            <option value="" selected disabled>Veuillez choisir un Maître d'ouvrage </option>
                             <?php
                                 while ($row = mysqli_fetch_assoc($clientRes)) {
                                     $clientName = fetchClientName($row['type'], $row['id_client']);

@@ -474,11 +474,13 @@ $(document).ready(function () {
             data:{id:service_deleted_id},
             type:'post',
             success:function(data){
+                alrt
                 var json = JSON.parse(data);
                 var status = json.status;
                 if(status == 'success'){
                     $('#servicesTable #'+service_deleted_row_id).closest('tr').remove();
                     $("#deleteServiceModal").modal('hide');
+                    // location.reload();
                 }else{
                     alert('Failed: connection with Database error');
                 }
@@ -2666,7 +2668,7 @@ $(document).on('change','.brsrvFilter',function(){
                     data:{brokerId:brokerId,paid_status:paid_status,srv_name:srv_name}
                 });
             }else{
-                st_pdf_href = `situation_export.php?br_id=${brokerId}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+                st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}`;
                 return $.ajax({
                     url:'st_info_status.php',
                     type:'POST',

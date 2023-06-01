@@ -18,13 +18,13 @@
 
         $invoice_number = sprintf("%03d", getInvoiceNumber()) . '/' . date('Y');
         $client_id = $devis['id_client'];
-        $invoice_comment = $devis['comment'];
+        $invoice_comment =mysqli_real_escape_string($cnx, $devis['comment']);
         $sub_total = $devis['sub_total'];
         $due_date = date("Y-m-d");
         $devis_discount = $devis['discount'];
         $net_total = $devis['net_total'];
         $remove_tva = $devis['remove_tva'];
-        $objet_name = $devis['objet'];
+        $objet_name = mysqli_real_escape_string($cnx,$devis['objet']);
         $located = $devis['located'];
         $user_role=getUserRole($_SESSION['user_id']);
         // ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
