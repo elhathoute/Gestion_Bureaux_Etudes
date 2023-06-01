@@ -22,6 +22,9 @@ if(isset($_POST["clientID"])){
         } else {
             $status = '<span class="badge text-bg-success">Payé</span>';
         }
+        if($row['fprix']==0){
+            $status = '<span class="badge text-bg-warning">Gratuit</span>';
+        }
         $subarray = array();
         $subarray[] = $number;
         $subarray[] = $row['number'];
@@ -74,6 +77,9 @@ if(isset($_POST["clientID"])){
             $status = '<span class="badge avance-color">Avance</span>';
         } else {
             $status = '<span class="badge text-bg-success">Payé</span>';
+        }
+        if($row['fprix']==0){
+            $status = '<span class="badge text-bg-warning">Gratuit</span>';
         }
         $subarray = array();
         $subarray[] = $number;
@@ -128,6 +134,9 @@ if(isset($_POST["clientID"])){
                 $status = '<span class="badge avance-color">Avance</span>';
             } else {
                 $status = '<span class="badge text-bg-success">Payé</span>';
+            }
+            if($row['fprix']==0){
+                $status = '<span class="badge text-bg-warning">Gratuit</span>';
             }
             $subarray = array();
             $subarray[] = $number;

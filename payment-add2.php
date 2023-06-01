@@ -63,7 +63,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $priceLeft =$detail_price - $servicePaymentDetails['avanceSum'];
                 $payment=$payment - $priceLeft;
                 $montant_paye =$priceLeft;
-                payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                 $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                 paymentNoti($dev_id);
@@ -80,7 +81,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $avanceSum= $payment +$servicePaymentDetails['avanceSum'];
                 if($avanceSum<=$detail_price){
                     $montant_paye= $payment;
-                    payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                    $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                     $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                     paymentNoti($dev_id);
@@ -91,7 +93,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $priceLeft =$detail_price - $servicePaymentDetails['avanceSum'];
                 $payment =$payment -$priceLeft;
                 $montant_paye = $priceLeft;  
-                payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                 $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                 paymentNoti($dev_id);
@@ -104,7 +107,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
             if($payment >= $detail_price){
                 $payment=$payment-$detail_price;
                 $montant_paye=$detail_price;
-                payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                 $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                 paymentNoti($dev_id);
@@ -118,7 +122,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 exit();
                 }
                 $montant_paye = $payment;  
-                payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                 $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                 paymentNoti($dev_id);
@@ -154,7 +159,9 @@ if(isset($_POST['ids'])){       //if any of the services is checked
             if($filter_type=='broker'){
                 $broker_commission= -($detail_price - $brokerSrvP);
             }else{
+                // die(var_dump($brokerdetails['id_broker']));
                 $broker_commission= $detail_price - $brokerSrvP;
+                updateBrokerSold($brokerdetails['id_broker'],$broker_commission);
             }
         }else{
             $broker_commission=0;
@@ -164,7 +171,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $priceLeft =$detail_price - $servicePaymentDetails['avanceSum'];
                 $payment=$payment - $priceLeft;
                 $montant_paye =$priceLeft;
-                payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                 $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                 paymentNoti($dev_id);
@@ -181,7 +189,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $avanceSum= $payment +$servicePaymentDetails['avanceSum'];
                 if($avanceSum<=$detail_price){
                     $montant_paye= $payment;
-                    payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                    $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                     $user_id = $_SESSION['user_id'];
                     userDevis_history($user_id,$devis_id,"Paiement Effectué");
                     paymentNoti($dev_id);
@@ -192,7 +201,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $priceLeft =$detail_price - $servicePaymentDetails['avanceSum'];
                 $payment =$payment -$priceLeft;
                 $montant_paye = $priceLeft;  
-                payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                 $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                 paymentNoti($dev_id);
@@ -205,7 +215,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
             if($payment >= $detail_price){
                 $payment=$payment-$detail_price;
                 $montant_paye=$detail_price;
-                payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                 $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                 paymentNoti($dev_id);
@@ -220,7 +231,8 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 exit();
                 }
                 $montant_paye = $payment;  
-                payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                $pay_id=payDevis($dev_id,$payment_method,$devis_id,$payment_giver,$dossier_id,$detail_price,$montant_paye,$broker_commission);
+                addReceipt($pay_id,$payment_giver);
                 $user_id = $_SESSION['user_id'];
                 userDevis_history($user_id,$devis_id,"Paiement Effectué");
                 paymentNoti($dev_id);

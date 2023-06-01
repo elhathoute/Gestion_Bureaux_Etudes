@@ -1136,7 +1136,7 @@ function getPaymentsInfo(){
         $html .= '<td> '.$user.' </td>';
         $html .= '<td> '.$row["client"].' </td>';
         $html .= '<td> '.$row["pay_date"].' </td>';
-        $html .= '<td> '.$row["prix"].' </td>';
+        $html .= '<td> '.$row["montant_paye"].' </td>';
         $html .= '<td class="text-center"> <a target="_blank" href="receipt_export.php?id='.$row["pay_id"].'" title="Imprimer Reçu"><i class="bi bi-paperclip"></i></a> </td>';
         $html .= '</tr>';
     }

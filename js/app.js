@@ -3356,6 +3356,7 @@ $(document).on('change','.allsrvFilter',function(){
     $(document).on('click','.editBrokerBtn',function(){
         var id = $(this).data('id');
         var tr_id = $(this).closest('tr').attr('id');
+        // alert(id);
         $.ajax({
             url:'get_slcd_Brk.php',
             data:{id:id},
@@ -3383,8 +3384,43 @@ $(document).on('change','.allsrvFilter',function(){
         submitEditBrkForm = checkNumberInput($(this));
     });
 
-    $(document).on('submit','#editBrokerForm',function(){
+    $(document).on('click','.updateBrokerSold',function(){
+        var id = $(this).data('id');
+        var tr_id = $(this).closest('tr').attr('id');
+        $.ajax({
+            url:'get_slcd_Brk.php',
+            data:{id:id},
+            type:"POST",
+            success:function(data){
+                var json = JSON.parse(data);
+                $("#BROKERID").val(json.id);
+                $("#tr_id").val(tr_id);
+                $("#updateBrokerSoldModal").modal('show');
+            }
+        });
+
         
+    });
+// ----------- broker sold form -------------
+
+    $(document).on('submit','#editBrokerSoldForm',function(){
+        var id = $("#BROKERID").val(),
+        montantPaye =$("#brokerMontantPaye").val()
+        lunchLoader();
+        $.ajax({
+            url:"broker-edit.php",
+            data:{id:id,montantPaye:montantPaye},
+            type:'post',
+            success:function(){
+                location.reload();
+            },
+        });
+
+    });
+
+// -------------------------- edit broker details ----------
+
+    $(document).on('submit','#editBrokerForm',function(){
         var id = $("#id").val()
         ,tr_id = $("#tr_id").val()
         ,brkNom = $("#brkNom").val()
@@ -3407,7 +3443,7 @@ $(document).on('change','.allsrvFilter',function(){
                 var status = json.status;
                 if(status == 'success'){
                     var table = $("#brokersTable").DataTable();
-                    var button = '<a href="javascript:void(0);" data-id="'+id+'" class="btn btn-primary btn-sm editBrokerBtn" ><span><i class="bi bi-pencil-square"></i></span></a> <a href = "javascript:void(0);" data-id="'+id+'" class=" btn btn-danger btn-sm deleteBrokerBtn"><span><i class="bi bi-trash"></i></span></a>';
+                    var button = '<a href="javascript:void(0);" data-id="'+id+'" class="btn btn-primary btn-sm editBrokerBtn" ><span><i class="bi bi-pencil-square"></i></span></a> <a href = "javascript:void(0);" data-id="'+id+'" class=" btn btn-danger btn-sm deleteBrokerBtn"><span><i class="bi bi-trash"></i></span></a><a href = "javascript:void(0);" data-id="'+id+'"  class=" btn btn-success ms-1 btn-sm updateBrokerSold" title="Update Sold" ><span><i class="bi bi-currency-exchange"></i></span></a>';
                     var row = table.row("[id='"+tr_id+"']");
                     row.row("[id='"+tr_id+"']").data([tr_id,brkNom,brkPrenom,brkPhone,brkAdr,brkSold,button]);
                     // cleaning inputs

@@ -93,7 +93,7 @@ include 'header.php';
                                     </div> -->
                                 </fieldset>
                                 <div class="text-center py-1">
-                                    <a href="javascript:void(0)" id="selectClientModal" class="" title="Sélectionner Client"><i class="bi bi-box-arrow-up-right" style="font-size:12px"></i> Select client</a>
+                                    <a href="javascript:void(0)" id="selectClientModal" class="" title="Sélectionner Maître d'ouvrage"><i class="bi bi-box-arrow-up-right" style="font-size:12px"></i> Select Maître d'ouvrage</a>
                                 </div>
                             <!-- show broker (intermidiare) -->
 
@@ -291,7 +291,7 @@ include 'header.php';
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel"><strong>Sélectionner un client existant</strong></h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"><strong>Sélectionner Un Maître d'ouvrage Existant</strong></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -606,11 +606,11 @@ include 'header.php';
                                                         <tr>
                                                             <th></th>
                                                             <th width="500">Service</th>
-                                                            <th>U</th>
-                                                            <th>Qte</th>
-                                                            <th>Prix</th>
-                                                            <th>Discount</th>
-                                                            <th>Montant</th>
+                                                            <th width="150">U</th>
+                                                            <th width="150">Qte</th>
+                                                            <th width="150">Prix</th>
+                                                            <th width="120">Discount</th>
+                                                            <th width="150">Montant</th>
                                                              <!-- <th>Uniquee_Srv_id</th> -->
 
                                                         </tr>

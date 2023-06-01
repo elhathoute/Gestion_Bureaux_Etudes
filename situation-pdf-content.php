@@ -116,7 +116,7 @@
                     GROUP BY id_devis
                 ) dp ON dd.id = dp.id_devis
                 WHERE d.remove = 0 and bd.id_broker =$brokerId AND dd.confirmed=1
-                ORDER BY d.date_creation;";
+                ORDER BY dd.service_name;";
                 if(isset($_GET["pd_st"]) && isset($_GET["srv_name"])){
                     $paid_status = $_GET["pd_st"];
                     $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
@@ -165,7 +165,7 @@
                             ($paid_status = 1 AND COALESCE(dp.total_montant_paye, 0) = dp.prix) OR
                             ($paid_status =2  AND COALESCE(dp.total_montant_paye, 0) > 0 AND COALESCE(dp.total_montant_paye, 0) < dp.prix)
                         )  AND dd.confirmed=1 AND bd.id_broker =$brokerId 
-                    ORDER BY dd.service_name;');";
+                    ORDER BY dd.service_name;";
                 }elseif (isset($_GET["srv_name"])){
                     $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
                     $query = "SELECT d.id, d.id_client, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation,dd.prix,dd.discount ,
@@ -216,7 +216,7 @@
 
         <section>
 
-                    <table class="table table-bordered">
+                    <!-- <table class="table table-bordered">
                     <tr class="text-center text-bold">
                         <td colspan="3">Factures</td>
                         <td rowspan="2" class="align-middle">Maitre D'ouvrage</td>
@@ -230,60 +230,142 @@
                         <td>Régle</td>
                         <td>payé</td>
                         <td>Réste</td>
-                    </tr>
+                    </tr> -->
                     <?php
-                            $num = 1;
-                            $totalPrice = 0;
-                            $totalAdvance = 0;
-                            $totalRemain = 0;
-                            foreach($data_rows as $row){
-                                $fprice = $row[3] == '0'? $row[7] * 1.2 : $row[7];
-                                $lprice=$fprice -($fprice*($row[8])/100);
-                                $totalPrice += floatval($lprice);
-                                $totalAdvance += floatval($row[11]);
-                                $totalRemain += (floatval($lprice) - floatval($row[11]));
-                                if($row[11]==0){
-                                    $status='Non Payé';
-                                }elseif($row[11]<$lprice && $row[11] != 0){
-                                    $status='Avance';
-                                }else{
-                                    $status= 'Payé';
-                                }
-                                $date = new DateTime($row[6]);
-                                $formated_date = $date->format('d/m/Y');
+
+
+
+                
+                    $num = 1;
+                    $totalPrice = 0;
+                    $totalAdvance = 0;
+                    $totalRemain = 0;
+                    $prevRef = '';
+                    $html = ''; // Initialize the variable
+
+                    foreach($data_rows as $row){
+                        $fprice = $row[3] == '0'? $row[7] * 1.2 : $row[7];
+                        $lprice = $fprice - ($fprice * ($row[8]) / 100);
+                        // $totalPrice += floatval($lprice);
+                        // $totalAdvance += floatval($row[11]);
+                        // $totalRemain += (floatval($lprice) - floatval($row[11]));
+                        if($row[11] == 0){
+                            $status = 'Non Payé';
+                        } elseif($row[11] < $lprice && $row[11] != 0){
+                            $status = 'Avance';
+                        } else{
+                            $status = 'Payé';
+                        }
+                        if(floatval($row[7])==0){
+                            $status = 'Gratuit';
+                        }
+                        $date = new DateTime($row[6]);
+                        $formated_date = $date->format('d/m/Y');
+
+                        // Check if the reference is different from the previous row
+                        if($row[4] !== $prevRef){
+                            // Close the previous table if it exists and add the total row
+                            if($prevRef !== ''){
                                 $html .= '<tr>';
-                                $html .= '<td>'.$num++.'</td>';     //NUMBER
-                                $html .= '<td>'.$formated_date.'</td>'; //DATE 
-                                $html .= '<td>'.$row[4].'</td>';  //REF
-                                $html .= '<td>'.$row[9].'</td>'; //CLIENT
-                                $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice),2)).'</td>'; //PRIX
-                                $html .= '<td>'.$status.'</td>';  //STATUS
-                                $html .= '<td>'.sprintf('%05.2f',round(floatval($row[11]),2)).'</td>'; //PEYE
-                                $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice) - floatval($row[11]),2)).'</td>'; //REST
-                                $html .='</tr>';
-                                
+                                $html .= '<td colspan="4" style="text-align:center">TOTAUX</td>';
+                                $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalPrice,2)).'</td>';
+                                $html .= '<td></td>';
+                                $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalAdvance,2)).'</td>';
+                                $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalRemain,2)).'</td>';
+                                $html .= '</tr>';
+                                $html .= '</table>';
+                                $html .= '<br>'; // Add a line break after each table
+                                $totalPrice = 0;
+                                $totalAdvance = 0;
+                                $totalRemain = 0;
                             }
+                            // Start a new table for the current reference
+                            $html .= '<h3 style="text-align:right;"><u>'.$row[5].'</u></h3>';
+                            $html .= '<table class="table table-bordered">';
+                            $html .= '<tr class="text-center text-bold">';
+                            $html .= '<td colspan="3">Factures</td>';
+                            $html .= '<td rowspan="2" class="align-middle">Maitre D\'ouvrage</td>';
+                            $html .= '<td colspan="4">Montants</td>';
+                            $html .= '</tr>';
+                            $html .= '<tr class="text-bold">';
+                            $html .= '<td>N°</td>';
+                            $html .= '<td>Date</td>';
+                            $html .= '<td>Réf</td>';
+                            $html .= '<td>Prix</td>';
+                            $html .= '<td>Régle</td>';
+                            $html .= '<td>payé</td>';
+                            $html .= '<td>Réste</td>';
+                            $html .= '</tr>';
+                        }
+                        $totalPrice += floatval($lprice);
+                        $totalAdvance += floatval($row[11]);
+                        $totalRemain += (floatval($lprice) - floatval($row[11]));
+                        // Output the row for the current service
+                        $html .= '<tr>';
+                        $html .= '<td>'.$num++.'</td>';     //NUMBER
+                        $html .= '<td>'.$formated_date.'</td>'; //DATE 
+                        $html .= '<td>'.$row[4].'</td>';  //REF
+                        $html .= '<td>'.$row[9].'</td>'; //CLIENT
+                        $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice),2)).'</td>'; //PRIX
+                        $html .= '<td>'.$status.'</td>';  //STATUS
+                        $html .= '<td>'.sprintf('%05.2f',round(floatval($row[11]),2)).'</td>'; //PEYE
+                        $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice) - floatval($row[11]),2)).'</td>'; //REST
+                        $html .= '</tr>';
+                        
+                        $prevRef = $row[4]; // Store the current reference for comparison with the next row
+                    }
+                    // Close the last table if it exists and add the total row
+                    if($prevRef !== ''){
+                        $html .= '<tr>';
+                        $html .= '<td colspan="4" style="text-align:center">TOTAUX</td>';
+                        $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalPrice,2)).'</td>';
+                        $html .= '<td></td>';
+                        $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalAdvance,2)).'</td>';
+                        $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalRemain,2)).'</td>';
+                        $html .= '</tr>';
+                        $html .= '</table>';
+                    }
+                    echo $html; // Output the HTML content
+                            // $num = 1;
+                            // $totalPrice = 0;
+                            // $totalAdvance = 0;
+                            // $totalRemain = 0;
+                            // foreach($data_rows as $row){
+                            //     $fprice = $row[3] == '0'? $row[7] * 1.2 : $row[7];
+                            //     $lprice=$fprice -($fprice*($row[8])/100);
+                            //     $totalPrice += floatval($lprice);
+                            //     $totalAdvance += floatval($row[11]);
+                            //     $totalRemain += (floatval($lprice) - floatval($row[11]));
+                            //     if($row[11]==0){
+                            //         $status='Non Payé';
+                            //     }elseif($row[11]<$lprice && $row[11] != 0){
+                            //         $status='Avance';
+                            //     }else{
+                            //         $status= 'Payé';
+                            //     }
+                            //     $date = new DateTime($row[6]);
+                            //     $formated_date = $date->format('d/m/Y');
+                            //     $html .= '<tr>';
+                            //     $html .= '<td>'.$num++.'</td>';     //NUMBER
+                            //     $html .= '<td>'.$formated_date.'</td>'; //DATE 
+                            //     $html .= '<td>'.$row[4].'</td>';  //REF
+                            //     $html .= '<td>'.$row[9].'</td>'; //CLIENT
+                            //     $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice),2)).'</td>'; //PRIX
+                            //     $html .= '<td>'.$status.'</td>';  //STATUS
+                            //     $html .= '<td>'.sprintf('%05.2f',round(floatval($row[11]),2)).'</td>'; //PEYE
+                            //     $html .= '<td>'.sprintf('%05.2f',round(floatval($lprice) - floatval($row[11]),2)).'</td>'; //REST
+                            //     $html .='</tr>';
+                                
+                            // }
                             
-                            $html .= '<tr>';
-                            $html .= '<td colspan="4" style="text-align:center">TOTAUX</td>';
-                            $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalPrice,2)).'</td>';
-                            $html .= '<td></td>';
-                            $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalAdvance,2)).'</td>';
-                            $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalRemain,2)).'</td>';
+                            // $html .= '<tr>';
+                            // $html .= '<td colspan="4" style="text-align:center">TOTAUX</td>';
+                            // $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalPrice,2)).'</td>';
+                            // $html .= '<td></td>';
+                            // $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalAdvance,2)).'</td>';
+                            // $html .= '<td class="text-bold" style="text-align:center">'.sprintf('%05.2f',round($totalRemain,2)).'</td>';
 
-                            echo $html;
-
-
-
-                            
-
-
-                            
-                            
-
-
-
-                            
+                            // echo $html;
 
 
 

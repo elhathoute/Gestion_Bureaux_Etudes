@@ -33,6 +33,9 @@ while($row=mysqli_fetch_assoc($result)){
     }else{
         $status= '<span class="badge text-bg-success">Payé</span>';
     }
+    if($row['prix']==0){
+        $status = '<span class="badge text-bg-warning">Gratuit</span>';
+    }
     $subarray = array();
     $subarray[] = $number;
     $subarray[] = $row['number'];
