@@ -67,7 +67,8 @@ if(isset($_SESSION["success"])){
                                                 $html .= '<td>'.$row['sold'].'</td>';
                                                 $html .= '  <td>
                                                                 <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editBrokerBtn '.$check_edit.' " title="Modifier Intermédiaire" ><span><i class="bi bi-pencil-square"></i></span></a>
-                                                                <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteBrokerBtn '.$check_delete.' " title="Supprimer Intermédiaire" ><span><i class="bi bi-trash"></i></span></a>
+                                                                <a href = "javascript:void(0);" data-id="'.$row['id'].'" class=" btn btn-danger btn-sm deleteBrokerBtn '.$check_delete.' " title="Supprimer Intermédiaire" ><span><i class="bi bi-trash"></i></span></a>
+                                                                <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-success btn-sm updateBrokerSold" title="Update Sold" ><span><i class="bi bi-currency-exchange"></i></span></a>
                                                             </td>';
                                                 $html .= '</tr>';
                                                 $number++;
@@ -97,7 +98,6 @@ if(isset($_SESSION["success"])){
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="javascript:void(0)" id="editBrokerForm" method="POST">
-
                 <div class="modal-body">
                     <input type="hidden" name="id" id="id" value="">
                     <input type="hidden" name="tr_id" id="tr_id" value="">
@@ -148,4 +148,26 @@ if(isset($_SESSION["success"])){
     </div>
 </div>
 <!-- Delete Broker modal end -->
+
+<!--update Broker Sold Modal -->
+<div class="modal fade" id="updateBrokerSoldModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Mettre à Jour Sold</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="javascript:void(0)" id="editBrokerSoldForm"  method="POST">
+            <div class="modal-body">
+                <input type="hidden" name="BROKERID" id="BROKERID" class="form-control">
+                <input type="text" name="brokerMontantPaye" id="brokerMontantPaye" class="form-control" placeholder="Montant Payé">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="submit" name="submit" class="btn btn-primary">Sauvegarder</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
 <?php include 'footer.php'; ?>

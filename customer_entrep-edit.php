@@ -4,11 +4,11 @@ include 'functions.php';
 
 $id = $_POST["id"];
 
-$name = $_POST["name"];
-$ice = $_POST["ice"];
-$email = $_POST["email"];
-$phone = $_POST["phone"];
-$address = $_POST["address"];
+$name = mysqli_real_escape_string($cnx,$_POST["name"]);
+$ice = mysqli_real_escape_string($cnx,$_POST["ice"]);
+$email = mysqli_real_escape_string($cnx,$_POST["email"]);
+$phone = mysqli_real_escape_string($cnx,$_POST["phone"]);
+$address = mysqli_real_escape_string($cnx,$_POST["address"]);
 
 
 $query = "UPDATE `client_entreprise` SET `nom`='$name',`ICE`='$ice',`email`='$email',`tel`='$phone',`address`='$address' WHERE id='$id'";

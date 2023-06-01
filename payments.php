@@ -20,6 +20,15 @@ if(isset($_SESSION["success"])){
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
+            <?php if (isset($_GET['message'])) {?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php 
+                $message = "<strong>Payment</strong> was successful!";
+                echo '<div class="success-message">' . $message . '</div>';
+                ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php }?>
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">Information des Paiements </h3>

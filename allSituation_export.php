@@ -9,7 +9,7 @@
     $dompdf = new Dompdf();
 
     ob_start();
-    require ('situation-pdf-content.php');
+    require ('allsituation-pdf-content.php');
     $html = ob_get_contents();
     ob_get_clean();
 

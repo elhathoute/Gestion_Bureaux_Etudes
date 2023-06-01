@@ -1,9 +1,9 @@
 <?php
 include 'header.php';
+$brokerRes = getBrokerData();
 
 $query = "SELECT * FROM `client` WHERE 'remove'=0";
 $clientRes = mysqli_query($cnx, $query);
-
 ?>
 
 <div class="pagetitle">
@@ -14,17 +14,33 @@ $clientRes = mysqli_query($cnx, $query);
     <div class="row">
         <div class="col-lg-12">
             <div class="card rounded-4">
-                <div class="card-body">
-                    <div class="card-title py-2">Choisir un client: </div>
-                    <select class="form-select" id="situationSelect">
-                        <option value="" selected disabled>Veuillez choisir un client </option>
-                        <?php
-                            while ($row = mysqli_fetch_assoc($clientRes)) {
-                                $clientName = fetchClientName($row['type'], $row['id_client']);
-                                echo '<option value=' . $row["id"] . '>' . $clientName . '</option>';
-                            }
-                        ?>
-                    </select>
+                <div class="card-body row">
+                    <div class="card-title py-2">Filter: </div>
+                    <div class="col-md-5 my-1">
+                        <select class="form-select" id="situationSelect">
+                            <option value="" selected disabled>Veuillez choisir un Maître d'ouvrage </option>
+                            <?php
+                                while ($row = mysqli_fetch_assoc($clientRes)) {
+                                    $clientName = fetchClientName($row['type'], $row['id_client']);
+                                    echo '<option value=' . $row["id"] . '>' . $clientName . '</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-5 my-1">
+                        <select class="form-select" id="brokerSelectsituation">
+                            <option value="" selected disabled>Veuillez choisir un intermédiaire </option>
+                            <?php
+                                while ($row = mysqli_fetch_assoc($brokerRes)) {
+                                    $brokerFullName = ucfirst($row["nom"]) .' '. ucfirst($row["prenom"]);
+                                    echo '<option value=' . $row["id"] . '>' . $brokerFullName . '</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2 my-1">
+                        <button class="situationreload btn btn-primary form-control">Réinitialiser</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,7 +92,9 @@ $clientRes = mysqli_query($cnx, $query);
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <?php
+                                    // echo getAllSituation();
+                                    ?>
                                     </tbody>
                                 </table>
                             </div>

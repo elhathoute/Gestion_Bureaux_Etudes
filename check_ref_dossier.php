@@ -5,7 +5,8 @@ include "./functions.php";
 if($_POST){
 
     $ref_dossier = $_POST["ref_dossier"];
-    $res=CheckRefDossier($ref_dossier);
+    $ds_ref=$_POST["ds_ref"];
+    $res=CheckRefDossier($ref_dossier,$ds_ref);
     if($res>0){
         $data = array('status'=>'success');
         echo json_encode($data);

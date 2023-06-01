@@ -83,7 +83,7 @@ include 'header.php';
                                         <input type="hidden" id="client_id" name="client_id">
                                         <input type="hidden" id="client_type" name="client_type">
                                         <input type="hidden" id="selectedBrkId" name="selectedBrkId">
-                                        <input type="text" class="form-control-plaintext fw-bold fs-6 py-0" placeholder="Client" name="" id="receiverName" disabled>
+                                        <input type="text" class="form-control-plaintext fw-bold fs-6 py-0" placeholder="Maître d'ouvrage" name="" id="receiverName" disabled>
                                     </div>
                                     <!-- <div class="input-group">
                                         <textarea class="form-control-plaintext fs-6 py-0  hidden" placeholder="Client Address" name="" id="receiverAdr" style='resize: none' disabled></textarea>
@@ -93,7 +93,7 @@ include 'header.php';
                                     </div> -->
                                 </fieldset>
                                 <div class="text-center py-1">
-                                    <a href="javascript:void(0)" id="selectClientModal" class="" title="Sélectionner Client"><i class="bi bi-box-arrow-up-right" style="font-size:12px"></i> Select client</a>
+                                    <a href="javascript:void(0)" id="selectClientModal" class="" title="Sélectionner Maître d'ouvrage"><i class="bi bi-box-arrow-up-right" style="font-size:12px"></i> Select Maître d'ouvrage</a>
                                 </div>
                             <!-- show broker (intermidiare) -->
 
@@ -291,7 +291,7 @@ include 'header.php';
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel"><strong>Sélectionner un client existant</strong></h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"><strong>Sélectionner Un Maître d'ouvrage Existant</strong></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -606,12 +606,12 @@ include 'header.php';
                                                         <tr>
                                                             <th></th>
                                                             <th width="500">Service</th>
-                                                            <th>U</th>
-                                                            <th>Qte</th>
-                                                            <th>Prix</th>
-                                                            <th>Discount</th>
-                                                            <th>Montant</th>
-                                                             <th>Uniquee_Srv_id</th>
+                                                            <th width="150">U</th>
+                                                            <th width="150">Qte</th>
+                                                            <th width="150">Prix</th>
+                                                            <th width="120">Discount</th>
+                                                            <th width="150">Montant</th>
+                                                             <!-- <th>Uniquee_Srv_id</th> -->
 
                                                         </tr>
                                                     </thead>
@@ -707,7 +707,7 @@ include 'header.php';
             html += '<td><input type="text" name="" class="form-control py-1 serviceUnit" placeholder="Unité" required></td>';
             html += '<td><input type="number" min="0" name="" class="form-control py-1 px-1 rowServiceQte" value="1" placeholder="Quantité"></td>';
             html += '<td><input type="number" min="0"  step="0.01" name="" class="form-control py-1 px-1 servicePrice" placeholder="0.00"></td>';
-            html += '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent"></i></span><input type="number" min="0" max="100" name="" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
+            html += '<td><div class="input-group"><span class="input-group-text py-1"><i class="bi bi-percent" ></i></span><input type="number" min="0" max="100" name="" class="form-control py-1 serviceDiscount" placeholder="Enter % (ex: 10%)"></div></td>';
             html += '<td><input type="text" name="" class="form-control py-1 rowServiceTotal" disabled placeholder="0"></td>';
             html += '</tr>';
             $('.servicesTable tbody').append(html);

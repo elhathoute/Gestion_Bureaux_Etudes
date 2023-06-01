@@ -6,12 +6,12 @@ include 'functions.php';
 
 $id = $_POST["id"];
 
-$title = $_POST["title"];
+$title = mysqli_real_escape_string($cnx,$_POST["title"]) ;
 if(isset($_POST['prix'])){
 
     $prix = $_POST["prix"];
 }
-$ref = $_POST["servRef"];
+$ref = mysqli_real_escape_string($cnx,$_POST["servRef"]);
 
 $query = "UPDATE `service` SET `title`='$title',`ref`='$ref' WHERE id=$id";
 $res = mysqli_query($cnx,$query);

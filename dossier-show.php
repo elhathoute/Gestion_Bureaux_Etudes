@@ -29,7 +29,7 @@ if(isset($_GET["s_id"])){
                         <div class="mb-3">
                             <label class="form-label fw-semibold">N° Dossier</label>
                             <div class="input-group ps-3">
-                                <span class="input-group-text" id="ds_ref"><?=ucfirst($row["ref"])?></span>
+                                <!-- <span class="input-group-text" id="ds_ref"><?=ucfirst($row["ref"])?></span> -->
                                 <input type="text" class="form-control refTxt" placeholder="N° Dossier" aria-describedby="ds_ref" value="<?=$row["N_dossier"]?>" disabled>
                             </div>
                         </div>

@@ -6,17 +6,24 @@ $query = "SELECT * FROM `client` WHERE 'remove'=0";
 $clientRes = mysqli_query($cnx, $query);
 ?>
 
-<div class="row py-4">
-    <div class="col-md-4">
+<div class="row py-4 justify-content-between">
+    <div class="col-md-4 ">
         <a href='javascript:void(0)' class="btn btn-outline-secondary btnChangePaymentClient" title="Sélectionner un autre Client">
             <i class="bi bi-plus-circle"></i>&nbsp;Change Maître d'ouvrage
         </a>
+    </div>
+    <!--client filter for the broker-->
+    <div class="col-md-3 d-none" id="selectBrokerClientContainer">
+        <select id="selectBrokerClient" class="form-control">
+            <option value="" selected disabled>Sélectionner un Maître d'ouvrage</option>
+        </select>
+        <input type="hidden" name="BrokerID" id="BrokerID">
     </div>
 </div>
 
 <section class="section">
     <div class="row">
-        <form action="payment-add.php" id="invoicePaymentClient" method="POST" >
+        <form action="payment-add2.php" id="invoicePaymentClient" method="POST" >
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -65,9 +72,9 @@ $clientRes = mysqli_query($cnx, $query);
                                                 <th>
                                                     <a href="#">Service</a>
                                                 </th>
-                                                <th>
+                                                <!-- <th>
                                                     <a href="#">Qte</a>
-                                                </th>
+                                                </th> -->
                                                 <th>
                                                     <a href="#">Prix</a>
                                                 </th>
@@ -109,7 +116,7 @@ $clientRes = mysqli_query($cnx, $query);
                                         </div>
                                         <div class="col-sm-6">
                                             <label class="labelClientPaymentTotal float-end fs-4 fw-bold" id="labelClientPaymentTotal">0.00 DH</label>
-                                            <input type="hidden" name="" id="hiddenTotal">
+                                            <input type="hidden" name="hiddenTotal" id="hiddenTotal">
                                             <input type="hidden" name="hiddenTotalValue" id="hiddenTotalValue">
                                             <input type="hidden" name="clientId" id="clientId">
                                             <input type="hidden" name="brokerId" id="brokerId">
