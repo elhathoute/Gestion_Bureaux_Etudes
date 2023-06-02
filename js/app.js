@@ -479,7 +479,6 @@ $(document).ready(function () {
                 if(status == 'success'){
                     $('#servicesTable #'+service_deleted_row_id).closest('tr').remove();
                     $("#deleteServiceModal").modal('hide');
-                    // location.reload();
                 }else{
                     alert('Failed: connection with Database error');
                 }
@@ -2933,8 +2932,10 @@ $(document).on('change','.brsrvFilter',function(){
     });
 
 
-// --------------------
+// ---------------------------------------------------------------
 // --------------------------get all situations ------------------
+// ---------------------------------------------------------------
+
 
 $.ajax({
       url: 'getAllSituation.php', 

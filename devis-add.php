@@ -6,7 +6,7 @@
     if($_POST){
         
         //declaring Vars
-        $devis_number = $_POST["devis_number"];
+        $devis_number = mysqli_real_escape_string($cnx,$_POST["devis_number"]);
         $client_id = getClientId($_POST["client_id"],$_POST["client_type"]);
         $devis_comment = mysqli_real_escape_string($cnx,$_POST['devis_comment']);
         $label_subTotal = floatval(trim(str_replace('DH',"",$_POST['labelSubTotal'])));
@@ -16,7 +16,7 @@
         $tva_checked = $_POST['tva_checked']=='true'?1:0;
         
         $objet_name = mysqli_real_escape_string($cnx,$_POST['objet_name']);
-        $located_txt = $_POST['located_txt'];
+        $located_txt = mysqli_real_escape_string($cnx,$_POST['located_txt']);
         if(isset($_POST['brkId'])){
             $brkId = $_POST['brkId'];
         }
@@ -60,7 +60,7 @@
             
         for($i=0;$i<intval($val['quantity']);$i++) {
             $discount = $val['discount']==""?0: floatval(trim(str_replace('DH',"",$val['discount'])));
-            $query = "INSERT INTO `detail_devis`(`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`,`unit`,`ref`,`srv_unique_id`,`empl`) VALUES (null,'$last_id','".mysqli_real_escape_string($cnx,$val["serviceName"])."','".floatval($val["price"])."','".$val["quantity"]."', '$discount','".$val["unit"]."','".$val["srvRef"]."',$last_id+$key+1,$empl)";
+            $query = "INSERT INTO `detail_devis`(`id`, `id_devis`, `service_name`, `prix`, `quantity`, `discount`,`unit`,`ref`,`srv_unique_id`,`empl`) VALUES (null,'$last_id','".mysqli_real_escape_string($cnx,$val["serviceName"])."','".floatval($val["price"])."','".$val["quantity"]."', '$discount','".mysqli_real_escape_string($cnx,$val["unit"])."','".$val["srvRef"]."',$last_id+$key+1,$empl)";
             $res1 = mysqli_query($cnx,$query);
         }
         $empl++;
