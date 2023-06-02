@@ -8,111 +8,152 @@
     <title>Reçu</title>
     <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Times New Roman', Times, serif;
-            /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-        }
+* {
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+    }
+/* .container {
+    width: 15cm; 
+   min-height: 100%;
+}*/
 
-        .my-5 {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .container {
-            width: 100%;
-            margin-right: auto;
-            margin-left: auto;
-            /* padding: 1.5rem; */
-            /* border: 2px solid red; */
-        }
+.invoice {
+    background: #fff;
+    width: 100%;
+    margin-bottom: 0;
+}
 
-        .img-container {
-            width: 200px;
-            height: 50px;
-            float: right;
-            margin-right: 50px;
-        }
+.logo {
+    width: 2.5cm;
+}
 
-        .img-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+.document-type {
+    /* text-align: left; */
+    color: #444;
+}
 
-        table,
-        th,
-        td {
-            border: 2px solid;
+.conditions {
+    font-size: 0.7em;
+    color: #666;
+}
+
+.bottom-page {
+    font-size: 0.7em;
+    /* margin-bottom: auto; */
+}
+.beplan_logo{
+    text-align: center;
+}
+.be{
+    color: #235D93;
+    /* font-family: ; */
+}
+.reçu_header{
+    display: flex;
+}
+table,th,tr,td {
+            border: 1px solid black;
             text-align: center;
-            padding: 3px;
-        }
-
-        .table {
+            padding: 5px;
+}
+.table {
             border-collapse: collapse;
             width: 100%;
-            font-size: 0.8rem;
-        }
-
-        .text-bold {
-            font-weight: bold;
-        }
-        .underline{
-            text-decoration: underline;
-        }
+            font-size: 1rem;
+}
     </style>
 </head>
-
 <body>
-    <?php
+<?php
 
-        if(isset($_GET['id'])){
-            $pay_id = $_GET['id'];
-            $receiptInfo = getReceipt($pay_id);
-            
-    
-    
-    ?>
+if(isset($_GET['id'])){
+    $pay_id = $_GET['id'];
+    $receiptInfo = getReceipt($pay_id);
+}
+?>
+<?php
+$path = 'images/BeplanLogo.png';
+$type = pathinfo($path, PATHINFO_EXTENSION);
+$data = file_get_contents($path);
+$base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+// $path2 = 'images/BeplanLogo_2.png';
+// $type2 = pathinfo($path2, PATHINFO_EXTENSION);
+// $data2 = file_get_contents($path2);
+// $base642 = 'data:image/' . $type2 . ';base64,' . base64_encode($data2);
+?>
     <div class="container">
-        
-        <!-- <section >
-            <div class="img-container">
-                <img src="<?php //echo $base64; ?> " alt="Logo Company">
-            </div>
-        </section> -->
-        
-
-        <section style="margin-top:4rem">
-            <div class="my-5">
-                <div style="margin:auto;width:fit-content;text-align:center;font-weight:600;font-size:1.3rem;line-height:1.5">
-                    <!-- <span>A</span><br> -->
-                    <span class="underline">Reçu de paiemant</span><br>
-                    <span style="text-decoration:underline">Numéro <?=$receiptInfo['R_number'];?></span>
+        <div class="invoice">
+            <div class="reçu_header">
+                <div>
+                    <div class="beplan_logo">
+                    <img src="<?php echo $base64?>" width="240"/>
+                </div>
+                <div class="">
+                    <h2 class="document-type" style="text-align: center;">Reçu de Paiment</h2>
+                    <p class="reçu_num" style="text-align: center;"><strong><u>N°<?=$receiptInfo['R_number'];?></u></strong></p>
                 </div>
             </div>
-        </section>
-
-        <br><br><br><br>
-        
-        <section>
-            <div class="my-5"style="font-size:1.2rem;line-height:1.5;">
-                <span>De: <strong><?=ucfirst($receiptInfo["pay_giver"]);?></strong></span>
-                <p>M.O : <strong><?=strtoupper($receiptInfo["client"]);?></strong></p>
-                <p>Service : <strong><?=strtoupper($receiptInfo["service_name"]);?></strong></p>
-                <p>La somme total de : <strong class="underline"><?=$receiptInfo["prix"];?> DHS</strong></p>
-                <p>Montant paye: <strong class="underline"><?=$receiptInfo["montant_paye"];?> DHS</strong></p>
-                <p>Pour : <span class="underline"><?=$receiptInfo["objet"];?>.<span></p>
-                <p>Mode de paiement : <?=ucfirst($receiptInfo['pay_method']);?></p>
-                <p>Date de paiement : <?=date("d/m/Y",strtotime($receiptInfo["pay_date"])) ;?>.</p>
-            </div><br><br><br><br>
-            <div>
-                <p style="float:right;margin-right:10px;font-size:1.3rem" class="underline">Signé par order de directeur général</p><br>
+            <div style="background-color:aliceblue">
+                <pre>
+                Paye Par     : <strong><?=ucfirst($receiptInfo["pay_giver"]);?></strong><br>
+                M.O            : <strong><?=strtoupper($receiptInfo["client"]);?></strong><br>
+                Description : <strong><?=$receiptInfo["objet"];?></strong>
+                </pre>
             </div>
-        </section>
-        
+        </div>
+    <!-- start of the table  -->
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+            <th>N°</th>
+            <th>Devis N°</th>
+            <th>Dossier N°</th>
+            <th>Ref</th>
+            <th>Service</th>
+            <th>Mode de paiement</th>
+            <th>Date de paiement</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>12/23</td>
+                <td>NSW001</td>
+                <td>CF</td>
+                <td><?=strtoupper($receiptInfo["service_name"]);?></td>
+                <td><?=ucfirst($receiptInfo['pay_method']);?></td>
+                <td><?=date("d/m/Y",strtotime($receiptInfo["pay_date"])) ;?></td>
+            </tr>
+            <tr>
+                <td colspan="5"><strong>Service Prix</strong></td>
+                <td colspan="2"><strong><?=$receiptInfo["prix"];?> DHS</strong></td>
+            </tr>
+            <tr>
+                <td colspan="5">Montant Paye</td>
+                <td colspan="2"><?=$receiptInfo["montant_paye"];?></td>
+            </tr>
+            <tr>
+                <td colspan="5">Total Montant Paye</td>
+                <td colspan="2"><?=$receiptInfo["montant_paye"];?></td>
+            </tr>
+            <tr>
+                <td colspan="5"><strong>Rest</strong></td>
+                <td colspan="2"><strong><?=$receiptInfo["prix"];?> DHS</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <h6>Audits et rapports mensuels (1er Novembre 2016 - 30 Novembre 2016)</h6>
+
+    <!--  end of the table  -->
+    <div>
+        <p style="float:right;margin-right:10px;font-size:1.3rem" class="underline">Signé par order de directeur général</p><br>
     </div>
-    
-    <?php } ?>
+
+
+    <
+  </div>
+</div>
 
 </body>
 

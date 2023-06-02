@@ -32,27 +32,14 @@
     $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
         $w = $canvas->get_width();
         $h = $canvas->get_height();
-        
-
-        // $canvas->set_opacity(.1,'Multiply');//Multiply means apply to all pages.
-        // Specify watermark text
         $imageURL = 'images/doc_bg.png';
         $imgWidth = 550;
         $imgHeight = 830;
-        //set image opacity
-        // use (.8,Multiply)
-        // $canvas->set_opacity(.8);
-
-        
-        
         //specify horizontal and vertical position
         $x = (($w-$imgWidth)/2);
         $y = (($h-$imgHeight)/2);
         // $y = (($h-$imgHeight)-10);
-
         //Add an image to the pdf
-
-
         $canvas->image($imageURL,$x,$y,$imgWidth,$imgHeight);
         
 
