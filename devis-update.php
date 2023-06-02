@@ -18,7 +18,7 @@
         // $devisStatus = $_POST['devisStatus'];
         $devis_comment =mysqli_real_escape_string($cnx,$_POST['devis_comment']);
         $objet_name = mysqli_real_escape_string($cnx,$_POST['objet_name']);
-        $located = $_POST['located_txt'];
+        $located = mysqli_real_escape_string($cnx,$_POST['located_txt']);
         $label_subTotal = floatval(trim(str_replace('DH',"",$_POST['labelSubTotal'])));
         $label_discount = floatval(trim(str_replace('DH',"",$_POST['labelDiscount'])));
         $label_netTotal = floatval(trim(str_replace('DH',"",$_POST['labelDevisTotal'])));
@@ -42,7 +42,7 @@
         $service_name =  mysqli_real_escape_string($cnx,$updatedServices[$j]['serviceName']);
         $price = $updatedServices[$j]['price'];
         $qte = $updatedServices[$j]['quantity'];
-        $unit = $updatedServices[$j]['unit'];
+        $unit = mysqli_real_escape_string($cnx,$updatedServices[$j]['unit']);
         $ref = $updatedServices[$j]['srvRef'];
        $discount = $updatedServices[$j]['discount']==""?0:$updatedServices[$j]['discount'];
         $originalServices = getDevisAllDetailsDistinct($devis_id,$updatedServices[$j]['serviceUniqueId']);
