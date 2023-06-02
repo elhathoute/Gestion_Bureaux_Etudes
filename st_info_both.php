@@ -2,7 +2,7 @@
 include "includes/config.php";
 
 $paid_status = $_POST["paid_status"];
-$srv_name = $_POST["srv_name"];
+$srv_name = mysqli_real_escape_string($cnx,$_POST["srv_name"]);
 
 
 if(isset($_POST["clientID"])){

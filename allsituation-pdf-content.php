@@ -116,6 +116,7 @@
                     WHERE d.remove = 0 AND 
                         (
                             ($paid_status = 0 AND COALESCE(dp.total_montant_paye, 0) = 0) OR
+                            ($paid_status = 3 AND dd.prix  =0) OR
                             ($paid_status = 1 AND COALESCE(dp.total_montant_paye, 0) = dp.prix) OR
                             ($paid_status =2  AND COALESCE(dp.total_montant_paye, 0) > 0 AND COALESCE(dp.total_montant_paye, 0) < dp.prix)
                         ) AND dd.service_name = '$srv_name' AND dd.confirmed=1
@@ -142,6 +143,7 @@
                     WHERE d.remove = 0 AND 
                         (
                             ($paid_status = 0 AND COALESCE(dp.total_montant_paye, 0) = 0) OR
+                            ($paid_status = 3 AND dd.prix  =0) OR
                             ($paid_status = 1 AND COALESCE(dp.total_montant_paye, 0) = dp.prix) OR
                             ($paid_status =2  AND COALESCE(dp.total_montant_paye, 0) > 0 AND COALESCE(dp.total_montant_paye, 0) < dp.prix)
                         ) AND dd.confirmed=1

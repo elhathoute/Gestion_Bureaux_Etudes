@@ -3,7 +3,7 @@ include "includes/config.php";
 
 
 
-$srv_name = $_POST["srv_name"];
+$srv_name = mysqli_real_escape_string($cnx,$_POST["srv_name"]);
 if(isset($_POST["clientID"])){
 
     $clientId = $_POST["clientID"];
