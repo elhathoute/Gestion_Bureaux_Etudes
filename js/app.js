@@ -2210,7 +2210,10 @@ $(document).on("change","#selectBrokerClient",function(){
             $("#payment_giver").val()!="" &&
             $(".CBPaymentByClient").length != 0)
         {
-            lunchLoader();
+            // lunchLoader();
+            $("#reload-icon").removeClass("d-none");
+            $("#overlay").removeClass("d-none");
+            $("#overlay").addClass("active");
         }
     });
 
