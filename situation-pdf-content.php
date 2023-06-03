@@ -86,13 +86,13 @@
                 $query = "CALL `sp_getDevisSituation`('".$clientId."');";
                 if(isset($_GET["pd_st"]) && isset($_GET["srv_name"])){
                     $paid_status = $_GET["pd_st"];
-                    $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
+                    $srv_name = mysqli_real_escape_string($cnx,str_replace("%20"," ", $_GET["srv_name"]));
                     $query = "CALL `sp_getDevisSituationBoth`('".$clientId."','".$paid_status."','".$srv_name."');";
                 }elseif (isset($_GET["pd_st"])) {
                     $paid_status = $_GET["pd_st"];
                     $query = "CALL `sp_getDevisSituationStatus`('".$clientId."','".$paid_status."');";
                 }elseif (isset($_GET["srv_name"])){
-                    $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
+                    $srv_name = mysqli_real_escape_string($cnx,str_replace("%20"," ", $_GET["srv_name"]));
                     $query = "CALL `sp_getDevisSituationSrv`('".$clientId."','".$srv_name."');";
                 }
                 $Situation_number = addSituation($clientId);
@@ -120,7 +120,7 @@
                 ORDER BY dd.service_name;";
                 if(isset($_GET["pd_st"]) && isset($_GET["srv_name"])){
                     $paid_status = $_GET["pd_st"];
-                    $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
+                    $srv_name = mysqli_real_escape_string($cnx,str_replace("%20"," ", $_GET["srv_name"]));
                     $query = "SELECT d.id, d.id_client, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation,dd.prix,dd.discount ,
                     CASE
                         WHEN c.type = 'individual' THEN (SELECT CONCAT(ci.prenom, ' ', UPPER(ci.nom)) AS Client FROM client_individual ci WHERE c.id_client = ci.id)
@@ -172,7 +172,7 @@
                     ORDER BY dd.service_name;";
 
                 }elseif (isset($_GET["srv_name"])){
-                    $srv_name = str_replace("%20"," ", $_GET["srv_name"]);
+                    $srv_name = mysqli_real_escape_string($cnx,str_replace("%20"," ", $_GET["srv_name"]));
                     $query = "SELECT d.id, d.id_client, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation,dd.prix,dd.discount ,
                     CASE
                         WHEN c.type = 'individual' THEN (SELECT CONCAT(ci.prenom, ' ', UPPER(ci.nom)) AS Client FROM client_individual ci WHERE c.id_client = ci.id)
