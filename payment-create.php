@@ -5,7 +5,39 @@ include 'header.php';
 $query = "SELECT * FROM `client` WHERE 'remove'=0";
 $clientRes = mysqli_query($cnx, $query);
 ?>
+<style>
+    #reload-icon {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
 
+#reload-icon i {
+  font-size: 48px;
+}
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+#overlay.active {
+  pointer-events: auto;
+}
+
+</style>
+<!-- reload icon -->
+<div id="reload-icon" class="text-primary d-none">
+  <i class="fa fa-refresh fa-spin"></i>
+</div>
+<!-- overlay to prevent the user from editing page content after submit -->
+<div id="overlay" class="d-none"></div>
 <div class="row py-4 justify-content-between">
     <div class="col-md-4 ">
         <a href='javascript:void(0)' class="btn btn-outline-secondary btnChangePaymentClient" title="Sélectionner un autre Client">
