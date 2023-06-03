@@ -23,7 +23,7 @@ if(isset($_SESSION["success"])){
             <?php if (isset($_GET['message'])) {?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <?php 
-                $message = "<strong>Payment</strong> was successful!";
+                $message = "<strong>Le paiement</strong> a réussi !";
                 echo '<div class="success-message">' . $message . '</div>';
                 ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
