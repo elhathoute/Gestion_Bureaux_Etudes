@@ -22,6 +22,9 @@
     width: 100%;
     margin-bottom: 0;
 }
+.underline{
+    text-decoration: underline;
+}
 
 .logo {
     width: 2.5cm;
@@ -61,25 +64,37 @@ table,th,tr,td {
             width: 100%;
             font-size: 1rem;
 }
+.S_table{
+    border-collapse: collapse;
+    margin-right: 22px;
+    float:right;
+}
+.S_table, .S_table tr,.S_table td{
+border: none;
+}
     </style>
 </head>
 <body>
 <?php
 
-if(isset($_GET['id'])){
-    $pay_id = $_GET['id'];
-    $receiptInfo = getReceipt($pay_id);
+// if(isset($_GET['id'])){
+//     $pay_id = $_GET['id'];
+//     $receiptInfo = getReceipt($pay_id);
+// }
+if(isset($_GET['R_number'])){
+    $R_number = $_GET['R_number'];
+    $receiptInfo = getReceipt($R_number);
 }
+// var_dump($receiptInfo[0]);
+// die();
+
+$html = '';
 ?>
 <?php
 $path = 'images/BeplanLogo.png';
 $type = pathinfo($path, PATHINFO_EXTENSION);
 $data = file_get_contents($path);
 $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-// $path2 = 'images/BeplanLogo_2.png';
-// $type2 = pathinfo($path2, PATHINFO_EXTENSION);
-// $data2 = file_get_contents($path2);
-// $base642 = 'data:image/' . $type2 . ';base64,' . base64_encode($data2);
 ?>
     <div class="container">
         <div class="invoice">
@@ -90,14 +105,19 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 </div>
                 <div class="">
                     <h2 class="document-type" style="text-align: center;">Reçu de Paiment</h2>
-                    <p class="reçu_num" style="text-align: center;"><strong><u>N°<?=$receiptInfo['R_number'];?></u></strong></p>
+                    <p class="reçu_num" style="text-align: center;"><strong><u>N°<?php echo $receiptInfo[0][1]?></u></strong></p>
                 </div>
             </div>
             <div style="background-color:aliceblue">
                 <pre>
-                Paye Par     : <strong><?=ucfirst($receiptInfo["pay_giver"]);?></strong><br>
-                M.O            : <strong><?=strtoupper($receiptInfo["client"]);?></strong><br>
-                Description : <strong><?=$receiptInfo["objet"];?></strong>
+                Paye Par                : <strong><?= $receiptInfo[0][8]?></strong><br>
+                <?php if($receiptInfo[0][12]=='broker'){ ?>
+Intermédiaire         : <strong><?= $receiptInfo[0][13]?></strong><br>
+                <?php }else{?>
+M.O                       : <strong><?= $receiptInfo[0][4]?></strong><br>
+                <?php }?>
+Date de paiement   : <strong><?=date("d/m/Y",strtotime($receiptInfo[0][5])) ;?></strong><br>
+                Mode de paiement  : <strong><?= $receiptInfo[0][2]?></strong><br>
                 </pre>
             </div>
         </div>
@@ -109,44 +129,73 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             <th>N°</th>
             <th>Devis N°</th>
             <th>Dossier N°</th>
-            <th>Ref</th>
             <th>Service</th>
-            <th>Mode de paiement</th>
-            <th>Date de paiement</th>
+            <th>Prix</th>
+            <th>Montant Paye</th>
+            <th>Status</th>
         </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>12/23</td>
-                <td>NSW001</td>
-                <td>CF</td>
-                <td><?=strtoupper($receiptInfo["service_name"]);?></td>
-                <td><?=ucfirst($receiptInfo['pay_method']);?></td>
-                <td><?=date("d/m/Y",strtotime($receiptInfo["pay_date"])) ;?></td>
-            </tr>
-            <tr>
-                <td colspan="5"><strong>Service Prix</strong></td>
-                <td colspan="2"><strong><?=$receiptInfo["prix"];?> DHS</strong></td>
-            </tr>
-            <tr>
-                <td colspan="5">Montant Paye</td>
-                <td colspan="2"><?=$receiptInfo["montant_paye"];?></td>
-            </tr>
-            <tr>
-                <td colspan="5">Total Montant Paye</td>
-                <td colspan="2"><?=$receiptInfo["montant_paye"];?></td>
-            </tr>
-            <tr>
-                <td colspan="5"><strong>Rest</strong></td>
-                <td colspan="2"><strong><?=$receiptInfo["prix"];?> DHS</strong></td>
-            </tr>
+            <?php 
+            $number=1;
+            $Total_paye =0;
+            $Total_prix=0;
+                foreach($receiptInfo as $row){
+                    if($row[6]==$row[7]){
+                        $status ='Payé';
+                    }elseif($row[7]<$row[6]){
+                        if($row[6]==$row[11]){
+                        $status ='Payé';
+                        }else{
+                        $status ='Avance';
+                        }
+                    }
+                    if($row[10]!=NULL){
+                        $Dossier_N =$row[10];
+                    }else{
+                        $Dossier_N ='-';
+                    }
+                    
+                $html .= '<tr>';
+                $html .= '<td>'.$number.'</td>';
+                $html .= '<td> '.strtoupper($row[0]).' </td>';
+                $html .= '<td>'.$Dossier_N .'</td>';
+                $html .= '<td> '.strtoupper($row[3]).' </td>';
+                $html .= '<td> '.$row[6].' </td>';
+                $html .= '<td>'.$row[7].'</td>';
+                $html .= '<td> '.$status.' </td>';
+                $html .= '</tr>';
+                $Total_paye+=$row[7];
+                $Total_prix+=$row[6];
+                if($row[11]==$row[6]){
+                    $avance=$row[11]-$row[7];
+                    $Total_prix-=$avance;
+                }
+                $number++;
+            }
+            $html .= '</table>';
+            $html .= '<br>';
+            $html .= '<table class="S_table">';
+            $html .= '<tbody>';
+            $html .= '<tr>';
+            $html .= '<td colspan="4"> <strong>TOTAL PRIX :</strong> </td>';
+            $html .= '<td colspan="3"><strong> '.$Total_prix.' DH</strong> </td>';
+            $html .= '</tr>';
+            $html .= '<tr>';
+            $html .= '<td colspan="4"> <strong>TOTAL PAYE :</strong> </td>';
+            $html .= '<td colspan="3"><strong> '.$Total_paye.' DH</strong> </td>';
+            $html .= '</tr>';
+            $html .= '</tbody>';
+            $html .= '</table>';
+            echo  $html;
+                ?>
         </tbody>
     </table>
-    <h6>Audits et rapports mensuels (1er Novembre 2016 - 30 Novembre 2016)</h6>
+    <!-- <h6>Audits et rapports mensuels (1er Novembre 2016 - 30 Novembre 2016)</h6> -->
 
     <!--  end of the table  -->
-    <div>
+    <br>
+    <div style="clear:right">
         <p style="float:right;margin-right:10px;font-size:1.3rem" class="underline">Signé par order de directeur général</p><br>
     </div>
 

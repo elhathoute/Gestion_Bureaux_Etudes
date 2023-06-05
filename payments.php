@@ -43,13 +43,13 @@ if(isset($_SESSION["success"])){
                                                 <a href="#">Type</a>
                                             </th>
                                             <th>
-                                                <a href="#">Devis</a>
+                                                <a href="#">Reçu N°</a>
                                             </th>
                                             <th>
                                                 <a href="#">Entré par</a>
                                             </th>
                                             <th>
-                                                <a href="#">Client</a>
+                                                <a href="#">Payé Par</a>
                                             </th>
                                             <th>
                                                 <a href="#">Date</a>

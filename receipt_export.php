@@ -17,8 +17,8 @@
     
 
     // (Optional) Setup the paper size and orientation
-    // $dompdf->setPaper('A4', 'portrait');
-    $dompdf->setPaper('letter', 'landscape');
+    $dompdf->setPaper('A4', 'portrait');
+    // $dompdf->setPaper('letter', 'landscape');
     // Render the HTML as PDF
     $dompdf->render();
     
