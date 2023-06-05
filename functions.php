@@ -985,14 +985,14 @@ function payInvoice($invoice_id,$price,$pay_method){
 }
 
 //insert data to devis_payments
-function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$price,$montant_paye,$broker_commission){
+function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$price,$montant_paye,$broker_commission,$filter_type){
     $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
     if (mysqli_connect_errno()) {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
     $user_id = $_SESSION['user_id'];
-    $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `pay_method`,`user_id`,`devis_id`,`payment_giver`,`dossier_id`, `prix`,`montant_paye`,`broker_commission`) VALUES (null,'$service_id','$pay_method','$user_id','$devis_id','$payment_giver','$dossier_id','$price','$montant_paye','$broker_commission')";
+    $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `pay_method`,`user_id`,`devis_id`,`payment_giver`,`dossier_id`, `prix`,`montant_paye`,`broker_commission`,`filterType`) VALUES (null,'$service_id','$pay_method','$user_id','$devis_id','$payment_giver','$dossier_id','$price','$montant_paye','$broker_commission','$filter_type')";
     mysqli_query($cnx,$query);
     $last_id = mysqli_insert_id($cnx);
     return $last_id;
@@ -1299,19 +1299,16 @@ function addReceipt($paymentId,$pay_giver){
 }
 
 
-function getReceipt($payment_id){
+function getReceipt($R_number){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-    //this stored procedure for invoice receipt
-    // $query = "CALL `sp_getReceipt`('$payment_id');";
-
-    //this stored procedure for devis receipt
-    $query = "CALL `sp_getDevisReceipt`('$payment_id');";
+    $R_number=mysqli_real_escape_string($cnx,$R_number);
+    $query = "CALL `sp_getDevisReceipt`('$R_number');";
     $res = mysqli_query($cnx,$query);
-    $row = mysqli_fetch_assoc($res);
+    $row = mysqli_fetch_all($res);
     return $row;
 
 }
