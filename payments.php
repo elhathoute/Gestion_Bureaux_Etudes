@@ -38,18 +38,18 @@ if(isset($_SESSION["success"])){
                             <div>
                                 <table id="paymentInfoTable" class="table table-hover table-bordered table-striped" style="width:100%">
                                     <thead>
-                                        <tr>
+                                    <tr>
                                             <th>
                                                 <a href="#">Type</a>
                                             </th>
                                             <th>
-                                                <a href="#">Devis</a>
+                                                <a href="#">Reçu N°</a>
                                             </th>
                                             <th>
                                                 <a href="#">Entré par</a>
                                             </th>
                                             <th>
-                                                <a href="#">Client</a>
+                                                <a href="#">Payé Par</a>
                                             </th>
                                             <th>
                                                 <a href="#">Date</a>

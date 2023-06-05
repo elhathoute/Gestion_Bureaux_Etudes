@@ -1132,12 +1132,12 @@ function getPaymentsInfo(){
         $user = ucfirst($userRow["prenom"]) . ' ' . ucfirst($userRow['nom']);
         $html .= '<tr>';
         $html .= '<td> '.ucfirst($row["pay_method"]).' </td>';
-        $html .= '<td> '.ucfirst($row["number"]).' </td>';
+        $html .= '<td> '.ucfirst($row["R_number"]).' </td>';
         $html .= '<td> '.$user.' </td>';
-        $html .= '<td> '.$row["client"].' </td>';
+        $html .= '<td> '.$row["payment_giver"].' </td>';
         $html .= '<td> '.$row["pay_date"].' </td>';
         $html .= '<td> '.$row["montant_paye"].' </td>';
-        $html .= '<td class="text-center"> <a target="_blank" href="receipt_export.php?id='.$row["pay_id"].'" title="Imprimer Reçu"><i class="bi bi-paperclip"></i></a> </td>';
+        $html .= '<td class="text-center"> <a target="_blank" href="receipt_export.php?R_number='.$row["R_number"].'" title="Imprimer Reçu"><i class="bi bi-paperclip"></i></a> </td>';
         $html .= '</tr>';
     }
     return $html;
