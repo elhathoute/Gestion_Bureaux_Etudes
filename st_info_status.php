@@ -100,8 +100,10 @@ if(isset($_POST["clientID"])){
             $test = 'COALESCE(dp.total_montant_paye, 0) = 0 AND dd.prix > 0';
         } elseif ($paid_status == 1) {
             $test = 'COALESCE(dp.total_montant_paye, 0) = dp.prix';
-        } else {
+        } else if ($paid_status == 2) {
             $test = 'COALESCE(dp.total_montant_paye, 0) > 0 AND COALESCE(dp.total_montant_paye, 0) < dp.prix';
+        }else{
+            $test = 'dd.prix  =0';
         }
 
         $query = "SELECT d.id, d.id_client, d.number, d.remove_tva, dd.ref, dd.service_name, d.date_creation, dd.prix AS fprix, dd.discount,

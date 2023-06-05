@@ -1285,20 +1285,32 @@ function getReceiptNumber(){
 
 //add receipt to payment
 
-function addReceipt($paymentId,$pay_giver){
+function addReceipt($paymentId,$pay_giver,$receiptNumber){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
 
-    $receiptNumber = sprintf("%03d", getReceiptNumber()).'-'. date('m') .'/'.date('Y');
+    // $receiptNumber = sprintf("%03d", getReceiptNumber()).'-'. date('m') .'/'.date('Y');
 
     $query = "INSERT INTO `receipt`(`id`, `R_number`, `id_payment`,`pay_giver`) VALUES (null,'$receiptNumber','$paymentId','$pay_giver');";
     mysqli_query($cnx,$query);
 }
 
 
+// function getReceipt($payment_id){
+//     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+//     if(mysqli_connect_errno()){
+//         echo "Failed to connect to MySQL: " . mysqli_connect_error();
+//         exit();
+//     }
+//     $query = "CALL `sp_getDevisReceipt`('$payment_id');";
+//     $res = mysqli_query($cnx,$query);
+//     $row = mysqli_fetch_assoc($res);
+//     return $row;
+
+// }
 function getReceipt($R_number){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){

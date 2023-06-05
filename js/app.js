@@ -2408,6 +2408,7 @@ $(document).on("change","#selectBrokerClient",function(){
     // });
     $(document).on("click",".situationreload",function(){
         location.reload();
+        // $('#situationSelect').trigger('change');
     });
 
     let globalServices = [];
@@ -2977,6 +2978,7 @@ $.ajax({
                                 <option value="0">Non Payé</option>
                                 <option value="1">Payé</option>
                                 <option value="2">Avance</option>
+                                <option value="3">Gratuit</option>
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
