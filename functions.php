@@ -369,10 +369,15 @@ function getSelectedDevisInfo(){
     }
     if($_GET){
         $id = $_GET['id'];
-        $query = "SELECT devis.*,broker_devis.id_broker
+        $query = "SELECT devis.*,broker_devis.id_broker,broker.nom,broker.prenom
         FROM `devis` 
         LEFT JOIN broker_devis on devis.id=broker_devis.id_devis
+        LEFT JOIN broker on broker_devis.id_broker = broker.id
         WHERE devis.id=$id AND `remove`=0;";
+        // $query = "SELECT devis.*,broker_devis.id_broker
+        // FROM `devis` 
+        // LEFT JOIN broker_devis on devis.id=broker_devis.id_devis
+        // WHERE devis.id=$id AND `remove`=0;";
         $res = mysqli_query($cnx,$query);
         $row = mysqli_fetch_assoc($res);
         return $row; 
@@ -2031,13 +2036,13 @@ function getBrokerByDevis($idDevis,$idBroker)
     
 }
 //insert to dossier table
-function saveDossier($serv_id,$N_dossier,$ds_ref){
+function saveDossier($serv_id,$N_dossier,$ds_ref,$dosdate){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-    $query = "INSERT INTO `dossier`(`id_service`, `N_dossier`) VALUES ('$serv_id','$ds_ref$N_dossier')";
+    $query = "INSERT INTO `dossier`(`id_service`, `N_dossier` ,`date`) VALUES ('$serv_id','$ds_ref$N_dossier' ,'$dosdate')";
     mysqli_query($cnx,$query);
 }
 

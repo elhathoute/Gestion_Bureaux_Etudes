@@ -24,8 +24,6 @@
             width: 100%;
             margin-right: auto;
             margin-left: auto;
-            /* padding: 1.5rem; */
-            /* border: 2px solid red; */
         }
 
         
@@ -101,27 +99,28 @@
             <div class="my-5">
                 <div style="margin:auto;width:fit-content;text-align:center;font-weight:600;font-size:1.3rem">
                     <span>A</span><br>
-                    <span><?php echo strtoupper(getSelectedClientName());?></span><br>
-                    
-                    <!-- <textarea  value="" name="" id="receiverAdr" style='resize: none;height:auto;border:none;' disabled> -->
-                    <!-- <?php 
-                        $adr_ice = explode('/',getSelectedClientAdr());
-                        if(count($adr_ice) > 1){
-                            $string = $adr_ice[1] . '<br>' . $adr_ice[0];
-                            echo br2nl($string); 
-                        }else{
-                            echo getSelectedClientAdr();
-                        }
-                    ?> -->
-                    <!-- </textarea> -->
+                    <span><?php 
+                    if(isset($_GET['broker_id'])){
+                        echo strtoupper( $devisInfo['nom'].' '.$devisInfo['prenom']);
+                    }else{
+                        echo strtoupper(getSelectedClientName());
+                    }
+                    ?></span><br>
                     <span style="text-decoration:underline">Devis N°<?= $devisInfo["number"]  ?></span>
                 </div>
             </div>
         </section>
 
         <div class="my-5">
+            <?php
+            $MO='';
+            if(isset($_GET['broker_id'])){
+                $MO.='<span style="text-decoration:underline;margin-right:5px;">MO:</span><span> '.strtoupper(getSelectedClientName()).'</span><br><br>';
+                echo $MO;
+            }
+            ?>
             <span style="text-decoration:underline">Objet:</span><br>
-            <p style="text-align:center;padding:0 20px"><?=$devisInfo['objet'];?>. <span style="font-weight: bold !important;">Sise</span> à <span> <?= $devisInfo['located'] ?></span>.</p>
+            <p style="text-align:center;padding:0 20px"><?=$devisInfo['objet'];?>. <span style="font-weight: bold !important;">Sis</span> à <span> <?= $devisInfo['located'] ?></span>.</p>
         </div>
         <?php 
         if($_GET){ 
@@ -133,12 +132,16 @@
             $html = '';
             for ($i=0; $i < $splitRows ; $i++) {
                 
+                if(isset($_GET['broker_id'])){
+                    $query = "SELECT detail_devis.id ,detail_devis.id_devis ,detail_devis.service_name ,detail_broker_devis.new_prix ,detail_devis.quantity,detail_broker_devis.new_discount,detail_devis.unit,detail_devis.ref,detail_devis.srv_unique_id FROM `detail_devis` JOIN detail_broker_devis ON detail_devis.srv_unique_id = detail_broker_devis.srv_unique_id WHERE `id_devis`='$id' GROUP BY `empl` LIMIT $offset,12;";
+                }else{
+                    $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id' GROUP BY `empl` LIMIT $offset,12 ";
+                }
+                $res = mysqli_query($cnx, $query);
+                $row = mysqli_fetch_all($res);
             
-            $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$id' GROUP BY `empl` LIMIT $offset,12 ";
-            $res = mysqli_query($cnx, $query);
-            $row = mysqli_fetch_all($res);
             
-        
+        $total=0;
 
 
         $html .= '<table class="table">
@@ -169,6 +172,7 @@
                                 $html .= '<td>'.sprintf('%05.2f', round(floatval($prix)*floatval($data[4]),2)).'</td>';
                             $html .= '</tr>';
                             $num++;
+                            $total+=sprintf('%05.2f', round(floatval($prix)*floatval($data[4]),2));
                             
                         }
                     
@@ -187,29 +191,34 @@
                         
                     }
                     }
-                
-
-
                 // <!-- TOTALS -->
-                $html .= '<tr class="text-bold">
-                    <td colspan="5">TOTAL H.T</td>
-                    <td>'.$devisInfo["sub_total"].'</td>
-                </tr>';
-                
+                if(isset($_GET['broker_id'])){
+                    $total=sprintf('%05.2f', $total);
+                    $html .= '<tr class="text-bold">
+                        <td colspan="5">TOTAL H.T</td>
+                        <td>'.$total.'</td>
+                    </tr>';
+                }else{
+                    $html .= '<tr class="text-bold">
+                        <td colspan="5">TOTAL H.T</td>
+                        <td>'.$devisInfo["sub_total"].'</td>
+                    </tr>';
+                    
                     if($devisInfo['remove_tva']=="0"){
                         $html .= '
-                            <tr class="text-bold">
-                                <td colspan="5">TVA 20%</td>
-                                <td>'. sprintf('%05.2f', round(floatval($devisInfo['sub_total'])*0.2,2)).'</td>
-                            </tr>
-                            <tr class="text-bold">
-                                <td colspan="5">TOTAL T.T.C</td>
-                                <td>'.$devisInfo['net_total'].'</td>
-                            </tr>';
+                        <tr class="text-bold">
+                        <td colspan="5">TVA 20%</td>
+                        <td>'. sprintf('%05.2f', round(floatval($devisInfo['sub_total'])*0.2,2)).'</td>
+                        </tr>
+                        <tr class="text-bold">
+                        <td colspan="5">TOTAL T.T.C</td>
+                        <td>'.$devisInfo['net_total'].'</td>
+                        </tr>';
                     }
+                }
                     
                 
-           $html .= '</tbody>
+            $html .= '</tbody>
         </table>';
                     echo $html;
                 ?>
@@ -219,7 +228,20 @@
         <div class="my-3">
             <span>Arrêté la présent Devis à la somme de:</span>
             <!-- <?php var_dump($devisInfo)?> -->
-            <p class="underline"style="text-align:center;padding:0 20px;font-size:0.9rem;"><strong><?= intergerIntoFrenchWords($devisInfo['net_total']); ?> <span><?php if(($devisInfo['remove_tva']=="0")) {echo('T.T.C.');}else{ echo 'H.T.';} ?></span> </strong></p>
+            <p class="underline"style="text-align:center;padding:0 20px;font-size:0.9rem;"><strong><?php 
+             if(isset($_GET['broker_id'])){
+                 echo intergerIntoFrenchWords($total); 
+             }else{
+                echo intergerIntoFrenchWords($devisInfo['net_total']); 
+             }
+            ?> 
+            <span><?php 
+            if(isset($_GET['broker_id'])){
+                echo 'H.T.';
+            }else{
+                if(($devisInfo['remove_tva']=="0")) {echo('T.T.C.');}else{ echo 'H.T.';}
+            }
+            ?></span> </strong></p>
         </div>
         <div class="my-5"style="font-size:0.7rem;line-height:0.5;z-index:1">
             <span class='underline'><strong>Condition de vente:</strong></span>

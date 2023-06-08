@@ -2,8 +2,8 @@
     include 'includes/config.php';
     include 'functions.php';
     include 'dompdf/autoload.inc.php';
-
-    checkUrlVars("devis",$_GET['id']);
+    //to prevent accessing from url
+    checkUrlVars("devis",$_GET['id']); 
     checkUrlVars("client",$_GET['client_id']);
     // reference the Dompdf namespace
     use Dompdf\Dompdf;

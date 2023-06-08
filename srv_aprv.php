@@ -7,12 +7,13 @@
         $srv_id = $_POST['srv_id'];
         $n_dossier = $_POST['n_dossier'];
         $ds_ref=$_POST['ds_ref'];
+        $dosdate=$_POST['dosdate'];
 
         $query = "UPDATE `detail_devis` SET `approved`='1' WHERE `id`='$srv_id' ";
         $res= mysqli_query($cnx,$query);
         
         //save dossier to db
-        saveDossier($srv_id,$n_dossier,$ds_ref);
+        saveDossier($srv_id,$n_dossier,$ds_ref,$dosdate);
 
         if($res){
             $data = array('status'=>'success');

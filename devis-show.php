@@ -35,7 +35,8 @@ function br2nl($string)
     
     
     <div class="col-md-4 <?= ($role->hasPerm('export devis')) ? "":"hide-element" ?> <?= (strtoupper($devis['type'])==strtoupper("Approved"))? '' :  "hide-element";?>">
-        <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&client_id=<?=$_GET['client_id']?>' class="btn btn-primary float-end" title="Imprimer Devis"><i class="bi bi-download"></i> Export</a>
+        <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&client_id=<?=$_GET['client_id']?>' class="btn btn-primary float-end" title="Imprimer Maîtres d'ouvrage Devis"><i class="bi bi-download"></i> Export MO</a>
+        <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&broker_id=<?=$broker_id?>&client_id=<?=$_GET['client_id']?>' class="btn btn-danger float-end me-2" title="Imprimer Intermédiaire Devis"><i class="bi bi-download"></i> Export INT</a>
        <?php if(getDevisById($_GET['id'])['is_facture']=='0'){?>
        <button class="btn btn-secondary float-end me-2 btnConvertToFacture">Convertir en Facture </button> 
        <?php } else {?>

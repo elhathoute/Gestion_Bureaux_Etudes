@@ -11,12 +11,12 @@
         //Fetching all Services Title Data
         $res = getServiceData();
         $exist = false;
-        while($row=mysqli_fetch_assoc($res)){
-            if(strtolower(str_replace(" ","",$title)) == strtolower(str_replace(" ","",$row["title"]))){
-                $exist=true;
-                break;
-            }
-        }
+        // while($row=mysqli_fetch_assoc($res)){
+        //     if(strtolower(str_replace(" ","",$title)) == strtolower(str_replace(" ","",$row["title"]))){
+        //         $exist=true;
+        //         break;
+        //     }
+        // }
 
         
         if($exist){

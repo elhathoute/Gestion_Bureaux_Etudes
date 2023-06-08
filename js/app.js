@@ -3693,12 +3693,16 @@ $(document).on("click","#dossierClTable tbody tr button",function(){
                         html += `<input type="hidden" id="srv_id" value="${json[4]}">`;
                         html += `<div class="mb-3">
                                     <label  class="form-label fw-semibold">N° Dossier</label>
-                                    <div class="input-group ps-3">
-                                        <span class="input-group-text" id="ds_ref">${json[0]}</span>
-                                        <input type="text" class="form-control refTxt" placeholder="N° Dossier" aria-describedby="ds_ref" required>
+                                    <div class="d-flex">
+                                        <div class="input-group ps-3 me-3">
+                                            <span class="input-group-text" id="ds_ref">${json[0]}</span>
+                                            <input type="text" class="form-control refTxt" placeholder="N° Dossier" aria-describedby="ds_ref" required>
+                                        </div>
+                                        <div>
+                                            <input type="datetime-local" class="form-control " id="dsDate" placeholder="N° Dossier"   value="${getCurrentDateTime()}">
+                                        </div>
                                     </div>
-                                    <p id="error-ref-exist" class="text-danger fs-5 ms-3 mt-2"></p>
-
+                                        <p id="error-ref-exist" class="text-danger fs-5 ms-3 mt-2"></p>
                                 </div>`;
                         html += `<div class="mb-3">
                                     <label  class="form-label fw-semibold">Objet</label>
@@ -3735,11 +3739,24 @@ $(document).on("click","#dossierClTable tbody tr button",function(){
             
         }
     });
-
+// To Get Current Date and time in js
+function getCurrentDateTime() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 
     $(document).on("click","#btn_createDs",function(){
         const srv_id = $("#srv_id").val();
         let refTxt = $(".refTxt");
+        var dosdate = $("#dsDate").val();
+        // console.log(dosdate);
+        // alert(dosdate);
         let ds_ref =$('#ds_ref').text();
         // alert(ds_ref);
         if(refTxt.val() == ""){
@@ -3754,7 +3771,7 @@ $(document).on("click","#dossierClTable tbody tr button",function(){
             $.ajax({
                 url:"srv_aprv.php",
                 type:"POST",
-                data:{"srv_id":srv_id,"n_dossier":refTxt.val(),"ds_ref":ds_ref},
+                data:{"srv_id":srv_id,"n_dossier":refTxt.val(),"ds_ref":ds_ref,dosdate:dosdate},
                 success:function(data){
                     let json = JSON.parse(data);
                     const status = json.status;
