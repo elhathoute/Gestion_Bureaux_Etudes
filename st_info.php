@@ -32,6 +32,7 @@ while($row=mysqli_fetch_assoc($result)){
     $subarray[] = $row['total_montant_paye'];
     $subarray[] = $status;
     $subarray[] = '<a target="_blank" href="devis_export.php?id='.$row['id'].'&client_id='.$clientId.'" class="btn btn-secondary btn-sm" title="Afficher Devis" ><span><i class="bi bi-eye"></i></span></a>';
+    $subarray[] = $row['date_creation'];
     $data[] = $subarray;
     $number++;
 }

@@ -2432,8 +2432,10 @@ $(document).on("change","#selectBrokerClient",function(){
                     if(json.length != 0){
 
                         json.forEach(row => {
+                            var date =row[8]==null?'-':row[8];
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
+                            html += `<td>${date}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
@@ -2448,16 +2450,27 @@ $(document).on("change","#selectBrokerClient",function(){
                         uniqueSrv.forEach(srv => {
                             options += `<option value="${srv}">${srv}</option>`;
                         });
+                        const monthNames = [ "janvier","février", "mars", "avril", "mai", "juin", "juillet", "aout","septembre", "octobre", "novembre", "décembre" ];
+                        const monthOptions = monthNames.map((month, index) => {
+                            const value = index + 1;
+                            return `<option value="${value}">${month}</option>`;
+                        }).join("");
                         $("#expSitBtn").html(`
-                            <select name="" id="" class="form-select srvFilter">
-                                <option value="" selected disabled>services</option>
+                            <select name="" id="MonthSelect" class="form-select">
+                                <option value="" selected disabled>Month</option>
+                                ${monthOptions}
+                            </select>
+                            <input type="text" id="yearSelect" class="form-control mx-2 placeholder="Years">
+                            <select name="" id="allsrvFilter" class="form-select allsrvFilter">
+                                <option value="" selected disabled>Services</option>
                                 ${options}
                             </select>
-                            <select name="" id="" class="form-select mx-2 statusFilter">
+                            <select name="" id="allSrvstatusFilter" class="form-select mx-2 allSrvstatusFilter">
                                 <option value="" selected disabled>Status</option>
-                                <option value="0">Non Payé</option>
-                                <option value="1">Payé</option>
-                                <option value="2">Avance</option>
+                                <option value="Non Payé">Non Payé</option>
+                                <option value="Payé">Payé</option>
+                                <option value="Avance">Avance</option>
+                                <option value="Gratuit">Gratuit</option>
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -2477,7 +2490,38 @@ $(document).on("change","#selectBrokerClient",function(){
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#situationTable tbody").html(html);
                     // $("#expSitBtn").html(`<a target="_blank" href='situation_export.php?cl_id=${clientID}' class="btn btn-primary float-end" title="Imprimer Facture"><i class="bi bi-download "></i> Export</a>`);
-                    
+                    // Event handler for filtering by year
+                    $('#yearSelect').on('input', function() {
+                        var selectedYear = $(this).val();
+                        var selectedMonth = $('#MonthSelect').val();
+                        var selectedStatus=$('#allSrvstatusFilter').val();
+                        var selectedService=$('#allsrvFilter').val();
+                        filterTableByYear(selectedYear,selectedMonth,selectedStatus,selectedService);
+                    });
+                    // Event handler for filtering by month
+                    $('#MonthSelect').on('change', function() {
+                        var selectedMonth = $(this).val();
+                        var selectedYear = $('#yearSelect').val();
+                        var selectedStatus=$('#allSrvstatusFilter').val();
+                        var selectedService=$('#allsrvFilter').val();
+                        filterTableByMonth(selectedMonth,selectedYear,selectedStatus,selectedService);
+                    });
+                    //Event handler for filtering By status
+                    $('#allSrvstatusFilter').on('change',function(){
+                        var selectedStatus= $(this).val();
+                        var selectedService=$('#allsrvFilter').val();
+                        var selectedMonth = $('#MonthSelect').val();
+                        var selectedYear = $('#yearSelect').val();
+                        filterTableByStatus(selectedStatus,selectedService,selectedMonth,selectedYear);
+                    });
+                    //Event handler for filtering By srvName
+                    $('#allsrvFilter').on('change',function(){
+                        var selectedService= $(this).val();
+                        var selectedStatus=$('#allSrvstatusFilter').val();
+                        var selectedMonth = $('#MonthSelect').val();
+                        var selectedYear = $('#yearSelect').val();
+                        filterTableByService(selectedService,selectedStatus,selectedMonth,selectedYear);
+                    });
                 }
             });
         }
@@ -2500,7 +2544,7 @@ $(document).on("change","#selectBrokerClient",function(){
                 data : {brokerId:brokerId},
                 type:"POST",
                 success:function(data){
-                    console.log(data);
+                    // console.log(data);
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     let services = [];
@@ -2508,8 +2552,10 @@ $(document).on("change","#selectBrokerClient",function(){
                     if(json.length != 0){
 
                         json.forEach(row => {
+                            var date =row[8]==null?'-':row[8];
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
+                            html += `<td>${date}</td>`;
                             html += `<td>${row[1]}</td>`;
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
@@ -2524,17 +2570,28 @@ $(document).on("change","#selectBrokerClient",function(){
                         uniqueSrv.forEach(srv => {
                             options += `<option value="${srv}">${srv}</option>`;
                         });
+                        const monthNames = [ "janvier","février", "mars", "avril", "mai", "juin", "juillet", "aout","septembre", "octobre", "novembre", "décembre" ];
+                        const monthOptions = monthNames.map((month, index) => {
+                            const value = index + 1;
+                            return `<option value="${value}">${month}</option>`;
+                        }).join("");
                         $("#expSitBtn").html(`
-                            <select name="" id="" class="form-select brsrvFilter">
-                                <option value="" selected disabled>services</option>
-                                ${options}
-                            </select>
-                            <select name="" id="" class="form-select mx-2 brstatusFilter">
-                                <option value="" selected disabled>Status</option>
-                                <option value="0">Non Payé</option>
-                                <option value="1">Payé</option>
-                                <option value="2">Avance</option>
-                            </select>
+                        <select name="" id="MonthSelect" class="form-select">
+                            <option value="" selected disabled>Month</option>
+                            ${monthOptions}
+                        </select>
+                        <input type="text" id="yearSelect" class="form-control mx-2 placeholder="Years">
+                        <select name="" id="allsrvFilter" class="form-select allsrvFilter">
+                            <option value="" selected disabled>Services</option>
+                            ${options}
+                        </select>
+                        <select name="" id="allSrvstatusFilter" class="form-select mx-2 allSrvstatusFilter">
+                            <option value="" selected disabled>Status</option>
+                            <option value="Non Payé">Non Payé</option>
+                            <option value="Payé">Payé</option>
+                            <option value="Avance">Avance</option>
+                            <option value="Gratuit">Gratuit</option>
+                        </select>
                             <div class="btn-group BtnExportSt" role="group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             Export
@@ -2551,6 +2608,38 @@ $(document).on("change","#selectBrokerClient",function(){
                     }
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#situationTable tbody").html(html);
+                      // Event handler for filtering by year
+                    $('#yearSelect').on('input', function() {
+                        var selectedYear = $(this).val();
+                        var selectedMonth = $('#MonthSelect').val();
+                        var selectedStatus=$('#allSrvstatusFilter').val();
+                        var selectedService=$('#allsrvFilter').val();
+                        filterTableByYear(selectedYear,selectedMonth,selectedStatus,selectedService);
+                    });
+                    // Event handler for filtering by month
+                    $('#MonthSelect').on('change', function() {
+                        var selectedMonth = $(this).val();
+                        var selectedYear = $('#yearSelect').val();
+                        var selectedStatus=$('#allSrvstatusFilter').val();
+                        var selectedService=$('#allsrvFilter').val();
+                        filterTableByMonth(selectedMonth,selectedYear,selectedStatus,selectedService);
+                    });
+                    //Event handler for filtering By status
+                    $('#allSrvstatusFilter').on('change',function(){
+                        var selectedStatus= $(this).val();
+                        var selectedService=$('#allsrvFilter').val();
+                        var selectedMonth = $('#MonthSelect').val();
+                        var selectedYear = $('#yearSelect').val();
+                        filterTableByStatus(selectedStatus,selectedService,selectedMonth,selectedYear);
+                    });
+                    //Event handler for filtering By srvName
+                    $('#allsrvFilter').on('change',function(){
+                        var selectedService= $(this).val();
+                        var selectedStatus=$('#allSrvstatusFilter').val();
+                        var selectedMonth = $('#MonthSelect').val();
+                        var selectedYear = $('#yearSelect').val();
+                        filterTableByService(selectedService,selectedStatus,selectedMonth,selectedYear);
+                    });
                     
                 }
             });
@@ -2564,180 +2653,180 @@ $(document).on("change","#selectBrokerClient",function(){
                 //--------------------start of filter broker with service name-------
                 //---------------------------------------------------------------------
 
-$(document).on('change','.brsrvFilter',function(){
-    const brokerId = $("#brokerSelectsituation").val();
-    const srv_name = $(this).val();
-    let paid_status = "";
-    let st_pdf_href = `situation_export.php?br_id=${brokerId}`;
-    function makeRequest(){
-        lunchLoader();
-        if($(".brstatusFilter").val() != null){
-            paid_status = $(".brstatusFilter").val();
-            st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-            return $.ajax({
-                url:'st_info_both.php',
-                type:'POST',
-                data:{brokerId:brokerId,paid_status:paid_status,srv_name:srv_name}
-            });
-        }else{
-            st_pdf_href = `situation_export.php?br_id=${brokerId}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-            return $.ajax({
-                url:'st_info_srv.php',
-                type:'POST',
-                data:{brokerId:brokerId,srv_name:srv_name}
-            });
-        }
-    }
-    $.when(makeRequest()).then(function successHandler(data){
+// $(document).on('change','.brsrvFilter',function(){
+//     const brokerId = $("#brokerSelectsituation").val();
+//     const srv_name = $(this).val();
+//     let paid_status = "";
+//     let st_pdf_href = `situation_export.php?br_id=${brokerId}`;
+//     function makeRequest(){
+//         lunchLoader();
+//         if($(".brstatusFilter").val() != null){
+//             paid_status = $(".brstatusFilter").val();
+//             st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+//             return $.ajax({
+//                 url:'st_info_both.php',
+//                 type:'POST',
+//                 data:{brokerId:brokerId,paid_status:paid_status,srv_name:srv_name}
+//             });
+//         }else{
+//             st_pdf_href = `situation_export.php?br_id=${brokerId}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+//             return $.ajax({
+//                 url:'st_info_srv.php',
+//                 type:'POST',
+//                 data:{brokerId:brokerId,srv_name:srv_name}
+//             });
+//         }
+//     }
+//     $.when(makeRequest()).then(function successHandler(data){
         
-        var json = JSON.parse(data)["data"];
-                var html =``;
-                let services = globalServices;
-                let options = ``;
-                if(json.length != 0){
+//         var json = JSON.parse(data)["data"];
+//                 var html =``;
+//                 let services = globalServices;
+//                 let options = ``;
+//                 if(json.length != 0){
 
-                    json.forEach(row => {
-                        html += `<tr>`;
-                        html += `<td>${row[0]}</td>`;
-                        html += `<td>${row[1]}</td>`;
-                        html += `<td>${row[2]}</td>`;
-                        html += `<td>${row[3]}</td>`;
-                        html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
-                        html += `<td>${row[5]} DH</td>`;
-                        html += `<td>${row[6]}</td>`;
-                        html += `<td class="text-center">${row[7]}</td>`;
-                        html += `</tr>`;
-                        // services.push(row[3]);
-                    });
-                    let uniqueSrv = [...new Set(services)];
-                    uniqueSrv.forEach(srv => {
-                        options += `<option value="${srv}">${srv}</option>`;
-                    });
-                    $("#expSitBtn").html(`
-                        <select name="" id="" class="form-select brsrvFilter">
-                            <option value="" selected disabled>Services</option>
-                            ${options}
-                        </select>
-                        <select name="" id="" class="form-select mx-2 brstatusFilter">
-                            <option value="" selected disabled>Status</option>
-                            <option value="0">Non Payé</option>
-                            <option value="1">Payé</option>
-                            <option value="2">Avance</option>
-                        </select>
-                        <div class="btn-group BtnExportSt" role="group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Export
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
-                        </ul>
-                    </div>
-                    `);
-                    $(".brsrvFilter").val(srv_name);
-                    $(".brstatusFilter").val(paid_status);
-                    $('.BtnExportSt').removeClass('invisible');
-                }else{
-                    html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
-                    // $("#expSitBtn").html('');
-                    $('.BtnExportSt').addClass('invisible');
-                }
-                $(".loader-wrapper").addClass("loader-hidden");
-                $("#situationTable tbody").html(html);
-                setTimeout(()=>$(".loader-wrapper").remove(),2000);
-    }),
-    function errorHandler(){
-        console.log('error occurred');
-    }
-});
+//                     json.forEach(row => {
+//                         html += `<tr>`;
+//                         html += `<td>${row[0]}</td>`;
+//                         html += `<td>${row[1]}</td>`;
+//                         html += `<td>${row[2]}</td>`;
+//                         html += `<td>${row[3]}</td>`;
+//                         html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+//                         html += `<td>${row[5]} DH</td>`;
+//                         html += `<td>${row[6]}</td>`;
+//                         html += `<td class="text-center">${row[7]}</td>`;
+//                         html += `</tr>`;
+//                         // services.push(row[3]);
+//                     });
+//                     let uniqueSrv = [...new Set(services)];
+//                     uniqueSrv.forEach(srv => {
+//                         options += `<option value="${srv}">${srv}</option>`;
+//                     });
+//                     $("#expSitBtn").html(`
+//                         <select name="" id="" class="form-select brsrvFilter">
+//                             <option value="" selected disabled>Services</option>
+//                             ${options}
+//                         </select>
+//                         <select name="" id="" class="form-select mx-2 brstatusFilter">
+//                             <option value="" selected disabled>Status</option>
+//                             <option value="0">Non Payé</option>
+//                             <option value="1">Payé</option>
+//                             <option value="2">Avance</option>
+//                         </select>
+//                         <div class="btn-group BtnExportSt" role="group">
+//                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+//                         Export
+//                         </button>
+//                         <ul class="dropdown-menu">
+//                             <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+//                         </ul>
+//                     </div>
+//                     `);
+//                     $(".brsrvFilter").val(srv_name);
+//                     $(".brstatusFilter").val(paid_status);
+//                     $('.BtnExportSt').removeClass('invisible');
+//                 }else{
+//                     html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+//                     // $("#expSitBtn").html('');
+//                     $('.BtnExportSt').addClass('invisible');
+//                 }
+//                 $(".loader-wrapper").addClass("loader-hidden");
+//                 $("#situationTable tbody").html(html);
+//                 setTimeout(()=>$(".loader-wrapper").remove(),2000);
+//     }),
+//     function errorHandler(){
+//         console.log('error occurred');
+//     }
+// });
 
                 //---------------------------------------------------------------------
                 //------------------start of filter broker with paid status------------ 
                 //---------------------------------------------------------------------
 
-    $(document).on('change','.brstatusFilter',function(){
-        const brokerId = $("#brokerSelectsituation").val();
-        const paid_status = $(this).val();
-        let srv_name = "";
-        // let st_pdf_href = `situation_export.php?br_id=${brokerId}`;
-        function makeRequest(){
-            lunchLoader();
-            if($(".brsrvFilter").val() != null){
-                srv_name = $(".brsrvFilter").val();
-                st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-                return $.ajax({
-                    url:'st_info_both.php',
-                    type:'POST',
-                    data:{brokerId:brokerId,paid_status:paid_status,srv_name:srv_name}
-                });
-            }else{
-                st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}`;
-                return $.ajax({
-                    url:'st_info_status.php',
-                    type:'POST',
-                    data:{brokerId:brokerId,paid_status:paid_status}
-                });
-            }
-        }
-        $.when(makeRequest()).then(function successHandler(data){
-            console.log(data)
-            var json = JSON.parse(data)["data"];
-                    var html =``;
-                    let services = globalServices;
-                    let options = ``;
-                    if(json.length != 0){
-                        json.forEach(row => {
-                            html += `<tr>`;
-                            html += `<td>${row[0]}</td>`;
-                            html += `<td>${row[1]}</td>`;
-                            html += `<td>${row[2]}</td>`;
-                            html += `<td>${row[3]}</td>`;
-                            html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
-                            html += `<td>${row[5]} DH</td>`;
-                            html += `<td>${row[6]}</td>`;
-                            html += `<td class="text-center">${row[7]}</td>`;
-                            html += `</tr>`;
-                        });
-                        let uniqueSrv = [...new Set(services)];
-                        uniqueSrv.forEach(srv => {
-                            options += `<option value="${srv}">${srv}</option>`;
-                        });
-                        $("#expSitBtn").html(`
-                            <select name="" id="" class="form-select brsrvFilter">
-                                <option value="" selected disabled>Services</option>
-                                ${options}
-                            </select>
-                            <select name="" id="" class="form-select mx-2 brstatusFilter">
-                                <option value="" selected disabled>Status</option>
-                                <option value="0">Non Payé</option>
-                                <option value="1">Payé</option>
-                                <option value="2">Avance</option>
-                            </select>
-                            <div class="btn-group BtnExportSt" role="group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Export
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
-                                </ul>
-                            </div>
+    // $(document).on('change','.brstatusFilter',function(){
+    //     const brokerId = $("#brokerSelectsituation").val();
+    //     const paid_status = $(this).val();
+    //     let srv_name = "";
+    //     // let st_pdf_href = `situation_export.php?br_id=${brokerId}`;
+    //     function makeRequest(){
+    //         lunchLoader();
+    //         if($(".brsrvFilter").val() != null){
+    //             srv_name = $(".brsrvFilter").val();
+    //             st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+    //             return $.ajax({
+    //                 url:'st_info_both.php',
+    //                 type:'POST',
+    //                 data:{brokerId:brokerId,paid_status:paid_status,srv_name:srv_name}
+    //             });
+    //         }else{
+    //             st_pdf_href = `situation_export.php?br_id=${brokerId}&pd_st=${paid_status}`;
+    //             return $.ajax({
+    //                 url:'st_info_status.php',
+    //                 type:'POST',
+    //                 data:{brokerId:brokerId,paid_status:paid_status}
+    //             });
+    //         }
+    //     }
+    //     $.when(makeRequest()).then(function successHandler(data){
+    //         console.log(data)
+    //         var json = JSON.parse(data)["data"];
+    //                 var html =``;
+    //                 let services = globalServices;
+    //                 let options = ``;
+    //                 if(json.length != 0){
+    //                     json.forEach(row => {
+    //                         html += `<tr>`;
+    //                         html += `<td>${row[0]}</td>`;
+    //                         html += `<td>${row[1]}</td>`;
+    //                         html += `<td>${row[2]}</td>`;
+    //                         html += `<td>${row[3]}</td>`;
+    //                         html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+    //                         html += `<td>${row[5]} DH</td>`;
+    //                         html += `<td>${row[6]}</td>`;
+    //                         html += `<td class="text-center">${row[7]}</td>`;
+    //                         html += `</tr>`;
+    //                     });
+    //                     let uniqueSrv = [...new Set(services)];
+    //                     uniqueSrv.forEach(srv => {
+    //                         options += `<option value="${srv}">${srv}</option>`;
+    //                     });
+    //                     $("#expSitBtn").html(`
+    //                         <select name="" id="" class="form-select brsrvFilter">
+    //                             <option value="" selected disabled>Services</option>
+    //                             ${options}
+    //                         </select>
+    //                         <select name="" id="" class="form-select mx-2 brstatusFilter">
+    //                             <option value="" selected disabled>Status</option>
+    //                             <option value="0">Non Payé</option>
+    //                             <option value="1">Payé</option>
+    //                             <option value="2">Avance</option>
+    //                         </select>
+    //                         <div class="btn-group BtnExportSt" role="group">
+    //                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    //                             Export
+    //                             </button>
+    //                             <ul class="dropdown-menu">
+    //                                 <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+    //                             </ul>
+    //                         </div>
                             
-                        `);
-                        $(".brsrvFilter").val(srv_name);
-                        $(".brstatusFilter").val(paid_status);
-                        $('.BtnExportSt').removeClass('invisible');
-                    }else{
-                        html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
-                        // $("#expSitBtn").html('');
-                        $('.BtnExportSt').addClass('invisible');
-                    }
-                    $(".loader-wrapper").addClass("loader-hidden");
-                    $("#situationTable tbody").html(html);
-                    setTimeout(()=>$(".loader-wrapper").remove(),2000);
-        }),
-        function errorHandler(){
-            console.log('error occurred');
-        }
-    });
+    //                     `);
+    //                     $(".brsrvFilter").val(srv_name);
+    //                     $(".brstatusFilter").val(paid_status);
+    //                     $('.BtnExportSt').removeClass('invisible');
+    //                 }else{
+    //                     html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+    //                     // $("#expSitBtn").html('');
+    //                     $('.BtnExportSt').addClass('invisible');
+    //                 }
+    //                 $(".loader-wrapper").addClass("loader-hidden");
+    //                 $("#situationTable tbody").html(html);
+    //                 setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    //     }),
+    //     function errorHandler(){
+    //         console.log('error occurred');
+    //     }
+    // });
 
                 //---------------------------------------------------------------------
                 //------------------end of filter broker with paid status------------ 
@@ -2748,191 +2837,187 @@ $(document).on('change','.brsrvFilter',function(){
     * Filter Situation with Payment status
     */
 
-    $(document).on('change','.statusFilter',function(){
-        const clientID = $("#situationSelect").val();
-        const paid_status = $(this).val();
-        // console.log('statu'+paid_status);
-        let srv_name = "";
-        let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
-        let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
-        function makeRequest(){
-            lunchLoader();
-            if($(".srvFilter").val() != null){
-                srv_name = $(".srvFilter").val();
-                // hrefs for pdf && excel
-                st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-                st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-                return $.ajax({
-                    url:'st_info_both.php',
-                    type:'POST',
-                    data:{clientID:clientID,paid_status:paid_status,srv_name:srv_name}
-                });
-            }else{
-                st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
-                st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
-                return $.ajax({
-                    url:'st_info_status.php',
-                    type:'POST',
-                    data:{clientID:clientID,paid_status:paid_status}
-                });
-            }
-        }
-        $.when(makeRequest()).then(function successHandler(data){
+    // $(document).on('change','.statusFilter',function(){
+    //     const clientID = $("#situationSelect").val();
+    //     const paid_status = $(this).val();
+    //     // console.log('statu'+paid_status);
+    //     let srv_name = "";
+    //     let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
+    //     let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
+    //     function makeRequest(){
+    //         lunchLoader();
+    //         if($(".srvFilter").val() != null){
+    //             srv_name = $(".srvFilter").val();
+    //             // hrefs for pdf && excel
+    //             st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+    //             st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+    //             return $.ajax({
+    //                 url:'st_info_both.php',
+    //                 type:'POST',
+    //                 data:{clientID:clientID,paid_status:paid_status,srv_name:srv_name}
+    //             });
+    //         }else{
+    //             st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
+    //             st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
+    //             return $.ajax({
+    //                 url:'st_info_status.php',
+    //                 type:'POST',
+    //                 data:{clientID:clientID,paid_status:paid_status}
+    //             });
+    //         }
+    //     }
+    //     $.when(makeRequest()).then(function successHandler(data){
             
-            var json = JSON.parse(data)["data"];
-                    var html =``;
-                    let services = globalServices;
-                    let options = ``;
-                    if(json.length != 0){
+    //         var json = JSON.parse(data)["data"];
+    //                 var html =``;
+    //                 let services = globalServices;
+    //                 let options = ``;
+    //                 if(json.length != 0){
 
-                        json.forEach(row => {
-                            html += `<tr>`;
-                            html += `<td>${row[0]}</td>`;
-                            html += `<td>${row[1]}</td>`;
-                            html += `<td>${row[2]}</td>`;
-                            html += `<td>${row[3]}</td>`;
-                            html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
-                            html += `<td>${row[5]} DH</td>`;
-                            html += `<td>${row[6]}</td>`;
-                            html += `<td class="text-center">${row[7]}</td>`;
-                            html += `</tr>`;
-                            // services.push(row[3]);
-                        });
-                        let uniqueSrv = [...new Set(services)];
-                        uniqueSrv.forEach(srv => {
-                            options += `<option value="${srv}">${srv}</option>`;
-                        });
-                        $("#expSitBtn").html(`
-                            <select name="" id="" class="form-select srvFilter">
-                                <option value="" selected disabled>Services</option>
-                                ${options}
-                            </select>
-                            <select name="" id="" class="form-select mx-2 statusFilter">
-                                <option value="" selected disabled>Status</option>
-                                <option value="0">Non Payé</option>
-                                <option value="1">Payé</option>
-                                <option value="2">Avance</option>
-                            </select>
-                            <div class="btn-group BtnExportSt" role="group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Export
-                                </button>
-                                <ul class="dropdown-menu">
-                                <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
-                                <li><a class="dropdown-item st_exp_excel" target="_blank" href=${st_excel_href}>Excel</a></li>
-                                </ul>
-                            </div>
-                        `);
-                        $(".statusFilter").val(paid_status);
-                        $(".srvFilter").val(srv_name);
-                        $('.BtnExportSt').removeClass('invisible');
-                    }else{
-                        html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
-                        // $("#expSitBtn").html('');
-                        $('.BtnExportSt').addClass('invisible');
-                    }
-                    $(".loader-wrapper").addClass("loader-hidden");
-                    $("#situationTable tbody").html(html);
-                    setTimeout(()=>$(".loader-wrapper").remove(),2000);
-        }),
-        function errorHandler(){
-            console.log('error occurred');
-        }
-    });
+    //                     json.forEach(row => {
+    //                         html += `<tr>`;
+    //                         html += `<td>${row[0]}</td>`;
+    //                         html += `<td>${row[1]}</td>`;
+    //                         html += `<td>${row[2]}</td>`;
+    //                         html += `<td>${row[3]}</td>`;
+    //                         html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+    //                         html += `<td>${row[5]} DH</td>`;
+    //                         html += `<td>${row[6]}</td>`;
+    //                         html += `<td class="text-center">${row[7]}</td>`;
+    //                         html += `</tr>`;
+    //                         // services.push(row[3]);
+    //                     });
+    //                     let uniqueSrv = [...new Set(services)];
+    //                     uniqueSrv.forEach(srv => {
+    //                         options += `<option value="${srv}">${srv}</option>`;
+    //                     });
+    //                     $("#expSitBtn").html(`
+    //                         <select name="" id="" class="form-select srvFilter">
+    //                             <option value="" selected disabled>Services</option>
+    //                             ${options}
+    //                         </select>
+    //                         <select name="" id="" class="form-select mx-2 statusFilter">
+    //                             <option value="" selected disabled>Status</option>
+    //                             <option value="0">Non Payé</option>
+    //                             <option value="1">Payé</option>
+    //                             <option value="2">Avance</option>
+    //                         </select>
+    //                         <div class="btn-group BtnExportSt" role="group">
+    //                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    //                             Export
+    //                             </button>
+    //                             <ul class="dropdown-menu">
+    //                             <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+    //                             <li><a class="dropdown-item st_exp_excel" target="_blank" href=${st_excel_href}>Excel</a></li>
+    //                             </ul>
+    //                         </div>
+    //                     `);
+    //                     $(".statusFilter").val(paid_status);
+    //                     $(".srvFilter").val(srv_name);
+    //                     $('.BtnExportSt').removeClass('invisible');
+    //                 }else{
+    //                     html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+    //                     // $("#expSitBtn").html('');
+    //                     $('.BtnExportSt').addClass('invisible');
+    //                 }
+    //                 $(".loader-wrapper").addClass("loader-hidden");
+    //                 $("#situationTable tbody").html(html);
+    //                 setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    //     }),
+    //     function errorHandler(){
+    //         console.log('error occurred');
+    //     }
+    // });
 
 
-    $(document).on('change','.srvFilter',function(){
-        const clientID = $("#situationSelect").val();
-        const srv_name = $(this).val();
-        let paid_status = "";
-        let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
-        let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
-        function makeRequest(){
-            lunchLoader();
-            if($(".statusFilter").val() != null){
+    // $(document).on('change','.srvFilter',function(){
+    //     const clientID = $("#situationSelect").val();
+    //     const srv_name = $(this).val();
+    //     let paid_status = "";
+    //     let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
+    //     let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
+    //     function makeRequest(){
+    //         lunchLoader();
+    //         if($(".statusFilter").val() != null){
                 
-                paid_status = $(".statusFilter").val();
-                st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-                st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-                return $.ajax({
-                    url:'st_info_both.php',
-                    type:'POST',
-                    data:{clientID:clientID,paid_status:paid_status,srv_name:srv_name}
-                });
-            }else{
-                st_pdf_href = `situation_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-                st_excel_href = `situation_excel_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-                return $.ajax({
-                    url:'st_info_srv.php',
-                    type:'POST',
-                    data:{clientID:clientID,srv_name:srv_name}
-                });
-            }
-        }
-        $.when(makeRequest()).then(function successHandler(data){
+    //             paid_status = $(".statusFilter").val();
+    //             st_pdf_href = `situation_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+    //             st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+    //             return $.ajax({
+    //                 url:'st_info_both.php',
+    //                 type:'POST',
+    //                 data:{clientID:clientID,paid_status:paid_status,srv_name:srv_name}
+    //             });
+    //         }else{
+    //             st_pdf_href = `situation_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+    //             st_excel_href = `situation_excel_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+    //             return $.ajax({
+    //                 url:'st_info_srv.php',
+    //                 type:'POST',
+    //                 data:{clientID:clientID,srv_name:srv_name}
+    //             });
+    //         }
+    //     }
+    //     $.when(makeRequest()).then(function successHandler(data){
             
-            var json = JSON.parse(data)["data"];
-                    var html =``;
-                    let services = globalServices;
-                    let options = ``;
-                    if(json.length != 0){
+    //         var json = JSON.parse(data)["data"];
+    //                 var html =``;
+    //                 let services = globalServices;
+    //                 let options = ``;
+    //                 if(json.length != 0){
 
-                        json.forEach(row => {
-                            // var status =  row[6]=='1'? '<span class="badge text-bg-success">Payé</span>' : '<span class="badge avance-color">Avance</span>' ;
-                            // let price = row[8] == '0'?parseFloat(row[4]) * 1.2 : parseFloat(row[4]);
-                            html += `<tr>`;
-                            html += `<td>${row[0]}</td>`;
-                            html += `<td>${row[1]}</td>`;
-                            html += `<td>${row[2]}</td>`;
-                            html += `<td>${row[3]}</td>`;
-                            html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
-                            html += `<td>${row[5]} DH</td>`;
-                            html += `<td>${row[6]}</td>`;
-                            html += `<td class="text-center">${row[7]}</td>`;
-                            html += `</tr>`;
-                            // services.push(row[3]);
-                        });
-                        let uniqueSrv = [...new Set(services)];
-                        uniqueSrv.forEach(srv => {
-                            options += `<option value="${srv}">${srv}</option>`;
-                        });
-                        $("#expSitBtn").html(`
-                            <select name="" id="" class="form-select srvFilter">
-                                <option value="" selected disabled>Services</option>
-                                ${options}
-                            </select>
-                            <select name="" id="" class="form-select mx-2 statusFilter">
-                                <option value="" selected disabled>Status</option>
-                                <option value="0">Non Payé</option>
-                                <option value="1">Payé</option>
-                                <option value="2">Avance</option>
-                            </select>
-                            <div class="btn-group BtnExportSt" role="group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Export
-                                </button>
-                                <ul class="dropdown-menu">
-                                <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
-                                <li><a class="dropdown-item st_exp_excel" target="_blank" href=${st_excel_href}>Excel</a></li>
-                                </ul>
-                            </div>
-                        `);
-                        $(".srvFilter").val(srv_name);
-                        $(".statusFilter").val(paid_status);
-                        $('.BtnExportSt').removeClass('invisible');
-                    }else{
-                        html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
-                        // $("#expSitBtn").html('');
-                        $('.BtnExportSt').addClass('invisible');
-                    }
-                    $(".loader-wrapper").addClass("loader-hidden");
-                    $("#situationTable tbody").html(html);
-                    setTimeout(()=>$(".loader-wrapper").remove(),2000);
-        }),
-        function errorHandler(){
-            console.log('error occurred');
-        }
-    });
+    //                     json.forEach(row => {
+    //                         html += `<tr>`;
+    //                         html += `<td>${row[0]}</td>`;
+    //                         html += `<td>${row[1]}</td>`;
+    //                         html += `<td>${row[2]}</td>`;
+    //                         html += `<td>${row[3]}</td>`;
+    //                         html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+    //                         html += `<td>${row[5]} DH</td>`;
+    //                         html += `<td>${row[6]}</td>`;
+    //                         html += `<td class="text-center">${row[7]}</td>`;
+    //                         html += `</tr>`;
+    //                     });
+    //                     let uniqueSrv = [...new Set(services)];
+    //                     uniqueSrv.forEach(srv => {
+    //                         options += `<option value="${srv}">${srv}</option>`;
+    //                     });
+    //                     $("#expSitBtn").html(`
+    //                         <select name="" id="" class="form-select srvFilter">
+    //                             <option value="" selected disabled>Services</option>
+    //                             ${options}
+    //                         </select>
+    //                         <select name="" id="" class="form-select mx-2 statusFilter">
+    //                             <option value="" selected disabled>Status</option>
+    //                             <option value="0">Non Payé</option>
+    //                             <option value="1">Payé</option>
+    //                             <option value="2">Avance</option>
+    //                         </select>
+    //                         <div class="btn-group BtnExportSt" role="group">
+    //                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    //                             Export
+    //                             </button>
+    //                             <ul class="dropdown-menu">
+    //                             <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+    //                             <li><a class="dropdown-item st_exp_excel" target="_blank" href=${st_excel_href}>Excel</a></li>
+    //                             </ul>
+    //                         </div>
+    //                     `);
+    //                     $(".srvFilter").val(srv_name);
+    //                     $(".statusFilter").val(paid_status);
+    //                     $('.BtnExportSt').removeClass('invisible');
+    //                 }else{
+    //                     html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+    //                     $('.BtnExportSt').addClass('invisible');
+    //                 }
+    //                 $(".loader-wrapper").addClass("loader-hidden");
+    //                 $("#situationTable tbody").html(html);
+    //                 setTimeout(()=>$(".loader-wrapper").remove(),2000);
+    //     }),
+    //     function errorHandler(){
+    //         console.log('error occurred');
+    //     }
+    // });
 
 
 // ---------------------------------------------------------------
@@ -2941,19 +3026,20 @@ $(document).on('change','.brsrvFilter',function(){
 
 
 $.ajax({
-      url: 'getAllSituation.php', 
-      method: 'GET',
-      success: function(data) {
-          var json = JSON.parse(data)["data"];
+    url: 'getAllSituation.php', 
+    method: 'GET',
+    success: function(data) {
+        var json = JSON.parse(data)["data"];
         var html =``;
         let services = [];
         let options = ``;
+        
         if(json.length != 0){
-
             json.forEach(row => {
-            //   alert($row[5]);
+                var date =row[8]==null?row[9]+' (ND)':row[8];
                 html += `<tr>`;
                 html += `<td>${row[0]}</td>`;
+                html += `<td>${date}</td>`;
                 html += `<td>${row[1]}</td>`;
                 html += `<td>${row[2]}</td>`;
                 html += `<td>${row[3]}</td>`;
@@ -2968,24 +3054,35 @@ $.ajax({
             uniqueSrv.forEach(srv => {
                 options += `<option value="${srv}">${srv}</option>`;
             });
+            const monthNames = [ "janvier","février", "mars", "avril", "mai", "juin", "juillet", "aout","septembre", "octobre", "novembre", "décembre"
+            ];
+            const monthOptions = monthNames.map((month, index) => {
+                const value = index + 1;
+                return `<option value="${value}">${month}</option>`;
+            }).join("");
             $("#expSitBtn").html(`
-                            <select name="" id="" class="form-select allsrvFilter">
+                            <select name="" id="MonthSelect" class="form-select">
+                                <option value="" selected disabled>Month</option>
+                                ${monthOptions}
+                            </select>
+                            <input type="text" id="yearSelect" class="form-control mx-2 placeholder="Years">
+                            <select name="" id="allsrvFilter" class="form-select allsrvFilter">
                                 <option value="" selected disabled>Services</option>
                                 ${options}
                             </select>
-                            <select name="" id="" class="form-select mx-2 allSrvstatusFilter">
+                            <select name="" id="allSrvstatusFilter" class="form-select mx-2 allSrvstatusFilter">
                                 <option value="" selected disabled>Status</option>
-                                <option value="0">Non Payé</option>
-                                <option value="1">Payé</option>
-                                <option value="2">Avance</option>
-                                <option value="3">Gratuit</option>
+                                <option value="Non Payé">Non Payé</option>
+                                <option value="Payé">Payé</option>
+                                <option value="Avance">Avance</option>
+                                <option value="Gratuit">Gratuit</option>
                             </select>
                             <div class="btn-group BtnExportSt" role="group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             Export
                             </button>
                             <ul class="dropdown-menu">
-                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href="allSituation_export.php">PDF</a></li>
+                            <li><a class="dropdown-item st_exp_pdf" id="pdfExport" target="_blank" href="allSituation_export.php">PDF</a></li>
                             </ul>
                         </div>
                         `);
@@ -2997,197 +3094,422 @@ $.ajax({
         $(".loader-wrapper").addClass("loader-hidden");
         $("#situationTable tbody").html(html);
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
+        // Event handler for filtering by year
+        $('#yearSelect').on('input', function() {
+            var selectedYear = $(this).val();
+            var selectedMonth = $('#MonthSelect').val();
+            var selectedStatus=$('#allSrvstatusFilter').val();
+            var selectedService=$('#allsrvFilter').val();
+            filterTableByYear(selectedYear,selectedMonth,selectedStatus,selectedService);
+            var st_pdf_href = `allSituation_export.php?sl_y=${selectedYear}`;
+            $('#pdfExport').attr('href',st_pdf_href );
+            if(selectedStatus=='Non Payé'){
+                selectedStatus=0
+            }else if(selectedStatus=='Payé'){
+                selectedStatus=1
+            }else if(selectedStatus=='Avance'){
+                selectedStatus=2
+            }else if(selectedStatus=='Gratuit'){
+                selectedStatus=3
+            }
+            if(selectedMonth!=null  &&selectedStatus!=null && selectedService!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedMonth!=null && selectedStatus!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedMonth!=null && selectedYear!='' &&selectedService!=null){
+                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}&sl_m=${selectedMonth}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedStatus!=null && selectedService!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedYear!='' && selectedMonth!=null){
+                var st_pdf_href = `allSituation_export.php?sl_y=${selectedYear}&sl_m=${selectedMonth}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedStatus!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedService!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }
+        });
+        // Event handler for filtering by month
+        $('#MonthSelect').on('change', function() {
+            var selectedMonth = $(this).val();
+            var selectedYear = $('#yearSelect').val();
+            var selectedStatus=$('#allSrvstatusFilter').val();
+            var selectedService=$('#allsrvFilter').val();
+            filterTableByMonth(selectedMonth,selectedYear,selectedStatus,selectedService);
+            var st_pdf_href = `allSituation_export.php?sl_m=${selectedMonth}`;
+            $('#pdfExport').attr('href',st_pdf_href );
+            if(selectedStatus=='Non Payé'){
+                selectedStatus=0
+            }else if(selectedStatus=='Payé'){
+                selectedStatus=1
+            }else if(selectedStatus=='Avance'){
+                selectedStatus=2
+            }else if(selectedStatus=='Gratuit'){
+                selectedStatus=3
+            }
+            if(selectedMonth!=null  &&selectedStatus!=null && selectedService!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if (selectedMonth!=null&& selectedStatus!=null && selectedService!=null){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedMonth!=null && selectedStatus!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedMonth!=null && selectedYear!='' &&selectedService!=null){
+                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}&sl_m=${selectedMonth}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedMonth!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?sl_y=${selectedYear}&sl_m=${selectedMonth}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedMonth!=null && selectedStatus!=null){
+                var st_pdf_href = `allSituation_export.php?sl_m=${selectedMonth}&pd_st=${selectedStatus}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedMonth!=null && selectedService!=null){
+                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_m=${selectedMonth}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }
+        });
+        //Event handler for filtering By status
+        $('#allSrvstatusFilter').on('change',function(){
+            var selectedStatus= $(this).val();
+            var selectedService=$('#allsrvFilter').val();
+            var selectedMonth = $('#MonthSelect').val();
+            var selectedYear = $('#yearSelect').val();
+            filterTableByStatus(selectedStatus,selectedService,selectedMonth,selectedYear);
+            if(selectedStatus=='Non Payé'){
+                selectedStatus=0
+            }else if(selectedStatus=='Payé'){
+                selectedStatus=1
+            }else if(selectedStatus=='Avance'){
+                selectedStatus=2
+            }else if(selectedStatus=='Gratuit'){
+                selectedStatus=3
+            }
+            var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}`;
+            $('#pdfExport').attr('href',st_pdf_href );
+            if(selectedStatus!=null && selectedService!=null && selectedMonth!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedStatus!=null && selectedYear!=''&& selectedMonth!=null){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedStatus!=null && selectedService!=null && selectedMonth!=null){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedStatus!=null && selectedService!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedStatus!=null && selectedService!=null){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedStatus!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedStatus!=null && selectedMonth!=null){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }
+        });
+         //Event handler for filtering By srvName
+        $('#allsrvFilter').on('change',function(){
+            var selectedService= $(this).val();
+            var selectedStatus=$('#allSrvstatusFilter').val();
+            var selectedMonth = $('#MonthSelect').val();
+            var selectedYear = $('#yearSelect').val();
+            filterTableByService(selectedService,selectedStatus,selectedMonth,selectedYear);
+            var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}`;
+            $('#pdfExport').attr('href',st_pdf_href );
+            if(selectedStatus=='Non Payé'){
+                selectedStatus=0
+            }else if(selectedStatus=='Payé'){
+                selectedStatus=1
+            }else if(selectedStatus=='Avance'){
+                selectedStatus=2
+            }else if(selectedStatus=='Gratuit'){
+                selectedStatus=3
+            }
+            if(selectedService!=null && selectedStatus!=null && selectedMonth!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedService!=null && selectedStatus!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedService!=null && selectedStatus!=null && selectedMonth!=null){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedService!=null && selectedMonth!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}&sl_m=${selectedMonth}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedService!=null && selectedStatus!=null){
+                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedService!=null && selectedMonth!=null){
+                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_m=${selectedMonth}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }else if(selectedService!=null && selectedYear!=''){
+                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}`;
+                $('#pdfExport').attr('href',st_pdf_href );
+            }
+        });
     },
-      error: function() {
+        error: function() {
         console.log('Error occurred while retrieving data.');
-      }
+    }
     });
+//----------------------------filter by year----------------------------
+
+function filterTableByYear(selectedYear, selectedMonth,selectedStatus,selectedService) {
+    $('#situationTable tbody tr').each(function() {
+        var dateCell = $(this).find('td:eq(1)');
+        var dateValue = dateCell.text();
+        var rowYear = parseInt(dateValue.split('-')[0]);
+        var rowMonth = parseInt(dateValue.split('-')[1]);
+        var statusCell = $(this).find('td:eq(7)');
+        var statusValue = statusCell.text();
+        var srvCell = $(this).find('td:eq(4)');
+        var srvValue = srvCell.text();
+        var showRow = (rowYear == selectedYear || selectedYear == ''|| dateValue=='-') && (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == ''|| dateValue=='-') &&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&&(selectedService == null || srvValue == selectedService || selectedService == '');
+        $(this).toggle(showRow);
+    });
+}
+//----------------------------filter by month----------------------------
+function filterTableByMonth(selectedMonth, selectedYear,selectedStatus,selectedService) {
+    $('#situationTable tbody tr').each(function() {
+        var dateCell = $(this).find('td:eq(1)');
+        var dateValue = dateCell.text();
+        var rowYear = parseInt(dateValue.split('-')[0]);
+        var rowMonth = parseInt(dateValue.split('-')[1]);
+        var statusCell = $(this).find('td:eq(7)');
+        var statusValue = statusCell.text();
+        var srvCell = $(this).find('td:eq(4)');
+        var srvValue = srvCell.text();
+        var showRow = (rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-') && (selectedYear == null || rowYear == selectedYear || selectedYear == ''|| dateValue=='-')&&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&&(selectedService == null || srvValue == selectedService || selectedService == '');
+        $(this).toggle(showRow);
+    });
+}
+//---------------------------------filter by status---------------
+function filterTableByStatus(selectedStatus, selectedService,selectedMonth,selectedYear) {
+    $('#situationTable tbody tr').each(function() {
+        var statusCell = $(this).find('td:eq(7)');
+        var statusValue = statusCell.text();
+        var srvCell = $(this).find('td:eq(4)');
+        var srvValue = srvCell.text();
+        var dateCell = $(this).find('td:eq(1)');
+        var dateValue = dateCell.text();
+        var rowYear = parseInt(dateValue.split('-')[0]);
+        var rowMonth = parseInt(dateValue.split('-')[1]);
+        var showRow = (statusValue == selectedStatus || selectedStatus == '') && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
+        $(this).toggle(showRow);
+    });
+}
+//---------------------------------filter by srvName---------------
+function filterTableByService(selectedService, selectedStatus,selectedMonth,selectedYear) {
+    $('#situationTable tbody tr').each(function() {
+        var srvCell = $(this).find('td:eq(4)');
+        var srvValue = srvCell.text();
+        var statusCell = $(this).find('td:eq(7)');
+        var statusValue = statusCell.text();
+        var dateCell = $(this).find('td:eq(1)');
+        var dateValue = dateCell.text();
+        var rowYear = parseInt(dateValue.split('-')[0]);
+        var rowMonth = parseInt(dateValue.split('-')[1]);
+        var showRow = (srvValue == selectedService || selectedService == '') &&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
+        $(this).toggle(showRow);
+    });
+}
 
 // ----------------------- status Filter for all Services-------------------------
 
-$(document).on('change','.allSrvstatusFilter',function(){
-    const paid_status = $(this).val();
-    console.log(paid_status);
-    let srv_name = "";
-    // let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
-    // let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
-    function makeRequest(){
-        lunchLoader();
-        if($(".allsrvFilter").val() != null){
-            srv_name = $(".allsrvFilter").val();
-            // hrefs for pdf && excel
-            st_pdf_href = `allSituation_export.php?pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-            // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-            return $.ajax({
-                url:'st_info_both.php',
-                type:'POST',
-                data:{paid_status:paid_status,srv_name:srv_name}
-            });
-        }else{
-            st_pdf_href = `allSituation_export.php?pd_st=${paid_status}`;
-            // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
-            return $.ajax({
-                url:'st_info_status.php',
-                type:'POST',
-                data:{paid_status:paid_status}
-            });
-        }
-    }
-    $.when(makeRequest()).then(function successHandler(data){
+// $(document).on('change','.allSrvstatusFilter',function(){
+//     const paid_status = $(this).val();
+//     console.log(paid_status);
+//     let srv_name = "";
+//     // let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
+//     // let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
+//     function makeRequest(){
+//         lunchLoader();
+//         if($(".allsrvFilter").val() != null){
+//             srv_name = $(".allsrvFilter").val();
+//             // hrefs for pdf && excel
+//             st_pdf_href = `allSituation_export.php?pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+//             // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+//             return $.ajax({
+//                 url:'st_info_both.php',
+//                 type:'POST',
+//                 data:{paid_status:paid_status,srv_name:srv_name}
+//             });
+//         }else{
+//             st_pdf_href = `allSituation_export.php?pd_st=${paid_status}`;
+//             // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}`;
+//             return $.ajax({
+//                 url:'st_info_status.php',
+//                 type:'POST',
+//                 data:{paid_status:paid_status}
+//             });
+//         }
+//     }
+//     $.when(makeRequest()).then(function successHandler(data){
         
-        // alert(data);
-        console.log(data);
-        var json = JSON.parse(data)["data"];
-                var html =``;
-                let services = globalServices;
-                let options = ``;
-                if(json.length != 0){
+//         // alert(data);
+//         console.log(data);
+//         var json = JSON.parse(data)["data"];
+//                 var html =``;
+//                 let services = globalServices;
+//                 let options = ``;
+//                 if(json.length != 0){
 
-                    json.forEach(row => {
-                    html += `<tr>`;
-                    html += `<td>${row[0]}</td>`;
-                    html += `<td>${row[1]}</td>`;
-                    html += `<td>${row[2]}</td>`;
-                    html += `<td>${row[3]}</td>`;
-                    html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
-                    html += `<td>${row[5]} DH</td>`;
-                    html += `<td>${row[6]}</td>`;
-                    html += `<td class="text-center">${row[7]}</td>`;
-                    html += `</tr>`;
-            });
-            let uniqueSrv = [...new Set(services)];
-            uniqueSrv.forEach(srv => {
-                options += `<option value="${srv}">${srv}</option>`;
-            });
-            $("#expSitBtn").html(`
-                            <select name="" id="" class="form-select allsrvFilter">
-                                <option value="" selected disabled>Services</option>
-                                ${options}
-                            </select>
-                            <select name="" id="" class="form-select mx-2 allSrvstatusFilter">
-                                <option value="" selected disabled>Status</option>
-                                <option value="0">Non Payé</option>
-                                <option value="1">Payé</option>
-                                <option value="2">Avance</option>
-                            </select>
-                            <div class="btn-group BtnExportSt" role="group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Export
-                            </button>
-                            <ul class="dropdown-menu">
-                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
-                            </ul>
-                        </div>
-                        `);
-                    $(".allSrvstatusFilter").val(paid_status);
-                    $(".allsrvFilter").val(srv_name);
-                    $('.BtnExportSt').removeClass('invisible');
-                }else{
-                    html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
-                    // $("#expSitBtn").html('');
-                    $('.BtnExportSt').addClass('invisible');
-                }
-                $(".loader-wrapper").addClass("loader-hidden");
-                $("#situationTable tbody").html(html);
-                setTimeout(()=>$(".loader-wrapper").remove(),2000);
-    }),
-    function errorHandler(){
-        console.log('error occurred');
-    }
-});
+//                     json.forEach(row => {
+//                     html += `<tr>`;
+//                     html += `<td>${row[0]}</td>`;
+//                     html += `<td>${row[1]}</td>`;
+//                     html += `<td>${row[2]}</td>`;
+//                     html += `<td>${row[3]}</td>`;
+//                     html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+//                     html += `<td>${row[5]} DH</td>`;
+//                     html += `<td>${row[6]}</td>`;
+//                     html += `<td class="text-center">${row[7]}</td>`;
+//                     html += `</tr>`;
+//             });
+//             let uniqueSrv = [...new Set(services)];
+//             uniqueSrv.forEach(srv => {
+//                 options += `<option value="${srv}">${srv}</option>`;
+//             });
+//             $("#expSitBtn").html(`
+//                             <select name="" id="" class="form-select allsrvFilter">
+//                                 <option value="" selected disabled>Services</option>
+//                                 ${options}
+//                             </select>
+//                             <select name="" id="" class="form-select mx-2 allSrvstatusFilter">
+//                                 <option value="" selected disabled>Status</option>
+//                                 <option value="0">Non Payé</option>
+//                                 <option value="1">Payé</option>
+//                                 <option value="2">Avance</option>
+//                             </select>
+//                             <div class="btn-group BtnExportSt" role="group">
+//                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+//                             Export
+//                             </button>
+//                             <ul class="dropdown-menu">
+//                             <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+//                             </ul>
+//                         </div>
+//                         `);
+//                     $(".allSrvstatusFilter").val(paid_status);
+//                     $(".allsrvFilter").val(srv_name);
+//                     $('.BtnExportSt').removeClass('invisible');
+//                 }else{
+//                     html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+//                     // $("#expSitBtn").html('');
+//                     $('.BtnExportSt').addClass('invisible');
+//                 }
+//                 $(".loader-wrapper").addClass("loader-hidden");
+//                 $("#situationTable tbody").html(html);
+//                 setTimeout(()=>$(".loader-wrapper").remove(),2000);
+//     }),
+//     function errorHandler(){
+//         console.log('error occurred');
+//     }
+// });
 
 // -------------------------------end of status filter --------------------
 
 
 //------------------------------------- service filter for all services -------------
-$(document).on('change','.allsrvFilter',function(){
-    // const clientID = $("#situationSelect").val();
-    const srv_name = $(this).val();
-    let paid_status = "";
-    // let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
-    // let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
-    function makeRequest(){
-        lunchLoader();
-        if($(".allSrvstatusFilter").val() != null){
+// $(document).on('change','.allsrvFilter',function(){
+//     // const clientID = $("#situationSelect").val();
+//     const srv_name = $(this).val();
+//     let paid_status = "";
+//     // let st_pdf_href = `situation_export.php?cl_id=${clientID}`;
+//     // let st_excel_href = `situation_excel_export.php?cl_id=${clientID}`;
+//     function makeRequest(){
+//         lunchLoader();
+//         if($(".allSrvstatusFilter").val() != null){
             
-            paid_status = $(".allSrvstatusFilter").val();
-            st_pdf_href = `allSituation_export.php?pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-            // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-            return $.ajax({
-                url:'st_info_both.php',
-                type:'POST',
-                data:{paid_status:paid_status,srv_name:srv_name}
-            });
-        }else{
-            st_pdf_href = `allSituation_export.php?srv_name=${srv_name.replaceAll(' ',"%20")}`;
-            // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
-            return $.ajax({
-                url:'st_info_srv.php',
-                type:'POST',
-                data:{srv_name:srv_name}
-            });
-        }
-    }
-    $.when(makeRequest()).then(function successHandler(data){
-        console.log(data);
-            var json = JSON.parse(data)["data"];
-            var html =``;
-            let services = globalServices;
-            let options = ``;
-            if(json.length != 0){
+//             paid_status = $(".allSrvstatusFilter").val();
+//             st_pdf_href = `allSituation_export.php?pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+//             // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&pd_st=${paid_status}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+//             return $.ajax({
+//                 url:'st_info_both.php',
+//                 type:'POST',
+//                 data:{paid_status:paid_status,srv_name:srv_name}
+//             });
+//         }else{
+//             st_pdf_href = `allSituation_export.php?srv_name=${srv_name.replaceAll(' ',"%20")}`;
+//             // st_excel_href = `situation_excel_export.php?cl_id=${clientID}&srv_name=${srv_name.replaceAll(' ',"%20")}`;
+//             return $.ajax({
+//                 url:'st_info_srv.php',
+//                 type:'POST',
+//                 data:{srv_name:srv_name}
+//             });
+//         }
+//     }
+//     $.when(makeRequest()).then(function successHandler(data){
+//         console.log(data);
+//             var json = JSON.parse(data)["data"];
+//             var html =``;
+//             let services = globalServices;
+//             let options = ``;
+//             if(json.length != 0){
 
-                json.forEach(row => {
-                html += `<tr>`;
-                html += `<td>${row[0]}</td>`;
-                html += `<td>${row[1]}</td>`;
-                html += `<td>${row[2]}</td>`;
-                html += `<td>${row[3]}</td>`;
-                html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
-                html += `<td>${row[5]} DH</td>`;
-                html += `<td>${row[6]}</td>`;
-                html += `<td class="text-center">${row[7]}</td>`;
-                html += `</tr>`;
-            });
-            let uniqueSrv = [...new Set(services)];
-            uniqueSrv.forEach(srv => {
-                options += `<option value="${srv}">${srv}</option>`;
-            });
-            $("#expSitBtn").html(`
-                            <select name="" id="" class="form-select allsrvFilter">
-                                <option value="" selected disabled>services</option>
-                                ${options}
-                            </select>
-                            <select name="" id="" class="form-select mx-2 allSrvstatusFilter">
-                                <option value="" selected disabled>Status</option>
-                                <option value="0">Non Payé</option>
-                                <option value="1">Payé</option>
-                                <option value="2">Avance</option>
-                            </select>
-                            <div class="btn-group BtnExportSt" role="group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Export
-                            </button>
-                            <ul class="dropdown-menu">
-                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
-                            </ul>
-                        </div>
-                        `);
-                        $(".allSrvstatusFilter").val(paid_status);
-                        $(".allsrvFilter").val(srv_name);
-                    $('.BtnExportSt').removeClass('invisible');
-                }else{
-                    html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
-                    // $("#expSitBtn").html('');
-                    $('.BtnExportSt').addClass('invisible');
-                }
-                $(".loader-wrapper").addClass("loader-hidden");
-                $("#situationTable tbody").html(html);
-                setTimeout(()=>$(".loader-wrapper").remove(),2000);
-    }),
-    function errorHandler(){
-        console.log('error occurred');
-    }
-});
+//                 json.forEach(row => {
+//                 html += `<tr>`;
+//                 html += `<td>${row[0]}</td>`;
+//                 html += `<td>${row[1]}</td>`;
+//                 html += `<td>${row[2]}</td>`;
+//                 html += `<td>${row[3]}</td>`;
+//                 html += `<td>${Number(row[4]).toFixed(2)} DH</td>`;
+//                 html += `<td>${row[5]} DH</td>`;
+//                 html += `<td>${row[6]}</td>`;
+//                 html += `<td class="text-center">${row[7]}</td>`;
+//                 html += `</tr>`;
+//             });
+//             let uniqueSrv = [...new Set(services)];
+//             uniqueSrv.forEach(srv => {
+//                 options += `<option value="${srv}">${srv}</option>`;
+//             });
+//             $("#expSitBtn").html(`
+//                             <select name="" id="" class="form-select allsrvFilter">
+//                                 <option value="" selected disabled>services</option>
+//                                 ${options}
+//                             </select>
+//                             <select name="" id="" class="form-select mx-2 allSrvstatusFilter">
+//                                 <option value="" selected disabled>Status</option>
+//                                 <option value="0">Non Payé</option>
+//                                 <option value="1">Payé</option>
+//                                 <option value="2">Avance</option>
+//                             </select>
+//                             <div class="btn-group BtnExportSt" role="group">
+//                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+//                             Export
+//                             </button>
+//                             <ul class="dropdown-menu">
+//                             <li><a class="dropdown-item st_exp_pdf" target="_blank" href=${st_pdf_href}>PDF</a></li>
+//                             </ul>
+//                         </div>
+//                         `);
+//                         $(".allSrvstatusFilter").val(paid_status);
+//                         $(".allsrvFilter").val(srv_name);
+//                     $('.BtnExportSt').removeClass('invisible');
+//                 }else{
+//                     html += `<tr><td colspan="8" class="text-center"><strong>No Data Available</strong></td></tr>`;
+//                     // $("#expSitBtn").html('');
+//                     $('.BtnExportSt').addClass('invisible');
+//                 }
+//                 $(".loader-wrapper").addClass("loader-hidden");
+//                 $("#situationTable tbody").html(html);
+//                 setTimeout(()=>$(".loader-wrapper").remove(),2000);
+//     }),
+//     function errorHandler(){
+//         console.log('error occurred');
+//     }
+// });
 
 // -------------------------------end of service filter --------------------
 

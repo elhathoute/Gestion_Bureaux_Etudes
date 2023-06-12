@@ -46,6 +46,23 @@ $clientRes = mysqli_query($cnx, $query);
         </div>
     </div>
     <div class="row">
+        <div class="mb-3 gap-2 d-flex">
+            <div class="bg-success col-4 py-3 text-white fw-bold fs-2"> payé <span class="">25</span>
+        <div class="ms-5">
+            <span class="ps-5 fs-1" id="totalPayeView">1023 $</span>
+        </div>
+        </div>
+            <div class="bg-danger col-4 py-3 text-white fw-bold fs-2">Total non payé <span class="">25</span>
+        <div class="ms-5">
+            <span class="ps-5 fs-1" id="totalNonPayeView">1023 $</span>
+        </div>
+        </div>
+            <div class="bg-info col-4 py-3 text-white fw-bold fs-2">Total avance <span class="">25</span>
+        <div class="ms-5">
+            <span class="ps-5 fs-1" id="totalAvanceView">1023 $</span>
+        </div>
+        </div>
+        </div>
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
@@ -57,9 +74,6 @@ $clientRes = mysqli_query($cnx, $query);
                             
                         </div>
                     </div>
-
-
-
                     <div class="tab-content" id="services-content">
                         <!-- table Situation -->
                         <div class="overflow-auto">
@@ -69,6 +83,9 @@ $clientRes = mysqli_query($cnx, $query);
                                         <tr>
                                             <th>
                                                 <a href="#">N°</a>
+                                            </th>
+                                            <th>
+                                                <a href="#">Date</a>
                                             </th>
                                             <th>
                                                 <a href="#">Devis</a>
