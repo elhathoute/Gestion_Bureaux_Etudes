@@ -47,21 +47,21 @@ $clientRes = mysqli_query($cnx, $query);
     </div>
     <div class="row">
         <div class="mb-3 gap-2 d-flex">
-            <div class="bg-success col-4 py-3 text-white fw-bold fs-2"> payé <span class="">25</span>
-        <div class="ms-5">
-            <span class="ps-5 fs-1" id="totalPayeView">1023 $</span>
-        </div>
-        </div>
-            <div class="bg-danger col-4 py-3 text-white fw-bold fs-2">Total non payé <span class="">25</span>
-        <div class="ms-5">
-            <span class="ps-5 fs-1" id="totalNonPayeView">1023 $</span>
-        </div>
-        </div>
-            <div class="bg-info col-4 py-3 text-white fw-bold fs-2">Total avance <span class="">25</span>
-        <div class="ms-5">
-            <span class="ps-5 fs-1" id="totalAvanceView">1023 $</span>
-        </div>
-        </div>
+            <div class="bg-white col-4 py-3 text-danger fw-bold fs-2 rounded text-center">Total non payé : <span class="" id="totalNonPayeView"></span>
+                <div class="">
+                    <span class="ps-5 fs-1" id="totalPriceNonPayeView"></span>
+                </div>
+            </div>
+            <div class="bg-white col-4 py-3 text-success fw-bold fs-2 rounded text-center">Total payé : <span class="" id="totalPayeView"></span>
+                <div class="">
+                    <span class="ps-5 fs-1" id="totalPricePayeView"></span>
+                </div>
+            </div>
+            <div class="bg-secondary bg-opacity-25 col-4 py-3 text-danger fw-bold fs-2 rounded text-center">Total : <span class="" id="totalAvanceView"></span>
+                <div class="">
+                    <span class="ps-5 fs-1" id="totalPriceAvanceView"></span>
+                </div>
+            </div>
         </div>
         <div class="col-lg-12">
             <div class="card">

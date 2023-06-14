@@ -66,31 +66,6 @@ $clientRes = mysqli_query($cnx, $query);
                                 <div>
                                     <table id="paymentByClientTable" class="table table-hover table-bordered table-striped" style="width:100%">
                                         <thead>
-                                            <!-- <tr>
-                                                <th>
-                                                    <a href="#">N°</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Client</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Description</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Date</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Total</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Avance</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#"></a>
-                                                </th>
-
-
-                                            </tr> -->
                                             <tr>
                                                 <th>
                                                     <a href="#">Devis</a>
@@ -121,16 +96,6 @@ $clientRes = mysqli_query($cnx, $query);
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            
-                                            <!-- <tr>
-                                                <td>001/2022</td>
-                                                <td>aze...</td>
-                                                <td></td>
-                                                <td>2021/01/12</td>
-                                                <td>920.00 DH</td>
-                                                <td>800.00 DH</td>
-                                                <td><input type="checkbox" name="" class="CBPaymentByClient" value="3"></td>
-                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -172,9 +137,12 @@ $clientRes = mysqli_query($cnx, $query);
                                         <option value="Check">Check</option>
                                         <option value="Virement">Virement</option>
                                         <option value="Trita">Traite</option>
+                                        <option value="Remis">Remis</option>
                                     </select>
                                 </div>
-
+                                <div>
+                                    <textarea name="" class="d-none form-control " id="remisDetails" cols="30" rows="10"></textarea>
+                                </div>
                                 <div class="form-check my-3">
                                     <input class="form-check-input" type="checkbox" value="" id="supplierCheckbox" name="supplierCheckbox">
                                     <label class="form-check-label" for="supplierCheckbox">

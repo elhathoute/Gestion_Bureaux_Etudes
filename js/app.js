@@ -2202,7 +2202,14 @@ $(document).on("change","#selectBrokerClient",function(){
             $(".payment-method").removeClass("border border-danger");
         }
     });
-
+//to display text area for remis explain:
+    $(".payment-method").on("change" ,function(){
+    if($(".payment-method").val()=='Remis'){
+        $("#remisDetails").removeClass("d-none");
+    }else{
+        $("#remisDetails").addClass("d-none");
+    }
+    });
     $(document).on("click","#pay_inv",function(){
         if(
             $(".payment-method").val!=null &&
@@ -2424,15 +2431,15 @@ $(document).on("change","#selectBrokerClient",function(){
                 data : {clientID:clientID},
                 type:"POST",
                 success:function(data){
-                    
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     let services = [];
                     let options = ``;
+                    var totalPricePayeView=0;
+                    var totalPriceNonPayeView=0;
                     if(json.length != 0){
-
                         json.forEach(row => {
-                            var date =row[8]==null?'-':row[8];
+                            var date =row[8]==null?row[9]+' (ND)':row[8];
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${date}</td>`;
@@ -2445,6 +2452,9 @@ $(document).on("change","#selectBrokerClient",function(){
                             html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
                             services.push(row[3]);
+                            if(row[10]=="Non Payé"){totalNonPayeView++; totalPriceNonPayeView+=Number(row[4])}
+                            if(row[10]=="Payé"){totalPayeView++; totalPricePayeView+=Number(row[5])}
+                            if(row[10]=="Avance"){totalAvanceView++; totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
                         });
                         let uniqueSrv = [...new Set(services)];
                         uniqueSrv.forEach(srv => {
@@ -2477,7 +2487,7 @@ $(document).on("change","#selectBrokerClient",function(){
                                 Export
                                 </button>
                                 <ul class="dropdown-menu">
-                                <li><a class="dropdown-item st_exp_pdf" target="_blank" href='situation_export.php?cl_id=${clientID}'>PDF</a></li>
+                                <li><a class="dropdown-item st_exp_pdf" id="pdfExport" target="_blank" href='situation_export.php?cl_id=${clientID}'>PDF</a></li>
                                 <li><a class="dropdown-item st_exp_excel" target="_blank" href='situation_excel_export.php?cl_id=${clientID}'>Excel</a></li>
                                 </ul>
                             </div>
@@ -2489,7 +2499,9 @@ $(document).on("change","#selectBrokerClient",function(){
                     }
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#situationTable tbody").html(html);
-                    // $("#expSitBtn").html(`<a target="_blank" href='situation_export.php?cl_id=${clientID}' class="btn btn-primary float-end" title="Imprimer Facture"><i class="bi bi-download "></i> Export</a>`);
+                    $("#totalPriceNonPayeView").text(totalPriceNonPayeView.toFixed(2) + ' DH');
+                    $("#totalPricePayeView").text(totalPricePayeView.toFixed(2) + ' DH');
+                    $("#totalPriceAvanceView").text((totalPriceNonPayeView-totalPricePayeView ).toFixed(2) + ' DH');
                     // Event handler for filtering by year
                     $('#yearSelect').on('input', function() {
                         var selectedYear = $(this).val();
@@ -2497,6 +2509,17 @@ $(document).on("change","#selectBrokerClient",function(){
                         var selectedStatus=$('#allSrvstatusFilter').val();
                         var selectedService=$('#allsrvFilter').val();
                         filterTableByYear(selectedYear,selectedMonth,selectedStatus,selectedService);
+                        var pd_st = '';
+                        if (selectedStatus == 'Non Payé') {pd_st = 0;}
+                        else if (selectedStatus == 'Payé') {pd_st = 1;} 
+                        else if (selectedStatus == 'Avance') {pd_st = 2;} 
+                        else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+                        var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+                        var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+                        var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+                        var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+                        var st_pdf_href = `situation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        $('#pdfExport').attr('href', st_pdf_href);
                     });
                     // Event handler for filtering by month
                     $('#MonthSelect').on('change', function() {
@@ -2505,6 +2528,17 @@ $(document).on("change","#selectBrokerClient",function(){
                         var selectedStatus=$('#allSrvstatusFilter').val();
                         var selectedService=$('#allsrvFilter').val();
                         filterTableByMonth(selectedMonth,selectedYear,selectedStatus,selectedService);
+                        var pd_st = '';
+                        if (selectedStatus == 'Non Payé') {pd_st = 0;}
+                        else if (selectedStatus == 'Payé') {pd_st = 1;} 
+                        else if (selectedStatus == 'Avance') {pd_st = 2;} 
+                        else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+                        var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+                        var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+                        var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+                        var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+                        var st_pdf_href = `situation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        $('#pdfExport').attr('href', st_pdf_href);
                     });
                     //Event handler for filtering By status
                     $('#allSrvstatusFilter').on('change',function(){
@@ -2513,6 +2547,17 @@ $(document).on("change","#selectBrokerClient",function(){
                         var selectedMonth = $('#MonthSelect').val();
                         var selectedYear = $('#yearSelect').val();
                         filterTableByStatus(selectedStatus,selectedService,selectedMonth,selectedYear);
+                        var pd_st = '';
+                        if (selectedStatus == 'Non Payé') {pd_st = 0;}
+                        else if (selectedStatus == 'Payé') {pd_st = 1;} 
+                        else if (selectedStatus == 'Avance') {pd_st = 2;} 
+                        else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+                        var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+                        var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+                        var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+                        var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+                        var st_pdf_href = `situation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        $('#pdfExport').attr('href', st_pdf_href);
                     });
                     //Event handler for filtering By srvName
                     $('#allsrvFilter').on('change',function(){
@@ -2521,6 +2566,17 @@ $(document).on("change","#selectBrokerClient",function(){
                         var selectedMonth = $('#MonthSelect').val();
                         var selectedYear = $('#yearSelect').val();
                         filterTableByService(selectedService,selectedStatus,selectedMonth,selectedYear);
+                        var pd_st = '';
+                        if (selectedStatus == 'Non Payé') {pd_st = 0;}
+                        else if (selectedStatus == 'Payé') {pd_st = 1;} 
+                        else if (selectedStatus == 'Avance') {pd_st = 2;} 
+                        else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+                        var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+                        var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+                        var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+                        var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+                        var st_pdf_href = `situation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        $('#pdfExport').attr('href', st_pdf_href);
                     });
                 }
             });
@@ -2528,7 +2584,6 @@ $(document).on("change","#selectBrokerClient",function(){
         //add this on success 
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
     });
-
 
     // -----------------------------------start of filter with broker-----------------
 
@@ -2544,15 +2599,15 @@ $(document).on("change","#selectBrokerClient",function(){
                 data : {brokerId:brokerId},
                 type:"POST",
                 success:function(data){
-                    // console.log(data);
                     var json = JSON.parse(data)["data"];
                     var html =``;
                     let services = [];
                     let options = ``;
+                    var totalPricePayeView=0;
+                    var totalPriceNonPayeView=0;
                     if(json.length != 0){
-
                         json.forEach(row => {
-                            var date =row[8]==null?'-':row[8];
+                            var date =row[8]==null?row[9]+' (ND)':row[8];
                             html += `<tr>`;
                             html += `<td>${row[0]}</td>`;
                             html += `<td>${date}</td>`;
@@ -2565,6 +2620,9 @@ $(document).on("change","#selectBrokerClient",function(){
                             html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
                             services.push(row[3]);
+                            if(row[10]=="Non Payé"){totalNonPayeView++; totalPriceNonPayeView+=Number(row[4])}
+                            if(row[10]=="Payé"){totalPayeView++; totalPricePayeView+=Number(row[5])}
+                            if(row[10]=="Avance"){totalAvanceView++; totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
                         });
                         let uniqueSrv = [...new Set(services)];
                         uniqueSrv.forEach(srv => {
@@ -2597,7 +2655,7 @@ $(document).on("change","#selectBrokerClient",function(){
                             Export
                             </button>
                             <ul class="dropdown-menu">
-                            <li><a class="dropdown-item st_exp_pdf" target="_blank" href='situation_export.php?br_id=${brokerId}'>PDF</a></li>
+                            <li><a class="dropdown-item st_exp_pdf" id="pdfExport" target="_blank" href='situation_export.php?br_id=${brokerId}'>PDF</a></li>
                             </ul>
                         </div>
                         `);
@@ -2608,6 +2666,9 @@ $(document).on("change","#selectBrokerClient",function(){
                     }
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#situationTable tbody").html(html);
+                    $("#totalPriceNonPayeView").text(totalPriceNonPayeView.toFixed(2) + ' DH');
+                    $("#totalPricePayeView").text(totalPricePayeView.toFixed(2) + ' DH');
+                    $("#totalPriceAvanceView").text((totalPriceNonPayeView-totalPricePayeView ).toFixed(2) + ' DH');
                       // Event handler for filtering by year
                     $('#yearSelect').on('input', function() {
                         var selectedYear = $(this).val();
@@ -2615,6 +2676,17 @@ $(document).on("change","#selectBrokerClient",function(){
                         var selectedStatus=$('#allSrvstatusFilter').val();
                         var selectedService=$('#allsrvFilter').val();
                         filterTableByYear(selectedYear,selectedMonth,selectedStatus,selectedService);
+                        var pd_st = '';
+                        if (selectedStatus == 'Non Payé') {pd_st = 0;}
+                        else if (selectedStatus == 'Payé') {pd_st = 1;} 
+                        else if (selectedStatus == 'Avance') {pd_st = 2;} 
+                        else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+                        var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+                        var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+                        var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+                        var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+                        var st_pdf_href = `situation_export.php?br_id=${brokerId}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        $('#pdfExport').attr('href', st_pdf_href);
                     });
                     // Event handler for filtering by month
                     $('#MonthSelect').on('change', function() {
@@ -2623,6 +2695,17 @@ $(document).on("change","#selectBrokerClient",function(){
                         var selectedStatus=$('#allSrvstatusFilter').val();
                         var selectedService=$('#allsrvFilter').val();
                         filterTableByMonth(selectedMonth,selectedYear,selectedStatus,selectedService);
+                        var pd_st = '';
+                        if (selectedStatus == 'Non Payé') {pd_st = 0;}
+                        else if (selectedStatus == 'Payé') {pd_st = 1;} 
+                        else if (selectedStatus == 'Avance') {pd_st = 2;} 
+                        else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+                        var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+                        var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+                        var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+                        var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+                        var st_pdf_href = `situation_export.php?br_id=${brokerId}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        $('#pdfExport').attr('href', st_pdf_href);
                     });
                     //Event handler for filtering By status
                     $('#allSrvstatusFilter').on('change',function(){
@@ -2631,6 +2714,17 @@ $(document).on("change","#selectBrokerClient",function(){
                         var selectedMonth = $('#MonthSelect').val();
                         var selectedYear = $('#yearSelect').val();
                         filterTableByStatus(selectedStatus,selectedService,selectedMonth,selectedYear);
+                        var pd_st = '';
+                        if (selectedStatus == 'Non Payé') {pd_st = 0;}
+                        else if (selectedStatus == 'Payé') {pd_st = 1;} 
+                        else if (selectedStatus == 'Avance') {pd_st = 2;} 
+                        else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+                        var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+                        var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+                        var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+                        var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+                        var st_pdf_href = `situation_export.php?br_id=${brokerId}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        $('#pdfExport').attr('href', st_pdf_href);
                     });
                     //Event handler for filtering By srvName
                     $('#allsrvFilter').on('change',function(){
@@ -2639,6 +2733,17 @@ $(document).on("change","#selectBrokerClient",function(){
                         var selectedMonth = $('#MonthSelect').val();
                         var selectedYear = $('#yearSelect').val();
                         filterTableByService(selectedService,selectedStatus,selectedMonth,selectedYear);
+                        var pd_st = '';
+                        if (selectedStatus == 'Non Payé') {pd_st = 0;}
+                        else if (selectedStatus == 'Payé') {pd_st = 1;} 
+                        else if (selectedStatus == 'Avance') {pd_st = 2;} 
+                        else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+                        var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+                        var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+                        var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+                        var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+                        var st_pdf_href = `situation_export.php?br_id=${brokerId}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        $('#pdfExport').attr('href', st_pdf_href);
                     });
                     
                 }
@@ -3033,7 +3138,11 @@ $.ajax({
         var html =``;
         let services = [];
         let options = ``;
-        
+        // var totalPayeView=0;
+        // var totalNonPayeView=0;
+        // var totalAvanceView=0;
+        var totalPricePayeView=0;
+        var totalPriceNonPayeView=0;
         if(json.length != 0){
             json.forEach(row => {
                 var date =row[8]==null?row[9]+' (ND)':row[8];
@@ -3049,6 +3158,9 @@ $.ajax({
                 html += `<td class="text-center">${row[7]}</td>`;
                 html += `</tr>`;
                 services.push(row[3]);
+                if(row[10]=="Non Payé"){totalNonPayeView++; totalPriceNonPayeView+=Number(row[4])}
+                if(row[10]=="Payé"){totalPayeView++; totalPricePayeView+=Number(row[5])}
+                if(row[10]=="Avance"){totalAvanceView++; totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
             });
             let uniqueSrv = [...new Set(services)];
             uniqueSrv.forEach(srv => {
@@ -3093,6 +3205,12 @@ $.ajax({
         }
         $(".loader-wrapper").addClass("loader-hidden");
         $("#situationTable tbody").html(html);
+        // $("#totalNonPayeView").text(totalNonPayeView);
+        // $("#totalPayeView").text(totalPayeView);
+        // $("#totalAvanceView").text(totalAvanceView);
+        $("#totalPriceNonPayeView").text(totalPriceNonPayeView.toFixed(2) + ' DH');
+        $("#totalPricePayeView").text(totalPricePayeView.toFixed(2) + ' DH');
+        $("#totalPriceAvanceView").text((totalPriceNonPayeView-totalPricePayeView ).toFixed(2) + ' DH');
         setTimeout(()=>$(".loader-wrapper").remove(),2000);
         // Event handler for filtering by year
         $('#yearSelect').on('input', function() {
@@ -3101,39 +3219,17 @@ $.ajax({
             var selectedStatus=$('#allSrvstatusFilter').val();
             var selectedService=$('#allsrvFilter').val();
             filterTableByYear(selectedYear,selectedMonth,selectedStatus,selectedService);
-            var st_pdf_href = `allSituation_export.php?sl_y=${selectedYear}`;
-            $('#pdfExport').attr('href',st_pdf_href );
-            if(selectedStatus=='Non Payé'){
-                selectedStatus=0
-            }else if(selectedStatus=='Payé'){
-                selectedStatus=1
-            }else if(selectedStatus=='Avance'){
-                selectedStatus=2
-            }else if(selectedStatus=='Gratuit'){
-                selectedStatus=3
-            }
-            if(selectedMonth!=null  &&selectedStatus!=null && selectedService!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedMonth!=null && selectedStatus!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedMonth!=null && selectedYear!='' &&selectedService!=null){
-                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}&sl_m=${selectedMonth}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedStatus!=null && selectedService!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedYear!='' && selectedMonth!=null){
-                var st_pdf_href = `allSituation_export.php?sl_y=${selectedYear}&sl_m=${selectedMonth}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedStatus!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedService!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }
+            var pd_st = '';
+            if (selectedStatus == 'Non Payé') {pd_st = 0;}
+            else if (selectedStatus == 'Payé') {pd_st = 1;} 
+            else if (selectedStatus == 'Avance') {pd_st = 2;} 
+            else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+            var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+            var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+            var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+            var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+            var st_pdf_href = `allSituation_export.php?${sl_m}${pd_st}${sl_y}${srv_name}`;
+            $('#pdfExport').attr('href', st_pdf_href);
         });
         // Event handler for filtering by month
         $('#MonthSelect').on('change', function() {
@@ -3142,39 +3238,17 @@ $.ajax({
             var selectedStatus=$('#allSrvstatusFilter').val();
             var selectedService=$('#allsrvFilter').val();
             filterTableByMonth(selectedMonth,selectedYear,selectedStatus,selectedService);
-            var st_pdf_href = `allSituation_export.php?sl_m=${selectedMonth}`;
-            $('#pdfExport').attr('href',st_pdf_href );
-            if(selectedStatus=='Non Payé'){
-                selectedStatus=0
-            }else if(selectedStatus=='Payé'){
-                selectedStatus=1
-            }else if(selectedStatus=='Avance'){
-                selectedStatus=2
-            }else if(selectedStatus=='Gratuit'){
-                selectedStatus=3
-            }
-            if(selectedMonth!=null  &&selectedStatus!=null && selectedService!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if (selectedMonth!=null&& selectedStatus!=null && selectedService!=null){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedMonth!=null && selectedStatus!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedMonth!=null && selectedYear!='' &&selectedService!=null){
-                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}&sl_m=${selectedMonth}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedMonth!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?sl_y=${selectedYear}&sl_m=${selectedMonth}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedMonth!=null && selectedStatus!=null){
-                var st_pdf_href = `allSituation_export.php?sl_m=${selectedMonth}&pd_st=${selectedStatus}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedMonth!=null && selectedService!=null){
-                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_m=${selectedMonth}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }
+            var pd_st = '';
+            if (selectedStatus == 'Non Payé') {pd_st = 0;}
+            else if (selectedStatus == 'Payé') {pd_st = 1;} 
+            else if (selectedStatus == 'Avance') {pd_st = 2;} 
+            else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+            var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+            var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+            var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+            var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+            var st_pdf_href = `allSituation_export.php?${sl_m}${pd_st}${sl_y}${srv_name}`;
+            $('#pdfExport').attr('href', st_pdf_href);
         });
         //Event handler for filtering By status
         $('#allSrvstatusFilter').on('change',function(){
@@ -3183,39 +3257,17 @@ $.ajax({
             var selectedMonth = $('#MonthSelect').val();
             var selectedYear = $('#yearSelect').val();
             filterTableByStatus(selectedStatus,selectedService,selectedMonth,selectedYear);
-            if(selectedStatus=='Non Payé'){
-                selectedStatus=0
-            }else if(selectedStatus=='Payé'){
-                selectedStatus=1
-            }else if(selectedStatus=='Avance'){
-                selectedStatus=2
-            }else if(selectedStatus=='Gratuit'){
-                selectedStatus=3
-            }
-            var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}`;
-            $('#pdfExport').attr('href',st_pdf_href );
-            if(selectedStatus!=null && selectedService!=null && selectedMonth!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedStatus!=null && selectedYear!=''&& selectedMonth!=null){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedStatus!=null && selectedService!=null && selectedMonth!=null){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedStatus!=null && selectedService!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedStatus!=null && selectedService!=null){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedStatus!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedStatus!=null && selectedMonth!=null){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }
+            var pd_st = '';
+            if (selectedStatus == 'Non Payé') {pd_st = 0;}
+            else if (selectedStatus == 'Payé') {pd_st = 1;} 
+            else if (selectedStatus == 'Avance') {pd_st = 2;} 
+            else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+            var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+            var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+            var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+            var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+            var st_pdf_href = `allSituation_export.php?${sl_m}${pd_st}${sl_y}${srv_name}`;
+            $('#pdfExport').attr('href', st_pdf_href);
         });
          //Event handler for filtering By srvName
         $('#allsrvFilter').on('change',function(){
@@ -3224,39 +3276,17 @@ $.ajax({
             var selectedMonth = $('#MonthSelect').val();
             var selectedYear = $('#yearSelect').val();
             filterTableByService(selectedService,selectedStatus,selectedMonth,selectedYear);
-            var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}`;
-            $('#pdfExport').attr('href',st_pdf_href );
-            if(selectedStatus=='Non Payé'){
-                selectedStatus=0
-            }else if(selectedStatus=='Payé'){
-                selectedStatus=1
-            }else if(selectedStatus=='Avance'){
-                selectedStatus=2
-            }else if(selectedStatus=='Gratuit'){
-                selectedStatus=3
-            }
-            if(selectedService!=null && selectedStatus!=null && selectedMonth!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedService!=null && selectedStatus!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_y=${selectedYear}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedService!=null && selectedStatus!=null && selectedMonth!=null){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&sl_m=${selectedMonth}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedService!=null && selectedMonth!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}&sl_m=${selectedMonth}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedService!=null && selectedStatus!=null){
-                var st_pdf_href = `allSituation_export.php?pd_st=${selectedStatus}&srv_name=${selectedService.replaceAll(' ',"%20")}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedService!=null && selectedMonth!=null){
-                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_m=${selectedMonth}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }else if(selectedService!=null && selectedYear!=''){
-                var st_pdf_href = `allSituation_export.php?srv_name=${selectedService.replaceAll(' ',"%20")}&sl_y=${selectedYear}`;
-                $('#pdfExport').attr('href',st_pdf_href );
-            }
+            var pd_st = '';
+            if (selectedStatus == 'Non Payé') {pd_st = 0;}
+            else if (selectedStatus == 'Payé') {pd_st = 1;} 
+            else if (selectedStatus == 'Avance') {pd_st = 2;} 
+            else if (selectedStatus == 'Gratuit') {pd_st = 3;}
+            var sl_y = selectedYear != '' ? `&sl_y=${selectedYear}` : '';
+            var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
+            var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
+            var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
+            var st_pdf_href = `allSituation_export.php?${sl_m}${pd_st}${sl_y}${srv_name}`;
+            $('#pdfExport').attr('href', st_pdf_href);
         });
     },
         error: function() {
@@ -3264,8 +3294,9 @@ $.ajax({
     }
     });
 //----------------------------filter by year----------------------------
-
 function filterTableByYear(selectedYear, selectedMonth,selectedStatus,selectedService) {
+    var totalPricePayeView=0;
+    var totalPriceNonPayeView=0;
     $('#situationTable tbody tr').each(function() {
         var dateCell = $(this).find('td:eq(1)');
         var dateValue = dateCell.text();
@@ -3277,10 +3308,27 @@ function filterTableByYear(selectedYear, selectedMonth,selectedStatus,selectedSe
         var srvValue = srvCell.text();
         var showRow = (rowYear == selectedYear || selectedYear == ''|| dateValue=='-') && (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == ''|| dateValue=='-') &&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&&(selectedService == null || srvValue == selectedService || selectedService == '');
         $(this).toggle(showRow);
+        var showRow2 = (selectedStatus != ''||selectedStatus != null) && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
+        if(showRow2){
+            if(statusValue=="Non Payé"){
+                totalPriceNonPayeView += parseFloat($(this).find('td:eq(5)').text().replace(/\D/g, '')) / 100;
+            }else if(statusValue=="Payé"){
+                totalPricePayeView += parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100;
+            }else{
+                var avcNp =(parseFloat($(this).find('td:eq(5)').text().replace(/\D/g, '')) / 100)-(parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100);
+                totalPriceNonPayeView+=avcNp;
+                totalPricePayeView += parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100;
+            }
+        }
     });
+    $("#totalPricePayeView").text(totalPricePayeView.toFixed(2)+ ' DH');
+    $("#totalPriceNonPayeView").text(totalPriceNonPayeView.toFixed(2)+ ' DH');
+    $("#totalPriceAvanceView").text((totalPriceNonPayeView - totalPricePayeView).toFixed(2)+ ' DH');
 }
 //----------------------------filter by month----------------------------
 function filterTableByMonth(selectedMonth, selectedYear,selectedStatus,selectedService) {
+    var totalPricePayeView=0;
+    var totalPriceNonPayeView=0;
     $('#situationTable tbody tr').each(function() {
         var dateCell = $(this).find('td:eq(1)');
         var dateValue = dateCell.text();
@@ -3292,10 +3340,27 @@ function filterTableByMonth(selectedMonth, selectedYear,selectedStatus,selectedS
         var srvValue = srvCell.text();
         var showRow = (rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-') && (selectedYear == null || rowYear == selectedYear || selectedYear == ''|| dateValue=='-')&&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&&(selectedService == null || srvValue == selectedService || selectedService == '');
         $(this).toggle(showRow);
+        var showRow2 = (selectedStatus != ''||selectedStatus != null) && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
+        if(showRow2){
+            if(statusValue=="Non Payé"){
+                totalPriceNonPayeView += parseFloat($(this).find('td:eq(5)').text().replace(/\D/g, '')) / 100;
+            }else if(statusValue=="Payé"){
+                totalPricePayeView += parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100;
+            }else{
+                var avcNp =(parseFloat($(this).find('td:eq(5)').text().replace(/\D/g, '')) / 100)-(parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100);
+                totalPriceNonPayeView+=avcNp;
+                totalPricePayeView += parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100;
+            }
+        }
     });
+    $("#totalPricePayeView").text(totalPricePayeView.toFixed(2)+ ' DH');
+    $("#totalPriceNonPayeView").text(totalPriceNonPayeView.toFixed(2)+ ' DH');
+    $("#totalPriceAvanceView").text((totalPriceNonPayeView - totalPricePayeView).toFixed(2)+ ' DH');
 }
 //---------------------------------filter by status---------------
 function filterTableByStatus(selectedStatus, selectedService,selectedMonth,selectedYear) {
+var totalPricePayeView=0;
+var totalPriceNonPayeView=0;
     $('#situationTable tbody tr').each(function() {
         var statusCell = $(this).find('td:eq(7)');
         var statusValue = statusCell.text();
@@ -3307,10 +3372,27 @@ function filterTableByStatus(selectedStatus, selectedService,selectedMonth,selec
         var rowMonth = parseInt(dateValue.split('-')[1]);
         var showRow = (statusValue == selectedStatus || selectedStatus == '') && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
         $(this).toggle(showRow);
+        var showRow2 = (selectedStatus != ''||selectedStatus != null) && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
+        if(showRow2){
+            if(statusValue=="Non Payé"){
+                totalPriceNonPayeView += parseFloat($(this).find('td:eq(5)').text().replace(/\D/g, '')) / 100;
+            }else if(statusValue=="Payé"){
+                totalPricePayeView += parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100;
+            }else{
+                var avcNp =(parseFloat($(this).find('td:eq(5)').text().replace(/\D/g, '')) / 100)-(parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100);
+                totalPriceNonPayeView+=avcNp;
+                totalPricePayeView += parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100;
+            }
+        }
     });
+    $("#totalPricePayeView").text(totalPricePayeView.toFixed(2)+ ' DH');
+    $("#totalPriceNonPayeView").text(totalPriceNonPayeView.toFixed(2)+ ' DH');
+    $("#totalPriceAvanceView").text((totalPriceNonPayeView - totalPricePayeView).toFixed(2)+ ' DH');
 }
 //---------------------------------filter by srvName---------------
 function filterTableByService(selectedService, selectedStatus,selectedMonth,selectedYear) {
+    var totalPricePayeView=0;
+    var totalPriceNonPayeView=0;
     $('#situationTable tbody tr').each(function() {
         var srvCell = $(this).find('td:eq(4)');
         var srvValue = srvCell.text();
@@ -3322,7 +3404,22 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
         var rowMonth = parseInt(dateValue.split('-')[1]);
         var showRow = (srvValue == selectedService || selectedService == '') &&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
         $(this).toggle(showRow);
+        var showRow2 = (selectedStatus != ''||selectedStatus != null) && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
+        if(showRow2){
+            if(statusValue=="Non Payé"){
+                totalPriceNonPayeView += parseFloat($(this).find('td:eq(5)').text().replace(/\D/g, '')) / 100;
+            }else if(statusValue=="Payé"){
+                totalPricePayeView += parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100;
+            }else{
+                var avcNp =(parseFloat($(this).find('td:eq(5)').text().replace(/\D/g, '')) / 100)-(parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100);
+                totalPriceNonPayeView+=avcNp;
+                totalPricePayeView += parseFloat($(this).find('td:eq(6)').text().replace(/\D/g, '')) / 100;
+            }
+        }
     });
+    $("#totalPricePayeView").text(totalPricePayeView.toFixed(2)+ ' DH');
+    $("#totalPriceNonPayeView").text(totalPriceNonPayeView.toFixed(2)+ ' DH');
+    $("#totalPriceAvanceView").text((totalPriceNonPayeView - totalPricePayeView).toFixed(2)+ ' DH');
 }
 
 // ----------------------- status Filter for all Services-------------------------
