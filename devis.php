@@ -122,36 +122,30 @@ include 'header.php';
                                         <input type="text" class="form-control border-dashed p-0" id="devis_number" name="devis_number" value="<?= '/' . date('Y'); ?>" >
                                     </div>
                                 </div>
-                                <div class="row my-1">
+                                <div class="row my-2">
                                     <label for="" class="col-sm-5 col-form-label fw-bold">Date</label>
                                     <div class="col-sm-7 my-auto">
                                         <input type="date" class="form-control-plaintext " id="dateTxt" value="<?= date('Y-m-d') ?>">
                                     </div>
                                 </div>
-                                <!-- <div class="row my-1">
-                                    <label for="" class="col-sm-5 col-form-label fw-bold">Description</label>
-                                    <div class="col-sm-7 my-auto">
-                                        <textarea name="" id="" class="form-control border-dashed" rows="1">Projet name...</textarea>
-                                    </div>
-                                </div>
-                                <div class="row my-1">
-                                    <label for="" class="col-sm-5 col-form-label fw-bold">Projet</label>
-                                    <div class="col-sm-7 my-auto">
-                                        <textarea name="" id="" class="form-control border-dashed" rows="1">Projet name...</textarea>
-                                    </div>
-                                </div> -->
                             </div>
-                            <div class="row my-1">
-                                <label for="" class="col-sm-2 col-form-label fw-bold">Objet</label>
-                                <div class="col-sm-10 my-auto">
+                            <div class="row my-3">
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Objet</label>
+                                <div class="col-sm-7 my-auto">
                                     <textarea name="" id="objet_name" class="form-control border-dashed" rows="1" placeholder="Objet" required></textarea>
+                                </div><label for="" class="col-sm-1 col-form-label fw-bold">Espace</label>
+                                <div class="col-sm-3 my-auto">
+                                    <input name="" id="espace" class="form-control border-dashed"  placeholder="Espace" required></input>
                                 </div>
                             </div>
-                            
                             <div class="row my-1">
-                                <label for="" class="col-sm-2 col-form-label fw-bold">Sis à</label>
-                                <div class="col-sm-10 my-auto">
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Sis à</label>
+                                <div class="col-sm-7 my-auto">
                                     <textarea name="" id="sisTxt" class="form-control border-dashed" rows="1" placeholder="Sis à" required></textarea>
+                                </div>
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Hauteur</label>
+                                <div class="col-sm-3 my-auto">
+                                    <input name="hauteur" id="hauteur" class="form-control border-dashed"  placeholder="R+2" required></input>
                                 </div>
                             </div>
                             <!-- end client section -->
@@ -253,23 +247,6 @@ include 'header.php';
                                             <label class="labelDevisTotal" id="labelDevisTotal">0.00 DH</label>
                                         </div>
                                     </div>
-                                    <!-- <div class="row my-2">
-                                        <div class="col-sm-6">
-                                            <label class="fw-bold">Paiement(s):</label>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <label class="labelInvoicePayment" id="labelInvoicePayment">0.00 DH</label>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="row my-2">
-                                        <div class="col-sm-6">
-                                            <label class="fw-bold">Solde à payer:</label>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <label class="labelInvoiceSolde" id="labelInvoiceSolde">0.00 DH</label>
-                                        </div>
-                                    </div> -->
-
                                 </div>
                             </div>
                         </div>
@@ -572,7 +549,7 @@ include 'header.php';
                                                         <input type="text" class="form-control border-dashed p-0" id="brkDevis_number" name="devis_number" value="" disabled>
                                                     </div>
                                                 </div>
-                                                <div class="row my-1">
+                                                <div class="row my-2">
                                                     <label for="" class="col-sm-5 col-form-label fw-bold">Date</label>
                                                     <div class="col-sm-7 my-auto">
                                                         <input type="date" class="form-control-plaintext " id="brk_dateTxt" value="" disabled>
@@ -583,16 +560,24 @@ include 'header.php';
                                                 
                                             </div>
 
-                                            <div class="row my-1">
-                                                <label for="" class="col-sm-2 col-form-label fw-bold">Objet</label>
-                                                <div class="col-sm-10 my-auto">
+                                            <div class="row my-3">
+                                                <label for="" class="col-sm-1 col-form-label fw-bold">Objet</label>
+                                                <div class="col-sm-7 my-auto">
                                                     <textarea name="" id="BrkObjet_name" class="form-control border-dashed" rows="1" placeholder="Objet" required disabled></textarea>
+                                                </div>
+                                                <label for="" class="col-sm-1 col-form-label fw-bold">Espace</label>
+                                                <div class="col-sm-3 my-auto">
+                                                    <input name="" id="brkespace" class="form-control border-dashed"  placeholder="Espace" required disabled></input>
                                                 </div>
                                             </div>
                                             <div class="row my-1">
-                                                <label for="" class="col-sm-2 col-form-label fw-bold">Sis à</label>
-                                                <div class="col-sm-10 my-auto">
+                                                <label for="" class="col-sm-1 col-form-label fw-bold">Sis à</label>
+                                                <div class="col-sm-7 my-auto">
                                                     <textarea name="" id="brkSisTxt" class="form-control border-dashed" rows="1" placeholder="Sis à" required disabled></textarea>
+                                                </div>
+                                                <label for="" class="col-sm-1 col-form-label fw-bold">Hauteur</label>
+                                                <div class="col-sm-3 my-auto">
+                                                    <input name="hauteur" id="brkhauteur" class="form-control border-dashed"  placeholder="R+2" required disabled></input>
                                                 </div>
                                             </div>
                                             <!-- end client section -->

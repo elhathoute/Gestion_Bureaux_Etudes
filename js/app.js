@@ -926,11 +926,11 @@ $(document).ready(function () {
 
     // send data to devis-add on create devis button click
     $(document).on('submit','#devisForm',function(e){
+        // alert();
         
         if(submitServiceForm){
             return false;
         }
-        
         var tableData = new Array();
         var row =0;
         $('.servicesTable tbody tr').each(function(){
@@ -963,9 +963,10 @@ $(document).ready(function () {
             labelDiscount = $('#labelDiscount').text(),
             labelDevisTotal = $('#labelDevisTotal').text(),
             objet_name = $("#objet_name").val(),
+            espace=$("#espace").val(),
+            hauteur=$("#hauteur").val(),
             located_txt = $("#sisTxt").val();
             // console.log(labelDevisTotal);
-
             let brkId;
             if(selectedDevisBroker && $("#selectedBrkId").val()!=""){
                 brkId = $("#selectedBrkId").val();
@@ -976,7 +977,7 @@ $(document).ready(function () {
             $.ajax({
                 url:'devis-add.php',
                 type:"POST",
-                data:{tableData:tableData,client_id:client_id,client_type:client_type,devis_number:devis_number,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,tva_checked:tva_checked,objet_name:objet_name,located_txt:located_txt,brkId:brkId},
+                data:{tableData:tableData,client_id:client_id,client_type:client_type,devis_number:devis_number,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,tva_checked:tva_checked,objet_name:objet_name,located_txt:located_txt,brkId:brkId,espace:espace,hauteur:hauteur},
                 success:function(data){
                     // alert(data);
                     // if(status == 'success')
@@ -1014,6 +1015,8 @@ $(document).ready(function () {
                         $("#brk_dateTxt").val($("#dateTxt").val());
                         $("#BrkObjet_name").val($("#objet_name").val());
                         $("#brkSisTxt").val($("#sisTxt").val());
+                        $("#brkespace").val($("#espace").val());
+                        $("#brkhauteur").val($("#hauteur").val());
                         $("#brkDevis_comment").val($("#devis_comment").val());
                         // devis_id
                         
@@ -1079,6 +1082,9 @@ $(document).ready(function () {
     $(document).on('click','.btn_brk_devis_confirm',function(){
        if(dBrk_id != '') {
         let prices = [];
+        let BrkSubTotal= $('.labelBrkSubTotal').text();
+        let BrkDiscount= $('.labelBrkDiscount').text();
+        let BrkDevisTotal= $('.labelBrkDevisTotal').text();
         $('#devisBrkShowTable tbody tr').each(function(){
             // prices
             var price = {
@@ -1093,7 +1099,7 @@ $(document).ready(function () {
         $.ajax({
             url:"devis_brk_dets.php",
             type:'POST',
-            data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
+            data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices,BrkSubTotal:BrkSubTotal,BrkDiscount:BrkDiscount,BrkDevisTotal:BrkDevisTotal},
             success:function(data){
                 // alert(data);
                 var json = JSON.parse(data);
@@ -1110,32 +1116,29 @@ $(document).ready(function () {
         // e.preventDefault();
         var DevisId = $('#devis_id').val();
         // var brkId =   $('#broker_id').val();
-        
         // var uniqueServiceId =   $('#uniqueService_id').val();
         var devis_broker_id =$('#devis_broker_id').val();
         // alert(devis_broker_id);
         if(devis_broker_id != '') {
+        let BrkSubTotal= $('.labelBrkSubTotal').text();
+        let BrkDiscount= $('.labelBrkDiscount').text();
+        let BrkDevisTotal= $('.labelBrkDevisTotal').text();
          let prices = [];
         //  let discounts = [];
         //  let service_unique_ids = [];
          $('.devisShowTableBrk tbody tr').each(function(){
-            
         //      // prices
              var price = {
                  "price":$('.serviceBrkPrice',this).val(),
                  "discount":$('.serviceBrkDiscount',this).val(),
                  "service_unique_id":$('.serviceUniqueId',this).val(),
              }
-             
              prices.push(price);
-            //  console.log(prices);
-            //  alert('stop');
-         
          });
          $.ajax({
              url:"devis_brk_dets_update.php",
              type:'POST',
-             data:{dBrk_id:devis_broker_id,devis_id:DevisId,prices:prices},
+             data:{dBrk_id:devis_broker_id,devis_id:DevisId,prices:prices,BrkSubTotal:BrkSubTotal,BrkDiscount:BrkDiscount,BrkDevisTotal:BrkDevisTotal},
              success:function(data){
                 // alert(data);
                  var json = JSON.parse(data);
@@ -1300,7 +1303,8 @@ $(document).ready(function () {
             labelDevisTotal = $('#labelDevisTotal').text(),
             tva_checked = $('.removeTvaClient').is(':checked'),
             // devisStatus = $('#devisStatusDropdown').val(),
-            
+            espace=$("#espace").val(),
+            hauteur=$("#hauteur").val(),
             objet_name = $("#objet_name").val(),
             located_txt = $("#sisTxt").val();
 
@@ -1329,7 +1333,7 @@ $(document).ready(function () {
             $.ajax({
                 url:'devis-update.php',
                 type:"POST",
-                data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt,tva_checked:tva_checked,brkId:brkId},
+                data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt,tva_checked:tva_checked,brkId:brkId,espace:espace,hauteur:hauteur},
                 success:function(data){
                     // alert(data);
                     var json = JSON.parse(data);
@@ -1361,6 +1365,8 @@ $(document).ready(function () {
                     $("#brk_dateTxt").val($("#dateTxt").val());
                     $("#BrkObjet_name").val($("#objet_name").val());
                     $("#brkSisTxt").val($("#sisTxt").val());
+                    $("#brkespace").val($("#espace").val());
+                    $("#brkhauteur").val($("#hauteur").val());
                     $("#brkDevis_comment").val($("#devis_comment").val());
                     // devis_id
                     
@@ -1428,6 +1434,9 @@ $(document).ready(function () {
      
         if (dBrk_id != '') {
             let prices = [];
+            let BrkSubTotal= $('.labelBrkSubTotal').text();
+            let BrkDiscount= $('.labelBrkDiscount').text();
+            let BrkDevisTotal= $('.labelBrkDevisTotal').text();
             $('#devisBrkShowTable tbody tr').each(function() {
                 // console.log($('.serviceUniqueId', this));
                 var price = {
@@ -1445,7 +1454,7 @@ $(document).ready(function () {
             $.ajax({
                 url:"devis_brk_dets_delete_add.php",
                 type: 'POST',
-                data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices},
+                data:{dBrk_id:dBrk_id,devis_id:devis_id,prices:prices,BrkSubTotal:BrkSubTotal,BrkDiscount:BrkDiscount,BrkDevisTotal:BrkDevisTotal},
                 
                 success: function(data) {
                     // alert(data);
@@ -1968,7 +1977,6 @@ $(document).ready(function () {
                     }else{
                         html += `<tr><td colspan="7" class="text-center"><strong>No Data Available</strong></td></tr>`;
                     }
-
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#paymentByClientTable tbody").html(html);
                     $('#clientId').val(clientId);
@@ -2452,9 +2460,9 @@ $(document).on("change","#selectBrokerClient",function(){
                             html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
                             services.push(row[3]);
-                            if(row[10]=="Non Payé"){totalNonPayeView++; totalPriceNonPayeView+=Number(row[4])}
-                            if(row[10]=="Payé"){totalPayeView++; totalPricePayeView+=Number(row[5])}
-                            if(row[10]=="Avance"){totalAvanceView++; totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
+                            if(row[10]=="Non Payé"){ totalPriceNonPayeView+=Number(row[4])}
+                            if(row[10]=="Payé"){ totalPricePayeView+=Number(row[5])}
+                            if(row[10]=="Avance"){totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
                         });
                         let uniqueSrv = [...new Set(services)];
                         uniqueSrv.forEach(srv => {
@@ -2487,8 +2495,7 @@ $(document).on("change","#selectBrokerClient",function(){
                                 Export
                                 </button>
                                 <ul class="dropdown-menu">
-                                <li><a class="dropdown-item st_exp_pdf" id="pdfExport" target="_blank" href='situation_export.php?cl_id=${clientID}'>PDF</a></li>
-                                <li><a class="dropdown-item st_exp_excel" target="_blank" href='situation_excel_export.php?cl_id=${clientID}'>Excel</a></li>
+                                <li><a class="dropdown-item st_exp_pdf" id="pdfExport" target="_blank" href='allSituation_export.php?cl_id=${clientID}'>PDF</a></li>
                                 </ul>
                             </div>
                         `);
@@ -2518,7 +2525,7 @@ $(document).on("change","#selectBrokerClient",function(){
                         var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
                         var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
                         var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
-                        var st_pdf_href = `situation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        var st_pdf_href = `allSituation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
                         $('#pdfExport').attr('href', st_pdf_href);
                     });
                     // Event handler for filtering by month
@@ -2537,7 +2544,7 @@ $(document).on("change","#selectBrokerClient",function(){
                         var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
                         var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
                         var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
-                        var st_pdf_href = `situation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        var st_pdf_href = `allSituation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
                         $('#pdfExport').attr('href', st_pdf_href);
                     });
                     //Event handler for filtering By status
@@ -2556,7 +2563,7 @@ $(document).on("change","#selectBrokerClient",function(){
                         var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
                         var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
                         var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
-                        var st_pdf_href = `situation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        var st_pdf_href = `allSituation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
                         $('#pdfExport').attr('href', st_pdf_href);
                     });
                     //Event handler for filtering By srvName
@@ -2575,7 +2582,7 @@ $(document).on("change","#selectBrokerClient",function(){
                         var sl_m = selectedMonth != null ? `&sl_m=${selectedMonth}` : '';
                         var pd_st = selectedStatus != null ? `&pd_st=${pd_st}` : '';
                         var srv_name = selectedService != null ? `&srv_name=${selectedService.replaceAll(' ', '%20')}` : '';
-                        var st_pdf_href = `situation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
+                        var st_pdf_href = `allSituation_export.php?cl_id=${clientID}${sl_m}${pd_st}${sl_y}${srv_name}`;
                         $('#pdfExport').attr('href', st_pdf_href);
                     });
                 }
@@ -2620,9 +2627,9 @@ $(document).on("change","#selectBrokerClient",function(){
                             html += `<td class="text-center">${row[7]}</td>`;
                             html += `</tr>`;
                             services.push(row[3]);
-                            if(row[10]=="Non Payé"){totalNonPayeView++; totalPriceNonPayeView+=Number(row[4])}
-                            if(row[10]=="Payé"){totalPayeView++; totalPricePayeView+=Number(row[5])}
-                            if(row[10]=="Avance"){totalAvanceView++; totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
+                            if(row[10]=="Non Payé"){totalPriceNonPayeView+=Number(row[4])}
+                            if(row[10]=="Payé"){totalPricePayeView+=Number(row[5])}
+                            if(row[10]=="Avance"){totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
                         });
                         let uniqueSrv = [...new Set(services)];
                         uniqueSrv.forEach(srv => {
@@ -3138,9 +3145,6 @@ $.ajax({
         var html =``;
         let services = [];
         let options = ``;
-        // var totalPayeView=0;
-        // var totalNonPayeView=0;
-        // var totalAvanceView=0;
         var totalPricePayeView=0;
         var totalPriceNonPayeView=0;
         if(json.length != 0){
@@ -3158,9 +3162,9 @@ $.ajax({
                 html += `<td class="text-center">${row[7]}</td>`;
                 html += `</tr>`;
                 services.push(row[3]);
-                if(row[10]=="Non Payé"){totalNonPayeView++; totalPriceNonPayeView+=Number(row[4])}
-                if(row[10]=="Payé"){totalPayeView++; totalPricePayeView+=Number(row[5])}
-                if(row[10]=="Avance"){totalAvanceView++; totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
+                if(row[10]=="Non Payé"){totalPriceNonPayeView+=Number(row[4])}
+                if(row[10]=="Payé"){totalPricePayeView+=Number(row[5])}
+                if(row[10]=="Avance"){totalPricePayeView+=Number(row[5]);totalPriceNonPayeView+=(Number(row[4])-Number(row[5]))}
             });
             let uniqueSrv = [...new Set(services)];
             uniqueSrv.forEach(srv => {
@@ -4118,7 +4122,7 @@ $(document).on("click","#dossierClTable tbody tr button",function(){
                                             <input type="text" class="form-control refTxt" placeholder="N° Dossier" aria-describedby="ds_ref" required>
                                         </div>
                                         <div>
-                                            <input type="datetime-local" class="form-control " id="dsDate" placeholder="N° Dossier"   value="${getCurrentDateTime()}">
+                                            <input type="date" class="form-control " id="dsDate" placeholder="N° Dossier"   value="${getCurrentDateTime()}">
                                         </div>
                                     </div>
                                         <p id="error-ref-exist" class="text-danger fs-5 ms-3 mt-2"></p>
@@ -4167,7 +4171,7 @@ function getCurrentDateTime() {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    return `${year}-${month}-${day}`;
 }
 
     $(document).on("click","#btn_createDs",function(){
@@ -4337,13 +4341,13 @@ function getCurrentDateTime() {
     $(document).on('click','.btnConvertToFacture',function(){
         let devis_id = $("#devis_id").val();
         // console.log(devis_id);
-        
+        let client_id =parseInt($('.btnConvertToFacture').attr('id'));
         function makeRequest(){
             lunchLoader();
             return $.ajax({
                 url:'convertToFct.php',
                 type:'POST',
-                data:{devis_id:devis_id}
+                data:{devis_id:devis_id,client_id:client_id}
             });
         }
         $.when(makeRequest()).then(function successHandler(data){
@@ -4355,6 +4359,44 @@ function getCurrentDateTime() {
                 let id = json.invoice_id,
                 client_id = json.client_id;
                 location.href = `invoice-view.php?id=${id}&client_id=${client_id}`;
+            }
+            else if (status == 'emptyDevis') {
+                $(".loader-wrapper").addClass("loader-hidden");
+                setTimeout(()=>$(".loader-wrapper").remove(),2000);
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Il n\'y a pas de services approuvés dans ce devis',
+                })
+            }
+        }),
+        function errorHandler(){
+            console.log('error occurred');
+        }
+    })
+// convert devis to invoice for the broker
+    $(document).on('click','.brkbtnConvertToFacture',function(){
+        let broker_id =$('.brkbtnConvertToFacture').attr('id');
+        let devis_id = $("#devis_id").val();
+        // console.log(broker_id);
+        function makeRequest(){
+            lunchLoader();
+            return $.ajax({
+                url:'convertToFct.php',
+                type:'POST',
+                data:{devis_id:devis_id,broker_id:broker_id}
+            });
+        }
+        $.when(makeRequest()).then(function successHandler(data){
+            //success message........
+            var json = JSON.parse(data);
+            var status = json.status;
+            if(status == 'success'){
+                $(".loader-wrapper").addClass("loader-hidden");
+                let id = json.invoice_id,
+                client_id = json.client_id,
+                broker_id=json.broker_id;
+                // console.log(broker_id);
+                location.href = `invoice-view.php?id=${id}&client_id=${client_id}&broker_id=${broker_id}`;
             }
             else if (status == 'emptyDevis') {
                 $(".loader-wrapper").addClass("loader-hidden");
@@ -4592,11 +4634,6 @@ function getCurrentDateTime() {
             $('.supplierContainer').hide('fast');
         }
     });
-
-
-
-
-
     //this function need to be on last line
     stylePagination();
 });
@@ -4661,7 +4698,12 @@ function rowTotal(){
     $('.labelTva').text(addedTvaPrice.toFixed(2)+" DH");
     $('.labelDevisTotal').text(price_Tva.toFixed(2)+" DH");
 
+    // alert();
     if($('.removeTvaClient').is(':checked')){
+        $('.labelTva').text('0.00 DH');
+        $('.labelDevisTotal').text(grand_total.toFixed(2)+" DH");
+    }
+    if($('.invoiceRmTVA').is(':checked')){
         $('.labelTva').text('0.00 DH');
         $('.labelDevisTotal').text(grand_total.toFixed(2)+" DH");
     }

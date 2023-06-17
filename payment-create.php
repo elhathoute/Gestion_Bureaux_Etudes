@@ -28,7 +28,7 @@ $clientRes = mysqli_query($cnx, $query);
 }
 
 #overlay.active {
-  pointer-events: auto;
+    pointer-events: auto;
 }
 
 </style>
@@ -141,7 +141,7 @@ $clientRes = mysqli_query($cnx, $query);
                                     </select>
                                 </div>
                                 <div>
-                                    <textarea name="" class="d-none form-control " id="remisDetails" cols="30" rows="10"></textarea>
+                                    <textarea name="remisDetails" class="d-none form-control " id="remisDetails" cols="30" rows="10"></textarea>
                                 </div>
                                 <div class="form-check my-3">
                                     <input class="form-check-input" type="checkbox" value="" id="supplierCheckbox" name="supplierCheckbox">

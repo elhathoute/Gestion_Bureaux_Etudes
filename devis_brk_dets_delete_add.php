@@ -7,13 +7,15 @@ if ($_POST) {
     $devis_id = $_POST["devis_id"];
     $prices = $_POST['prices'];
     // die(var_dump($devis_broker_id));
-    
+    $BrkSubTotal = $_POST['BrkSubTotal'];
+    $BrkDiscount = $_POST['BrkDiscount'];
+    $BrkDevisTotal = $_POST['BrkDevisTotal'];
+    $request="UPDATE `broker_devis` SET `discount`='$BrkDiscount',`sub_total`='$BrkSubTotal',`net_total`='$BrkDevisTotal' WHERE `id_devis`='$devis_id'";
+    $result=mysqli_query($cnx, $request);
     // Delete existing services
     $query1 = "DELETE FROM detail_broker_devis WHERE id_broker_devis = $devis_broker_id";
     $res1 = mysqli_query($cnx, $query1);
     // die(var_dump($res1));
-
-
     if ($res1) {
     $res='';
         // Insert new services
@@ -25,7 +27,6 @@ if ($_POST) {
 
             $res = mysqli_query($cnx, $query);
         }
-        
         // die(var_dump($res));
         if ($res) {
             $data = array('status' => 'success');

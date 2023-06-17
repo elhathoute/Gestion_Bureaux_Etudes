@@ -103,7 +103,7 @@ function br2nl($string)
                                         <input type="text" class="form-control border-dashed p-0" id="devis_number" name="devis_number" value="<?php echo $devis['number'];?>" disabled>
                                     </div>
                                 </div>
-                                <div class="row my-1">
+                                <div class="row my-2">
                                     <label for="" class="col-sm-5 col-form-label fw-bold">Date</label>
                                     <div class="col-sm-7 my-auto">
                                         <input type="date" class="form-control-plaintext " id="dateTxt" value="<?php echo date('Y-m-d',strtotime($devis['date_creation']));?>">
@@ -123,16 +123,24 @@ function br2nl($string)
                                 </div> -->
                             </div>
 
-                            <div class="row my-1">
-                                <label for="" class="col-sm-2 col-form-label fw-bold">Object</label>
-                                <div class="col-sm-10 my-auto">
+                            <div class="row my-3">
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Object</label>
+                                <div class="col-sm-7 my-auto">
                                     <textarea name="" id="objet_name" class="form-control border-dashed" rows="1" placeholder="Objet" required><?= $devis['objet'];?></textarea>
+                                </div>
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Espace</label>
+                                <div class="col-sm-3 my-auto">
+                                    <input name="" id="espace" class="form-control border-dashed"  placeholder="Espace" required  value="<?= $devis['espace']; ?>"></input>
                                 </div>
                             </div>
                             <div class="row my-1">
-                                <label for="" class="col-sm-2 col-form-label fw-bold">Sis à</label>
-                                <div class="col-sm-10 my-auto">
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Sis à</label>
+                                <div class="col-sm-7 my-auto">
                                     <textarea name="sisTxt" id="sisTxt" class="form-control border-dashed" rows="1" placeholder="Sis à" required ><?= $devis['located']; ?></textarea>
+                                </div>
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Hauteur</label>
+                                <div class="col-sm-3 my-auto">
+                                    <input name="hauteur" id="hauteur" class="form-control border-dashed"  placeholder="R+2" required  value="<?= $devis['hauteur']; ?>"></input>
                                 </div>
                             </div>
                             <!-- end client section -->
@@ -279,7 +287,6 @@ function br2nl($string)
                                                         
                                                         </textarea>
                                                     </div> -->
-                                                   
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="row my-1">
@@ -300,15 +307,23 @@ function br2nl($string)
                                             </div>
 
                                             <div class="row my-1">
-                                                <label for="" class="col-sm-2 col-form-label fw-bold">Objet</label>
-                                                <div class="col-sm-10 my-auto">
+                                                <label for="" class="col-sm-1 col-form-label fw-bold">Objet</label>
+                                                <div class="col-sm-7 my-auto">
                                                     <textarea name="" id="BrkObjet_name" class="form-control border-dashed" rows="1" placeholder="Objet" required disabled></textarea>
+                                                </div>
+                                                <label for="" class="col-sm-1 col-form-label fw-bold">Espace</label>
+                                                <div class="col-sm-3 my-auto">
+                                                    <input name="" id="brkespace" class="form-control border-dashed"  placeholder="Espace" required disabled></input>
                                                 </div>
                                             </div>
                                             <div class="row my-1">
-                                                <label for="" class="col-sm-2 col-form-label fw-bold">Sis à</label>
-                                                <div class="col-sm-10 my-auto">
+                                                <label for="" class="col-sm-1 col-form-label fw-bold">Sis à</label>
+                                                <div class="col-sm-7 my-auto">
                                                     <textarea name="" id="brkSisTxt" class="form-control border-dashed" rows="1" placeholder="Sis à" required disabled></textarea>
+                                                </div>
+                                                <label for="" class="col-sm-1 col-form-label fw-bold">Hauteur</label>
+                                                <div class="col-sm-3 my-auto">
+                                                    <input name="hauteur" id="brkhauteur" class="form-control border-dashed"  placeholder="R+2" required disabled></input>
                                                 </div>
                                             </div>
                                             <!-- end client section -->

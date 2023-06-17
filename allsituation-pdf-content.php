@@ -85,16 +85,16 @@
             ) dp ON dd.id = dp.id_devis
             WHERE d.remove = 0 AND dd.confirmed = 1";
             $request ="SELECT  receipt.R_number,receipt.id_payment,Sum(devis_payments.montant_paye) as receiptMontant,devis_payments.pay_method, receipt.date
-            FROM devis d
-            INNER JOIN detail_devis dd ON d.id = dd.id_devis
+            FROM receipt 
+            LEFT JOIN devis_payments ON  receipt.id_payment=devis_payments.id 
+            INNER JOIN detail_devis dd ON devis_payments.id_devis = dd.id
+            LEFT JOIN  devis d ON dd.id_devis =d.id
             LEFT JOIN dossier ON dd.id = dossier.id_service
             LEFT JOIN (
                 SELECT id_devis, prix, SUM(montant_paye) AS total_montant_paye
                 FROM devis_payments
                 GROUP BY id_devis
             ) dp ON dd.id = dp.id_devis
-            LEFT JOIN devis_payments ON dd.id = devis_payments.id_devis
-			LEFT JOIN receipt on devis_payments.id =receipt.id_payment
             WHERE d.remove = 0 AND dd.confirmed=1";
             $conditions2=[];
             $conditions = [];
@@ -120,6 +120,10 @@
             (YEAR(dossier.date) = $sl_y AND dossier.date IS NOT NULL) OR
                     (YEAR(d.date_creation) = $sl_y AND dossier.date IS NULL)
                 )";
+                $conditions2[] = "(
+            (YEAR(dossier.date) = $sl_y AND dossier.date IS NOT NULL) OR
+                    (YEAR(d.date_creation) = $sl_y AND dossier.date IS NULL)
+                )";
             }
 
             if (isset($_GET['sl_m'])) {
@@ -128,11 +132,23 @@
                     (MONTH(dossier.date) = $sl_m AND dossier.date IS NOT NULL) OR
                     (MONTH(d.date_creation) = $sl_m AND dossier.date IS NULL)
                 )";
+                $conditions2[] = "(
+                    (MONTH(dossier.date) = $sl_m AND dossier.date IS NOT NULL) OR
+                    (MONTH(d.date_creation) = $sl_m AND dossier.date IS NULL)
+                )";
+            }
+
+            if (isset($_GET['cl_id'])) {
+                $cl_id = $_GET["cl_id"];
+                $conditions[] = " d.id_client = $cl_id ";
+                $conditions2[] = " d.id_client = $cl_id ";
+                $Situation_number = addSituation($cl_id);
             }
 
             if (isset($_GET['srv_name'])) {
                 $srv_name = mysqli_real_escape_string($cnx, str_replace("%20", " ", $_GET["srv_name"]));
                 $conditions[] = "dd.service_name = '$srv_name'";
+                $conditions2[] = "dd.service_name = '$srv_name'";
             }
 
             if (!empty($conditions)) {
@@ -145,7 +161,7 @@
             }else{
                 $request .= " GROUP BY receipt.R_number ORDER BY receipt.date;";
             }
-            $Situation_number = 0;
+            // $Situation_number = 0;
             $RPresult = mysqli_query($cnx,$request);
             $RProws = mysqli_fetch_all($RPresult);
             $res = mysqli_query($cnx,$query);
@@ -165,8 +181,8 @@
             <div class="my-5">
                 <div style="margin:auto;width:fit-content;text-align:center;font-weight:600;font-size:1.3rem">
                     <span>DE</span><br>
-                    <span style="text-decoration:underline"><?= strtoupper("beplan"); ?></span><br>
-                    <!-- <span style="text-decoration:underline">Situation N°<?=$Situation_number;?></span> -->
+                    <span style="text-decoration:underline"><?= isset($_GET['cl_id'])==true?strtoupper($data_rows[0][9]) : strtoupper("beplan"); ?></span><br>
+                    <span style="text-decoration:underline"><?= isset($_GET['cl_id'])==true?'Situation N° '.$Situation_number:"";?></span>
                 </div>
             </div>
         </section>
@@ -319,6 +335,7 @@
                     }
                     //ETAT DES AVANCES
                         $TotalPaiment=0;
+                        $num3=1;
                         $html .= '<h3 class="text-center underline" style="color:red">ETAT DES AVANCES</h3>';
                         $html .= '<table class="table table-bordered break_page" >';
                         $html .= '<tr class=" text-bold">';
@@ -330,16 +347,18 @@
                         $html .= '<td>Mode de paiment</td>';
                         $html .= '</tr>';
                         foreach($RProws as $row){
+                            $date =new datetime($row[4]);
                             if($row[0]!=null){
                                 $html .= '<tr class=" text-bold">';
-                                $html .= '<td"></td>';
-                                $html .= '<td>'.$row[4].'</td>';
+                                $html .= '<td">'.$num3.'</td>';
+                                $html .= '<td>'.$date->format('Y-m-d').'</td>';
                                 $html .= '<td class="align-middle" >'.$row[0].'</td>';
-                                $html .= '<td>Avances</td>';
+                                $html .= '<td>'. ($num3 == 1 ? $num3.'er avance' : $num3.'ème avance') .'</td>';
                                 $html .= '<td>'.$row[2].'</td>';
                                 $html .= '<td>'.$row[3].'</td>';
                                 $html .= '</tr>';
                                 $TotalPaiment+=$row[2];
+                                $num3++;
                             }
                         }
                         $html .= '<tr class=" text-bold">';
@@ -347,7 +366,7 @@
                         $html .= '<td" colspan="2">'.$TotalPaiment.'</td>';
                         $html .= '</tr class=" text-bold">';
                         $html .= '</table>';
-                    echo $html; // Output the HTML content
+                        echo $html; // Output the HTML content
                         ?>
                         </table>
         </section>

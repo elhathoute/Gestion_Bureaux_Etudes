@@ -204,7 +204,7 @@ function br2nl($string)
                                     <div class="row my-2">
                                         <div class="col-sm-6">
                                             <label class="form-check-label fw-light" for="tvaCheckbox">Enlever TVA&nbsp</label>
-                                            <input type="checkbox" class="form-check-input removeTva" name="" id="tvaCheckbox" <?= $invoice['remove_tva']=='1'?'checked':"";?> >
+                                            <input type="checkbox" class="form-check-input removeTva removeTvaClient" name="" id="tvaCheckbox" <?= $invoice['remove_tva']=='1'?'checked':"";?> >
                                         </div>
 
                                     </div>

@@ -15,10 +15,9 @@
         }
 
         .my-5 {
-            margin-top: 1rem;
+            margin-top: 2rem;
             margin-bottom: 1rem;
         }
-        
         .container {
             width: 100%;
             margin-right: auto;
@@ -39,21 +38,16 @@
             height: 100%;
             object-fit: cover;
         }
-
-        table,
-        th,
-        td {
+        table,th,td {
             border: 2px solid;
             text-align: center;
             padding: 3px;
         }
-
         .table {
             border-collapse: collapse;
             width: 100%;
             font-size: 0.8rem;
         }
-
         .text-bold {
             font-weight: bold;
         }
@@ -73,20 +67,12 @@
     // $data = file_get_contents($path);
     // $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
     $invoiceInfo = getSelectedInvoiceInfo();
-    
     function br2nl($string)
     {
         return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
     }
     ?>
     <div class="container">
-        
-        <!-- <section >
-            <div class="img-container">
-                <img src=" " alt="Logo Company">
-            </div>
-        </section> -->
-        
         <section>
                 <div style="position:relative;">
                     <p class="" style='font-size:1.1rem;text-decoration:underline;position:absolute;top:30;right:0'>Agadir le : <?php echo date("d/m/Y"); ?></p>
@@ -96,7 +82,14 @@
             <div class="my-5">
                 <div style="margin:auto;width:fit-content;text-align:center;font-weight:600;font-size:1.3rem">
                     <span>A</span><br>
-                    <span><?php echo strtoupper(getSelectedClientName());?></span><br>
+                    <span><?php 
+                    if(isset($_GET['broker_id'])){
+                        $broker=getBrokerById($_GET['broker_id']);
+                        echo strtoupper( $broker['nom'].' '.$broker['prenom']);
+                    }else{
+                        echo strtoupper(getSelectedClientName());
+                    }
+                    ?></span><br>
                     <!-- <textarea  value="" name="" id="receiverAdr" style='resize: none;height:auto;border:none;' disabled> -->
                     <!-- <?php 
                         $adr_ice = explode('/',getSelectedClientAdr());
@@ -106,7 +99,6 @@
                         }else{
                             echo getSelectedClientAdr();
                         }
-                    
                     ?> -->
                     <!-- </textarea> -->
                     <span style="text-decoration:underline">Facture N°<?= $invoiceInfo["F_number"]  ?></span>
@@ -115,6 +107,13 @@
         </section>
 
         <div class="my-5">
+            <?php
+            $MO='';
+            if(isset($_GET['broker_id'])){
+                $MO.='<span style="text-decoration:underline;margin-right:5px;">MO:</span><span> '.strtoupper(getSelectedClientName()).'</span><br><br>';
+                echo $MO;
+            }
+            ?>
             <span style="text-decoration:underline">Objet:</span><br>
             <p style="text-align:center;padding:0 20px"><?=ucfirst($invoiceInfo["objet"]);?>. <span style="font-weight: bold !important;">Sise</span> à <span> <?= $invoiceInfo['located'] ?></span>.</p>
         </div>
@@ -126,25 +125,22 @@
             $num = 1;
             $splitRows = ceil($invoiceRows/12);
             $html = '';
-
             for ($i=0; $i < $splitRows ; $i++) { 
-
-            $query = "SELECT * FROM `detail_invoice` WHERE `id_invoice`='$id' LIMIT $offset,12";
-            $res = mysqli_query($cnx, $query);
-            $row = mysqli_fetch_all($res);
-
-        $html .= '<table class="table">
-            <thead>
-                <tr>
-                    <th>N°P</th>
-                    <th>Désignation des ouvrages</th>
-                    <th>U</th>
-                    <th>Qté</th>
-                    <th>P.U(Hors T.V.A)</th>
-                    <th>P.T(Hors T.V.A)</th>
-                </tr>
-            </thead>
-            <tbody>';
+                    $query = "SELECT * FROM `detail_invoice` WHERE `id_invoice`='$id' LIMIT $offset,12";
+                    $res = mysqli_query($cnx, $query);
+                    $row = mysqli_fetch_all($res);
+                    $html .= '<table class="table">
+                        <thead>
+                            <tr>
+                                <th>N°P</th>
+                                <th>Désignation des ouvrages</th>
+                                <th>U</th>
+                                <th>Qté</th>
+                                <th>P.U(Hors T.V.A)</th>
+                                <th>P.T(Hors T.V.A)</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
                 
                         foreach ($row as $data) {
                             $prix = floatval($data[3]) - ((floatval($data[5])/100)*floatval($data[3]));
@@ -157,23 +153,17 @@
                                 $html .= '<td>'.sprintf('%05.2f', round(floatval($prix)*floatval($data[4]),2)).'</td>';
                             $html .= '</tr>';
                             $num++;
-                        }
-                    
-                
+                        }                    
                 // <!-- for loop bracket -->
-                
                 //foreach loop the offset take plus 6 for the limit that means retieving data will start from the $offset row
-                $offset += 12;
-                
-                if($i+1 != $splitRows){
-                    $html .= '</tbody></table>';
-                    $html .= '<div class="page-break"></div>';
-                    $html .= '<div style="margin-top:5rem;"></div>';
-                    
+                        $offset += 12;
+                        if($i+1 != $splitRows){
+                            $html .= '</tbody></table>';
+                            $html .= '<div class="page-break"></div>';
+                            $html .= '<div style="margin-top:5rem;"></div>';
+                            
+                        }
                 }
-                }
-                
-
                 // <!-- TOTALS -->
                 $html .= '<tr class="text-bold">
                     <td colspan="5">TOTAL H.T</td>

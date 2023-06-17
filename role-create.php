@@ -284,6 +284,14 @@ $check_showAll =  ($role->hasPerm('show all')) ? "":"hide-element";
                                         </div>
                                     </div>
                                     <!-- ********** -->
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="41" name="perms[]"  id="CbCreatePaymentChecking">
+                                            <label class="form-check-label" for="CbCreatePaymentChecking">
+                                                paiement par chèque
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </fieldset>
 

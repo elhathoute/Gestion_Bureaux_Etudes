@@ -84,6 +84,10 @@ if(isset($_GET["sc"])){
                                             $check_delete = ($role->hasPerm('delete invoice')) ? "":"hide-element";
                                             while($row=mysqli_fetch_assoc($res)){
                                                 // $check_client = ($row['status']=="accepter" && strtolower($row['type'])=="approved")? '<span><i class="bi bi-check-circle btn btn-outline-success btn-sm rounded-circle btn-client-approve" data-id="'.$row['id'].'" ></i></span>' :'';
+                                                $broker_id='';
+                                                if($row['broker_id']!=0){
+                                                    $broker_id='&broker_id='.$row['broker_id'].'';
+                                                }
                                                 $paid_invoice = ($row['paid_inv']=="1")? "approved_row" :"";
                                                 $solde = (floatval($row["net_total"]) - floatval($row['solde']))<0 ? 0 : (floatval($row["net_total"]) - floatval($row['solde']));
                                                 echo '<tr class="'.$paid_invoice.'" >
@@ -96,7 +100,7 @@ if(isset($_GET["sc"])){
                                                     <td >'.number_format($solde,2).' DH</td>
                                                     <td><span class="'.styleStatus($row["status"]).'">'.$row["status"].'</span></td>
                                                     <td>
-                                                        <a href="invoice-view.php?id='.$row['id'].'&client_id='.$row['client_id'].'" data-id="'.$row['id'].'" data-id_client="'.$row['client_id'].'" class="btn btn-secondary btn-sm viewInvoiceBtn" title="Afficher Facture" ><span><i class="bi bi-eye"></i></span></a>
+                                                        <a href="invoice-view.php?id='.$row['id'].'&client_id='.$row['client_id'].''.$broker_id.'" data-id="'.$row['id'].'" data-id_client="'.$row['client_id'].'" class="btn btn-secondary btn-sm viewInvoiceBtn" title="Afficher Facture" ><span><i class="bi bi-eye"></i></span></a>
                                                         <a href="invoice-edit.php?id='.$row['id'].'&client_id='.$row['client_id'].'" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editInvoiceBtn '. (($row['paid_inv']=="1")? "hide-element" :"") .'  '.$check_edit.'" title="Modifier Facture" ><span><i class="bi bi-pencil-square"></i></span></a>
                                                         <a href="javascript:void(0)" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteInvoiceBtn '.$check_delete.' " title="Supprimer Facture" ><span><i class="bi bi-trash"></i></span></a>
                                                         

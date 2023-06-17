@@ -423,6 +423,14 @@ if ($exist) {
                 </a>
             </li>
             <!-- Situation End -->
+            <!-- Caisse -->
+            <li class="nav-item">
+                <a id="getCaisse" class="nav-link collapsed <?= $page == 'caisse.php' ? 'active' : '' ?> <?= ($role->hasPerm('show situation')) ? "" : "hide-element" ?>" href="caisse.php">
+                    <i class="bi bi-safe-fill"></i>
+                    <span>Caisse</span>
+                </a>
+            </li>
+            <!-- Caisse End -->
 
             <!-- Achat -->
             <li class="nav-item <?= ($role->hasPerm('show purchase') || $role->hasPerm('create purchase')) ? "" : "hide-element" ?>">

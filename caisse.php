@@ -1,17 +1,12 @@
-<?php
+<?php 
 include 'header.php';
-$brokerRes = getBrokerData();
-
-$query = "SELECT * FROM `client` WHERE 'remove'=0";
-$clientRes = mysqli_query($cnx, $query);
 ?>
-
 <div class="pagetitle">
-    <h1>Liste des situations</h1>
+    <h1>Caisse</h1>
 </div>
 
 <section class="section">
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-lg-12">
             <div class="card rounded-4">
                 <div class="card-body row">
@@ -19,23 +14,11 @@ $clientRes = mysqli_query($cnx, $query);
                     <div class="col-md-5 my-1">
                         <select class="form-select" id="situationSelect">
                             <option value="" selected disabled>Veuillez choisir un Maître d'ouvrage </option>
-                            <?php
-                                while ($row = mysqli_fetch_assoc($clientRes)) {
-                                    $clientName = fetchClientName($row['type'], $row['id_client']);
-                                    echo '<option value=' . $row["id"] . '>' . $clientName . '</option>';
-                                }
-                            ?>
                         </select>
                     </div>
                     <div class="col-md-5 my-1">
                         <select class="form-select" id="brokerSelectsituation">
                             <option value="" selected disabled>Veuillez choisir un intermédiaire </option>
-                            <?php
-                                while ($row = mysqli_fetch_assoc($brokerRes)) {
-                                    $brokerFullName = ucfirst($row["nom"]) .' '. ucfirst($row["prenom"]);
-                                    echo '<option value=' . $row["id"] . '>' . $brokerFullName . '</option>';
-                                }
-                            ?>
                         </select>
                     </div>
                     <div class="col-md-2 my-1">
@@ -44,31 +27,31 @@ $clientRes = mysqli_query($cnx, $query);
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="row">
-        <div class="mb-3 gap-2 d-flex">
-            <div class="bg-white col-6 py-3 text-danger fw-bold fs-2 rounded text-center">Total non payé : <span class="" id="totalNonPayeView"></span>
+        <!-- <div class="mb-3 gap-2 d-flex">
+            <div class="bg-white col-4 py-3 text-danger fw-bold fs-2 rounded text-center">Total non payé : <span class="" id="totalNonPayeView"></span>
                 <div class="">
                     <span class="ps-5 fs-1" id="totalPriceNonPayeView"></span>
                 </div>
             </div>
-            <div class="bg-white col-6 py-3 text-success fw-bold fs-2 rounded text-center">Total payé : <span class="" id="totalPayeView"></span>
+            <div class="bg-white col-4 py-3 text-success fw-bold fs-2 rounded text-center">Total payé : <span class="" id="totalPayeView"></span>
                 <div class="">
                     <span class="ps-5 fs-1" id="totalPricePayeView"></span>
                 </div>
             </div>
-            <!-- <div class="bg-secondary bg-opacity-25 col-4 py-3 text-danger fw-bold fs-2 rounded text-center">Total : <span class="" id="totalAvanceView"></span>
+            <div class="bg-secondary bg-opacity-25 col-4 py-3 text-danger fw-bold fs-2 rounded text-center">Total : <span class="" id="totalAvanceView"></span>
                 <div class="">
                     <span class="ps-5 fs-1" id="totalPriceAvanceView"></span>
                 </div>
-            </div> -->
-        </div>
+            </div>
+        </div> -->
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <div class="row my-2">
                         <div class="col-md-6">
-                            <h3 class="card-title">Situation information</h3>
+                            <h3 class="card-title">Caisse information</h3>
                         </div>
                         <div class="col-md-6 d-flex align-items-center justify-content-end" id="expSitBtn">
                             
@@ -78,7 +61,7 @@ $clientRes = mysqli_query($cnx, $query);
                         <!-- table Situation -->
                         <div class="overflow-auto">
                             <div>
-                                <table id="situationTable" class="table table-hover table-bordered table-striped" style="width:100%">
+                                <table id="" class="table table-hover table-bordered table-striped" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>
@@ -126,3 +109,4 @@ $clientRes = mysqli_query($cnx, $query);
 
 
 <?php include 'footer.php'; ?>
+

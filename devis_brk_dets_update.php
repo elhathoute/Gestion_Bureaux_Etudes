@@ -6,6 +6,11 @@ if($_POST){
 $devis_broker_id = $_POST["dBrk_id"];
 $devis_id = $_POST["devis_id"];
 $prices = $_POST['prices'];
+$BrkSubTotal = $_POST['BrkSubTotal'];
+$BrkDiscount = $_POST['BrkDiscount'];
+$BrkDevisTotal = $_POST['BrkDevisTotal'];
+$request="UPDATE `broker_devis` SET `discount`='$BrkDiscount',`sub_total`='$BrkSubTotal',`net_total`='$BrkDevisTotal' WHERE `id_devis`='$devis_id'";
+$result=mysqli_query($cnx, $request);
 // $discounts = $_POST['discounts'];
 // $service_unique_ids = $_POST['service_unique_ids'];
 $res ='';

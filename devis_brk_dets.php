@@ -4,7 +4,11 @@ include "includes/config.php";
 $devis_broker_id = $_POST["dBrk_id"];
 $devis_id = $_POST["devis_id"];
 $prices = $_POST['prices'];
-
+$BrkSubTotal = $_POST['BrkSubTotal'];
+$BrkDiscount = $_POST['BrkDiscount'];
+$BrkDevisTotal = $_POST['BrkDevisTotal'];
+$request="UPDATE `broker_devis` SET `discount`='$BrkDiscount',`sub_total`='$BrkSubTotal',`net_total`='$BrkDevisTotal' WHERE `id_devis`='$devis_id'";
+$result=mysqli_query($cnx, $request);
 $res = '';
 foreach ($prices as $price) {
     $_price = $price["price"];
@@ -15,6 +19,7 @@ foreach ($prices as $price) {
 
     $res = mysqli_query($cnx, $query);
 }
+
 
 if ($res) {
     $data = array('status' => 'success');

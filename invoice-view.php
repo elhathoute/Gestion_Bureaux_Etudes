@@ -21,7 +21,11 @@ function br2nl($string)
     </div>
     
     <div class="col-md-4 <?= ($role->hasPerm('export invoice')) ? "":"hide-element" ?> <?= (strtoupper($invoice['type'])==strtoupper("Approved"))? '' :  "hide-element";?>">
+    <?php if(isset($_GET['broker_id'])){?>
+        <a target="_blank" href='invoice_export.php?id=<?=$_GET['id']?>&client_id=<?=$_GET['client_id']?>&broker_id=<?=$_GET['broker_id']?>' class="btn btn-danger float-end" title="Imprimer Facture"><i class="bi bi-download"></i> Export</a>
+    <?php }else{?>
         <a target="_blank" href='invoice_export.php?id=<?=$_GET['id']?>&client_id=<?=$_GET['client_id']?>' class="btn btn-primary float-end" title="Imprimer Facture"><i class="bi bi-download"></i> Export</a>
+    <?php }?>
     </div>
 </div>
 <div class="row">
@@ -64,11 +68,15 @@ function br2nl($string)
                                 <fieldset class="border-dashed">
                                     <div class="input-group">
                                         <input type="hidden" id="client_id" name="client_id" >
-                                        <input type="text" class="form-control-plaintext fw-bold fs-6 py-0" value="<?php echo getSelectedClientName(); ?>" name="" id="receiverName" disabled>
+                                        <input type="text" class="form-control-plaintext fw-bold fs-6 py-0" value="<?php
+                                        if(isset($_GET['broker_id'])){
+                                            $broker=getBrokerById($_GET['broker_id']);
+                                            echo strtoupper( $broker['nom'].' '.$broker['prenom']);
+                                        }else{
+                                            echo strtoupper(getSelectedClientName()); 
+                                        }
+                                        ?>" name="" id="receiverName" disabled>
                                     </div>
-                                    <!-- <div class="input-group">
-                                        <input type="text" class="form-control-plaintext fs-6 py-0 " value="<?php echo getSelectedClientAdr(); ?>" name="" id="receiverAdr" disabled>
-                                    </div> -->
                                     <div class="input-group">
                                         <textarea  class="form-control-plaintext fs-6 py-0 " value="" name="" id="receiverAdr" style='resize: none;' disabled><?php 
                                             $adr_ice = explode('/',getSelectedClientAdr());
@@ -97,7 +105,7 @@ function br2nl($string)
                                         <input type="text" class="form-control border-dashed p-0" id="invoice_number" name="invoice_number" value="<?php echo $invoice['F_number'];?>" disabled>
                                     </div>
                                 </div>
-                                <div class="row my-1">
+                                <div class="row my-2">
                                     <label for="" class="col-sm-5 col-form-label fw-bold">Date</label>
                                     <div class="col-sm-7 my-auto">
                                         <input type="date" class="form-control-plaintext " id="" value="<?php echo date('Y-m-d',strtotime($invoice['date_creation']));?>" disabled>
@@ -122,7 +130,7 @@ function br2nl($string)
                                     </div>
                                 </div> -->
                             </div>
-                            <div class="row my-1">
+                            <div class="row my-3">
                                 <label for="" class="col-sm-2 col-form-label fw-bold">Objet</label>
                                 <div class="col-sm-10 my-auto">
                                     <textarea name="" id="objet_name" class="form-control border-dashed" rows="1" placeholder="Objet" required disabled><?= $invoice['objet']; ?></textarea>
@@ -156,7 +164,6 @@ function br2nl($string)
                                         <?php
                                             echo getSelectedInvoiceServices();
                                         ?>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -196,9 +203,8 @@ function br2nl($string)
                                     <div class="row my-2">
                                         <div class="col-sm-6">
                                             <label class="form-check-label fw-light" for="tvaCheckbox">Enlever TVA&nbsp</label>
-                                            <input type="checkbox" class="form-check-input removeTva" name="" id="tvaCheckbox" <?= $invoice['remove_tva']=='1'?'checked':"";?> disabled>
+                                            <input type="checkbox" class="form-check-input removeTva invoiceRmTVA" name="" id="tvaCheckbox" <?= $invoice['remove_tva']=='1'?'checked':"";?> disabled>
                                         </div>
-
                                     </div>
                                     <div class="row my-2">
                                         <div class="col-sm-6">

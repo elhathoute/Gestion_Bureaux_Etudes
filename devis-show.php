@@ -17,9 +17,12 @@ if($devis['status']==strtolower('rejeter')){
         $broker_id = getBroker_devisData($devis['id'])['id_broker'];
         $brokerRow = getBrokerById($broker_id);
         $broker_fullName = ucfirst($brokerRow['prenom']) . ' ' . strtoupper($brokerRow['nom']);
+        $isfacture2 =getbrkDevisfactById($_GET['id'])['is_facture']=='0'?"":"disabled"; 
+        $display="";
+    }else{
+        $display="d-none";
     }
    
-    
 
 
 function br2nl($string)
@@ -37,13 +40,21 @@ function br2nl($string)
     <div class="col-md-4 <?= ($role->hasPerm('export devis')) ? "":"hide-element" ?> <?= (strtoupper($devis['type'])==strtoupper("Approved"))? '' :  "hide-element";?>">
         <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&client_id=<?=$_GET['client_id']?>' class="btn btn-primary float-end" title="Imprimer Maîtres d'ouvrage Devis"><i class="bi bi-download"></i> Export MO</a>
         <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&broker_id=<?=$broker_id?>&client_id=<?=$_GET['client_id']?>' class="btn btn-danger float-end me-2" title="Imprimer Intermédiaire Devis"><i class="bi bi-download"></i> Export INT</a>
-       <?php if(getDevisById($_GET['id'])['is_facture']=='0'){?>
-       <button class="btn btn-secondary float-end me-2 btnConvertToFacture">Convertir en Facture </button> 
-       <?php } else {?>
-
-        <button class="btn btn-secondary float-end me-2 btnConvertToFacture" disabled>Déjà converti </button> 
-
-        <?php } ?>
+        <!-- <button class="btn btn-secondary float-end me-2 btnConvertToFacture" disabled>Déjà converti </button>  -->
+        <?php 
+        $isfacture =getDevisById($_GET['id'])['is_facture']=='0'?"":"disabled"; 
+       
+        ?>
+        <div class="btn-group dropstart">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Convertir en Facture
+            </button>
+            <div class="dropdown-menu">
+                <button class="brkbtnConvertToFacture text-center dropdown-item fw-bold text-danger btn <?= $isfacture2?> <?= $display?>" id="<?= $broker_id?>">Intermédiaire</button>
+                <!-- <li><hr class="dropdown-divider"></li> -->
+                <button class="btnConvertToFacture text-center dropdown-item fw-bold text-primary btn <?= $isfacture?>" id="<?= $_GET['client_id']?>">Maître d'ouvrage</button>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -123,7 +134,7 @@ function br2nl($string)
                                             <input type="text" class="form-control border-dashed p-0" id="devis_number" name="devis_number" value="<?php echo $devis['number'];?>" disabled>
                                         </div>
                                     </div>
-                                    <div class="row my-1">
+                                    <div class="row my-2">
                                         <label for="" class="col-sm-5 col-form-label fw-bold">Date</label>
                                         <div class="col-sm-7 my-auto">
                                             <input type="date" class="form-control-plaintext " id="" value="<?php echo date('Y-m-d',strtotime($devis['date_creation']));?>" disabled>
@@ -145,16 +156,24 @@ function br2nl($string)
                                     </div> -->
                                 </div>
 
-                                <div class="row my-1">
-                                    <label for="" class="col-sm-2 col-form-label fw-bold">Objet</label>
-                                    <div class="col-sm-10 my-auto">
+                                <div class="row my-3">
+                                    <label for="" class="col-sm-1 col-form-label fw-bold">Objet</label>
+                                    <div class="col-sm-7 my-auto">
                                         <textarea name="" id="objet_name" class="form-control border-dashed" rows="1" placeholder="Objet" required disabled><?= $devis['objet']; ?></textarea>
+                                    </div>
+                                    <label for="" class="col-sm-1 col-form-label fw-bold">Espace</label>
+                                    <div class="col-sm-3 my-auto">
+                                        <input name="" id="espace" class="form-control border-dashed"  placeholder="Espace" required disabled value="<?= $devis['espace']; ?>"></input>
                                     </div>
                                 </div>
                                 <div class="row my-1">
-                                    <label for="" class="col-sm-2 col-form-label fw-bold">Sis à</label>
-                                    <div class="col-sm-10 my-auto">
+                                    <label for="" class="col-sm-1 col-form-label fw-bold">Sis à</label>
+                                    <div class="col-sm-7 my-auto">
                                         <textarea name="" id="sisTxt" class="form-control border-dashed" rows="1" placeholder="Sis à" required disabled><?= $devis['located']; ?></textarea>
+                                    </div>
+                                    <label for="" class="col-sm-1 col-form-label fw-bold">Hauteur</label>
+                                    <div class="col-sm-3 my-auto">
+                                        <input name="hauteur" id="hauteur" class="form-control border-dashed"  placeholder="R+2" required disabled value="<?= $devis['hauteur']; ?>"></input>
                                     </div>
                                 </div>
                                 <!-- end client section -->
@@ -313,12 +332,10 @@ function br2nl($string)
                                         <input type="text" class="form-control border-dashed p-0" id="devis_number" name="devis_number" value="<?php echo $devis['number'];?>" disabled>
                                     </div>
                                 </div>
-                                <div class="row my-1">
+                                <div class="row my-2">
                                     <label for="" class="col-sm-5 col-form-label fw-bold">Date</label>
                                     <div class="col-sm-7 my-auto">
-                                        <input type="date" class="form-control-plaintext " id="" value="<?php echo date('Y-m-d',strtotime($devis['date_creation']));?>" disabled>
-                                        
-                                        
+                                        <input type="date" class="form-control-plaintext " id="" value="<?php echo date('Y-m-d',strtotime($devis['date_creation']));?>" disabled>                                        
                                     </div>
                                 </div>
                                 <!-- <div class="row my-1">
@@ -335,16 +352,24 @@ function br2nl($string)
                                 </div> -->
                             </div>
 
-                            <div class="row my-1">
-                                <label for="" class="col-sm-2 col-form-label fw-bold">Objet</label>
-                                <div class="col-sm-10 my-auto">
+                            <div class="row my-3">
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Objet</label>
+                                <div class="col-sm-7 my-auto">
                                     <textarea name="" id="objet_name" class="form-control border-dashed" rows="1" placeholder="Objet" required disabled><?= $devis['objet']; ?></textarea>
+                                </div>
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Espace</label>
+                                <div class="col-sm-3 my-auto">
+                                    <input name="" id="espace" class="form-control border-dashed"  placeholder="Espace" required disabled value="<?= $devis['espace']; ?>"></input>
                                 </div>
                             </div>
                             <div class="row my-1">
-                                <label for="" class="col-sm-2 col-form-label fw-bold">Sis à</label>
-                                <div class="col-sm-10 my-auto">
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Sis à</label>
+                                <div class="col-sm-7 my-auto">
                                     <textarea name="" id="sisTxt" class="form-control border-dashed" rows="1" placeholder="Sis à" required disabled><?= $devis['located']; ?></textarea>
+                                </div>
+                                <label for="" class="col-sm-1 col-form-label fw-bold">Hauteur</label>
+                                <div class="col-sm-3 my-auto">
+                                    <input name="hauteur" id="hauteur" class="form-control border-dashed"  placeholder="R+2" required disabled value="<?= $devis['hauteur']; ?>"></input>
                                 </div>
                             </div>
                             <!-- end client section -->

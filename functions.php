@@ -990,14 +990,14 @@ function payInvoice($invoice_id,$price,$pay_method){
 }
 
 //insert data to devis_payments
-function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$price,$montant_paye,$broker_commission,$filter_type){
+function payDevis($service_id,$pay_method,$devis_id,$payment_giver,$dossier_id,$price,$montant_paye,$broker_commission,$filter_type,$remisDetails){
     $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
     if (mysqli_connect_errno()) {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
     $user_id = $_SESSION['user_id'];
-    $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `pay_method`,`user_id`,`devis_id`,`payment_giver`,`dossier_id`, `prix`,`montant_paye`,`broker_commission`,`filterType`) VALUES (null,'$service_id','$pay_method','$user_id','$devis_id','$payment_giver','$dossier_id','$price','$montant_paye','$broker_commission','$filter_type')";
+    $query = "INSERT INTO `devis_payments`(`id`, `id_devis`, `pay_method`,`user_id`,`devis_id`,`payment_giver`,`dossier_id`, `prix`,`montant_paye`,`broker_commission`,`filterType`,`remisDetails`) VALUES (null,'$service_id','$pay_method','$user_id','$devis_id','$payment_giver','$dossier_id','$price','$montant_paye','$broker_commission','$filter_type','$remisDetails')";
     mysqli_query($cnx,$query);
     $last_id = mysqli_insert_id($cnx);
     return $last_id;
@@ -1089,38 +1089,6 @@ function updateDetailAvance($detailDevis_id,$amount){
 }
 
 
-
-//calling procedure for fetching payments info
-//this function is for invoice payment
-/**
- * This function is for invoice payment info 
-*/
-// function getPaymentsInfo(){
-//     $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
-//     if (mysqli_connect_errno()) {
-//         echo "Failed to connect to MySQL: " . mysqli_connect_error();
-//         exit();
-//     }
-
-//     $query = "CALL `sp_getPaymentInfo`();";
-//     $res = mysqli_query($cnx,$query);
-//     $html = '';
-//     while($row=mysqli_fetch_assoc($res)){
-//         $userRow = getUser($_SESSION['user_id']);
-//         $user = ucfirst($userRow["prenom"]) . ' ' . ucfirst($userRow['nom']);
-//         $html .= '<tr>';
-//         $html .= '<td> '.ucfirst($row["pay_method"]).' </td>';
-//         $html .= '<td> '.ucfirst($row["F_number"]).' </td>';
-//         $html .= '<td> '.$user.' </td>';
-//         $html .= '<td> '.$row["client"].' </td>';
-//         $html .= '<td> '.$row["pay_date"].' </td>';
-//         $html .= '<td> '.$row["prix"].' </td>';
-//         $html .= '<td class="text-center"> <a target="_blank" href="receipt_export.php?id='.$row["pay_id"].'" title="Imprimer Reçu"><i class="bi bi-paperclip"></i></a> </td>';
-//         $html .= '</tr>';
-//     }
-//     return $html;
-// }
-
 //for devis payment info
 function getPaymentsInfo(){
     $cnx = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
@@ -1136,7 +1104,7 @@ function getPaymentsInfo(){
         $userRow = getUser($_SESSION['user_id']);
         $user = ucfirst($userRow["prenom"]) . ' ' . ucfirst($userRow['nom']);
         $html .= '<tr>';
-        $html .= '<td> '.ucfirst($row["pay_method"]).' </td>';
+        $html .= '<td title="'.$row['remisDetails'].'"> '.ucfirst($row["pay_method"]).' </td>';
         $html .= '<td> '.ucfirst($row["R_number"]).' </td>';
         $html .= '<td> '.$user.' </td>';
         $html .= '<td> '.$row["payment_giver"].' </td>';
@@ -1540,6 +1508,28 @@ function getDevisById($id){
         exit();
     }
     $query = "SELECT * FROM `devis` WHERE `id`='$id';";
+    $res = mysqli_query($cnx,$query);
+    $row = mysqli_fetch_assoc($res);
+    return $row;
+}
+function getbrkDevisfactById($id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT * FROM `broker_devis` WHERE `id_devis`='$id';";
+    $res = mysqli_query($cnx,$query);
+    $row = mysqli_fetch_assoc($res);
+    return $row;
+}
+function getbrkDevisById($id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT devis.*,broker_devis.discount as brkdiscount ,broker_devis.sub_total as brkksubtotal ,broker_devis.net_total as brknettotal FROM `devis` left JOIN broker_devis on devis.id= broker_devis.id_devis WHERE devis.id='$id';";
     $res = mysqli_query($cnx,$query);
     $row = mysqli_fetch_assoc($res);
     return $row;
@@ -2098,6 +2088,17 @@ function getApprovedDevisDetails($devis_id){
     }
 
     $query = "SELECT * FROM `detail_devis` WHERE `id_devis`='$devis_id' AND `confirmed`='1' GROUP BY `empl` ";
+    $res = mysqli_query($cnx,$query);
+    $rows = mysqli_fetch_all($res);
+    return $rows;
+}
+function getApprovedDevisDetailsBrk($devis_id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT * from detail_devis LEFT JOIN (SELECT detail_broker_devis.* from detail_broker_devis LEFT JOIN broker_devis on broker_devis.id = detail_broker_devis.id_broker_devis WHERE broker_devis.id_devis=$devis_id) t1 on t1.srv_unique_id = detail_devis.srv_unique_id WHERE detail_devis.id_devis = $devis_id GROUP BY detail_devis.srv_unique_id;";
     $res = mysqli_query($cnx,$query);
     $rows = mysqli_fetch_all($res);
     return $rows;

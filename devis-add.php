@@ -6,25 +6,26 @@
     if($_POST){
         
         //declaring Vars
+        // die(var_dump($_POST));
         $devis_number = mysqli_real_escape_string($cnx,$_POST["devis_number"]);
         $client_id = getClientId($_POST["client_id"],$_POST["client_type"]);
         $devis_comment = mysqli_real_escape_string($cnx,$_POST['devis_comment']);
+        $espace = mysqli_real_escape_string($cnx,$_POST['espace']);
+        $hauteur = mysqli_real_escape_string($cnx,$_POST['hauteur']);
         $label_subTotal = floatval(trim(str_replace('DH',"",$_POST['labelSubTotal'])));
         // $label_discount = $_POST['labelDiscount'];
         $label_discount = floatval(trim(str_replace('DH',"",$_POST['labelDiscount'])));
         $label_netTotal = floatval(trim(str_replace('DH',"",$_POST['labelDevisTotal'])));
         $tva_checked = $_POST['tva_checked']=='true'?1:0;
-        
         $objet_name = mysqli_real_escape_string($cnx,$_POST['objet_name']);
         $located_txt = mysqli_real_escape_string($cnx,$_POST['located_txt']);
         if(isset($_POST['brkId'])){
             $brkId = $_POST['brkId'];
         }
-        
         $user_role=getUserRole($_SESSION['user_id']);
         // ($user_role['role_name']=="assistant") ?  $type="encours" : $type="Approved";
         // ($user_role['role_name']=="assistant") ?  $status="encours" : $status="accepter";
-        $query = "INSERT INTO `devis`(`id`, `number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`) VALUES (null,'$devis_number','$client_id','$label_subTotal','$label_discount','$label_netTotal','Approved','accepter','$tva_checked','$devis_comment','$objet_name','$located_txt')";
+        $query = "INSERT INTO `devis`(`id`, `number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`,`hauteur`,`espace`) VALUES (null,'$devis_number','$client_id','$label_subTotal','$label_discount','$label_netTotal','Approved','accepter','$tva_checked','$devis_comment','$objet_name','$located_txt','$hauteur','$espace')";
         $res = mysqli_query($cnx,$query);
         
         $last_id;

@@ -22,8 +22,10 @@
         $label_subTotal = floatval(trim(str_replace('DH',"",$_POST['labelSubTotal'])));
         $label_discount = floatval(trim(str_replace('DH',"",$_POST['labelDiscount'])));
         $label_netTotal = floatval(trim(str_replace('DH',"",$_POST['labelDevisTotal'])));
+        $espace = mysqli_real_escape_string($cnx,$_POST['espace']);
+        $hauteur = mysqli_real_escape_string($cnx,$_POST['hauteur']);
         // update devis
-        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='Approved', `status`='accepter', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located' WHERE id='$devis_id'";
+        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='Approved', `status`='accepter', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located',`hauteur`='$hauteur',`espace`='$espace' WHERE id='$devis_id'";
         $res = mysqli_query($cnx,$query);
      
         //adding to user_devis for history...
