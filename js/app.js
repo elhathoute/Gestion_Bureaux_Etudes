@@ -3646,15 +3646,16 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
             data:{period:timeRange},
             type:"POST",
             success:function(data){
+                console.log(data);
                 let json = JSON.parse(data);
                 //revenue
                 $("#revenueDashTxt").html(`${parseFloat(json.revenue).toLocaleString("fr-FR")} DH`)
+                //income
+                $("#incomeDashTxt").html(`${parseFloat(json.payservices).toLocaleString("fr-FR")} DH`)
                 //client
                 $("#cusDashTxt").html(json.clients);
                 //sales
                 $("#salesDashTxt").html(json.sales);
-
-
                 // $(`#revenuePeriodTxt,#cusDashTxt,#salesDashTxt`).html(`| This ${timeRange[0]} - ${timeRange[1]}`);
                 // $(`#${eleDashTxt}`).html(`${parseFloat(data).toLocaleString("fr-FR")} ${currency}`);
                 $(".loader-wrapper").addClass("loader-hidden");
@@ -4748,3 +4749,53 @@ function brkRowTotal(){
     // saveInvoicePayment();
 }
 // brkRowTotal();
+
+
+
+
+
+
+
+//------------------------caise
+
+const monthNames = [ "janvier","février", "mars", "avril", "mai", "juin", "juillet", "aout","septembre", "octobre", "novembre", "décembre" ];
+const monthOptions = monthNames.map((month, index) => {
+    const value = index + 1;
+    return `<option value="${value}">${month}</option>`;
+}).join("");
+$("#SearchField").html(`
+    <select name="" id="selectedMonth" class="form-select">
+        <option value="" selected disabled>Month</option>
+        ${monthOptions}
+    </select>
+    <input type="text" id="selectedYear" name="" class="form-control mx-2 placeholder="Years">
+    <button id="searchBtn" class="btn btn-outline-primary">Search</button>
+    `);
+$(document).on("click","#searchBtn",function(){
+        var selectedYear=$('#selectedYear').val();
+        var selectedMonth=$('#selectedMonth').val();
+        // console.log(selectedYear);
+        if(selectedYear!='' || selectedMonth!=null){
+            $.ajax({
+                url:"caiseDetails.php",
+                data : {selectedYear:selectedYear,selectedMonth:selectedMonth},
+                type:"POST",
+                success:function(data){
+                    var json = JSON.parse(data)["data"];
+                    var html=``;
+                    if(json.length !=0){
+                        json.forEach(row=>{
+                            html += `<tr>`;
+                            html += `<td>${row[0]}</td>`;
+                            html += `<td>${row[1]}</td>`;
+                            html += `<td>${row[2]}</td>`;
+                            html += `</tr>`;
+                        });
+                    }
+                    $("#caiseTable tbody").html(html);
+                }
+
+            })
+
+        }
+    });

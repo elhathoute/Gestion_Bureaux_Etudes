@@ -13,8 +13,12 @@ function br2nl($string)
 {
     return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
 }
+if(isset($_GET['broker_id'])){
+    $bgColor="background-color: #F0E0E3;";
+ }else{
+     $bgColor="";
+ }
 ?>
-
 <div class="row my-3">
     <div class="pagetitle col-md-8">
         <h1>View Facture</h1>
@@ -39,7 +43,7 @@ function br2nl($string)
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" style="<?= $bgColor?>">
                         <div class="row mt-3 justify-content-between">
                             <div class="col-md-3">
                                 <div class="invoice-logo">

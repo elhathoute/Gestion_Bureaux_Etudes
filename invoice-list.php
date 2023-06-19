@@ -50,7 +50,7 @@ if(isset($_GET["sc"])){
                                                 <a href="#">N°Facture</a>
                                             </th>
                                             <th>
-                                                <a href="#">Client</a>
+                                                <a href="#">Maître d'ouvrage</a>
                                             </th>
                                             <th width="130">
                                                 <a href="#">Objet</a>
@@ -101,7 +101,7 @@ if(isset($_GET["sc"])){
                                                     <td><span class="'.styleStatus($row["status"]).'">'.$row["status"].'</span></td>
                                                     <td>
                                                         <a href="invoice-view.php?id='.$row['id'].'&client_id='.$row['client_id'].''.$broker_id.'" data-id="'.$row['id'].'" data-id_client="'.$row['client_id'].'" class="btn btn-secondary btn-sm viewInvoiceBtn" title="Afficher Facture" ><span><i class="bi bi-eye"></i></span></a>
-                                                        <a href="invoice-edit.php?id='.$row['id'].'&client_id='.$row['client_id'].'" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editInvoiceBtn '. (($row['paid_inv']=="1")? "hide-element" :"") .'  '.$check_edit.'" title="Modifier Facture" ><span><i class="bi bi-pencil-square"></i></span></a>
+                                                        <a href="invoice-edit.php?id='.$row['id'].'&client_id='.$row['client_id'].''.$broker_id.'" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editInvoiceBtn '. (($row['paid_inv']=="1")? "hide-element" :"") .'  '.$check_edit.'" title="Modifier Facture" ><span><i class="bi bi-pencil-square"></i></span></a>
                                                         <a href="javascript:void(0)" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteInvoiceBtn '.$check_delete.' " title="Supprimer Facture" ><span><i class="bi bi-trash"></i></span></a>
                                                         
                                                     </td>

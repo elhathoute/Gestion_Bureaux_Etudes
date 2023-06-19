@@ -7,6 +7,7 @@ date_add($date,date_interval_create_from_date_string("1 week ago"));
 $weekAgo = date_format($date,"Y-m-d");
 
 $period = array($curDate,$weekAgo);
+// var_dump($period);
 
 ?>
 
@@ -42,7 +43,7 @@ if(!empty( $_SESSION["user_id"])){
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
-                <div class="col-xxl-4 col-md-6">
+                <div class="col-xxl-3 col-md-6">
                     <div class="card info-card sales-card">
 
                         <!-- <div class="filter">
@@ -81,7 +82,7 @@ if(!empty( $_SESSION["user_id"])){
 
 
                 <!-- Revenue Card -->
-                <div class="col-xxl-4 col-md-6">
+                <div class="col-xxl-3 col-md-6">
                     <div class="card info-card revenue-card">
 
                         <!-- <div class="filter">
@@ -117,7 +118,7 @@ if(!empty( $_SESSION["user_id"])){
                 </div><!-- End Revenue Card -->
 
                 <!-- Customers Card -->
-                <div class="col-xxl-4 col-md-6">
+                <div class="col-xxl-3 col-md-6">
 
                     <div class="card info-card customers-card">
 
@@ -133,11 +134,9 @@ if(!empty( $_SESSION["user_id"])){
                                 <li><a class="dropdown-item" id="btn-client-year" href="javascript:void(0)">This Year</a></li>
                             </ul>
                         </div> -->
-
                         <div class="card-body">
                             <!-- <h5 class="card-title">Customers <span id="cusPeriodTxt">| This Year</span></h5> -->
                             <h5 class="card-title">Maitres d'ouvrage <span>| </span></h5>
-
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-people"></i>
@@ -145,16 +144,30 @@ if(!empty( $_SESSION["user_id"])){
                                 <div class="ps-3">
                                     <h6 id="cusDashTxt"><?= countClientDash($period); ?></h6>
                                     <span class="text-danger small pt-1 fw-bold">Nombre total de clients</span> <span class="text-muted small pt-2 ps-1"></span>
-
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
                 </div><!-- End Customers Card -->
-
-
+                <!-- income Card -->
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card income-card">
+                        <div class="card-body">
+                            <!-- <h5 class="card-title">Customers <span id="cusPeriodTxt">| This Year</span></h5> -->
+                            <h5 class="card-title">Income<span>| </span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-cash-coin"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6 id="incomeDashTxt"><?= countPayServices($period); ?></h6>
+                                    <span class="text-success small pt-1 fw-bold">Income</span> <span class="text-muted small pt-2 ps-1"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Customers Card -->
             </div>
         </div>
     </div>

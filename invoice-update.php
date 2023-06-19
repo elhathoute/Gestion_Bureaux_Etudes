@@ -45,8 +45,6 @@
             $res = mysqli_query($cnx,$query);
             
         }
-        
-        
         if($res){
             $data = array('status'=>'success');
             echo json_encode($data);

@@ -53,41 +53,37 @@ include 'header.php';
                         <div class="col-md-6">
                             <h3 class="card-title">Caisse information</h3>
                         </div>
-                        <div class="col-md-6 d-flex align-items-center justify-content-end" id="expSitBtn">
+                    <!-- <form action="caiseDetails.php" method="POST" class="col-md-6 d-flex  justify-content-end"> -->
+                        <div class="col-md-6 d-flex align-items-center justify-content-end" id="SearchField">
                             
                         </div>
+                    <!-- </form> -->
                     </div>
-                    <div class="tab-content" id="services-content">
+                    <div class="tab-content" id="">
                         <!-- table Situation -->
                         <div class="overflow-auto">
                             <div>
-                                <table id="" class="table table-hover table-bordered table-striped" style="width:100%">
+                                <table id="caiseTable" class="table table-hover table-bordered table-striped" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>
                                                 <a href="#">N°</a>
                                             </th>
                                             <th>
-                                                <a href="#">Date</a>
+                                                <a href="#">Caise</a>
+                                            </th>
+                                            <!-- <th>
+                                                <a href="#">Libellé</a>
                                             </th>
                                             <th>
-                                                <a href="#">Devis</a>
+                                                <a href="#">Crédit</a>
                                             </th>
                                             <th>
-                                                <a href="#">Objet</a>
+                                                <a href="#">Débit</a>
                                             </th>
                                             <th>
-                                                <a href="#">Service</a>
-                                            </th>
-                                            <th>
-                                                <a href="#">Prix</a>
-                                            </th>
-                                            <th>
-                                                <a href="#">Avance</a>
-                                            </th>
-                                            <th>
-                                                <a href="#">Status</a>
-                                            </th>
+                                                <a href="#">Solde</a>
+                                            </th> -->
                                             <th></th>
                                         </tr>
                                     </thead>

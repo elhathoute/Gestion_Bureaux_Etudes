@@ -22,7 +22,8 @@ if(isset($_POST['supplierCheckbox']) && $_POST['supplier'] != '' && $_POST['paym
                         $supplier = getSupplierById($supplier_id);
                         $category = getSuppCatById($supplier['cat_id']);
                         if($supplier['full_name'] != 'Beplan'){
-                            $amount = $_POST['paymentSupplier'] + $supplier['sold'];
+                            // $amount = $_POST['paymentSupplier'] + $supplier['sold'];
+                            $amount = $_POST['paymentSupplier'];
                             updateSupplierSold($supplier_id,$amount);
                             unset($_POST['supplierCheckbox']);
                         }

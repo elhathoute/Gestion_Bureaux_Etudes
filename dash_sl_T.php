@@ -10,6 +10,7 @@
     $clients = countClientDash($period);
     //revenue
     $revenue = countInvPayDash($period);
-    $output = array("sales"=>$sales,"clients"=>$clients,"revenue"=>$revenue);
+    $payservices=countPayServices($period);
+    $output = array("sales"=>$sales,"clients"=>$clients,"revenue"=>$revenue,"payservices"=>$payservices);
     echo json_encode($output);
 ?>

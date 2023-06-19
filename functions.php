@@ -1765,7 +1765,7 @@ function countInvDashSales($period){
     $from = $period[0];
     $to = $period[1];
     
-    $query = "SELECT * FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved';";
+    $query = "SELECT * FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved' AND `pour`='MO';";
 
 
 
@@ -1776,6 +1776,7 @@ function countInvDashSales($period){
 }
 //count invoices payemnts For dashbord revenue
 function countInvPayDash($period){
+    // var_dump($period);
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
     if(mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -1800,11 +1801,30 @@ function countInvPayDash($period){
     $from = $period[0];
     $to = $period[1];
 
-    $query = "SELECT IFNULL(SUM(net_total),0) AS price FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved';";
+    // $query = "SELECT IFNULL(SUM(net_total),0) AS price FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved';";
+    $query = "SELECT IFNULL(SUM(montant_paye),0) AS price FROM `devis_payments` WHERE DATE(pay_date) BETWEEN '$from' AND '$to'";
 
 
     $res = mysqli_query($cnx,$query);
     $priceSum = mysqli_fetch_assoc($res);
+    return $priceSum['price'];
+}
+
+function countPayServices($period){
+    // var_dump($period);
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $from = $period[0];
+    $to = $period[1];
+    // $query = "SELECT IFNULL(SUM(net_total),0) AS price FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved';";
+    $query = "SELECT IFNULL(SUM(net_total),0) AS price FROM `devis` WHERE DATE(date_creation) BETWEEN '$from' AND '$to'";
+
+    $res = mysqli_query($cnx,$query);
+    $priceSum = mysqli_fetch_assoc($res);
+    //  var_dump($priceSum['price']);
     return $priceSum['price'];
 }
 
@@ -1820,8 +1840,8 @@ function weeklyDashSales(){
     $date=date_create(date("Y-m-d"));
     date_add($date,date_interval_create_from_date_string("1 week ago"));
     $weekAgo = date_format($date,"Y-m-d");
-
-    $query = "SELECT DATE(date_creation) AS Day,COUNT(*) AS somme FROM invoice WHERE DATE(date_creation) BETWEEN '$weekAgo' AND '$curDate' GROUP BY DATE(date_creation);";
+    // $query = "SELECT DATE(date_creation) AS Day,COUNT(*) AS somme FROM invoice WHERE DATE(date_creation) BETWEEN '$weekAgo' AND '$curDate' GROUP BY DATE(date_creation);";
+    $query = "SELECT DATE(date_creation) AS Day,COUNT(*) AS somme FROM invoice WHERE DATE(date_creation) BETWEEN '$weekAgo' AND '$curDate' AND `pour`='MO' GROUP BY DATE(date_creation);";
     $res = mysqli_query($cnx, $query);
     $days = array();
     $invs = array();
@@ -1870,7 +1890,8 @@ function weeklyDashRevenue(){
     date_add($date,date_interval_create_from_date_string("1 week ago"));
     $weekAgo = date_format($date,"Y-m-d");
 
-    $query = "SELECT DATE(date_creation) AS Day,SUM(net_total) AS somme FROM invoice  WHERE DATE(date_creation) BETWEEN '$weekAgo' AND '$curDate' GROUP BY DATE(date_creation);";
+    // $query = "SELECT DATE(date_creation) AS Day,SUM(net_total) AS somme FROM invoice  WHERE DATE(date_creation) BETWEEN '$weekAgo' AND '$curDate' GROUP BY DATE(date_creation);";
+    $query = "SELECT DATE(pay_date) AS Day,SUM(montant_paye) AS somme FROM devis_payments  WHERE DATE(pay_date) BETWEEN '$weekAgo' AND '$curDate' GROUP BY DATE(pay_date);";
     $res = mysqli_query($cnx, $query);
     $days = array();
     $invs = array();
@@ -2295,7 +2316,8 @@ function getSupplierData(){
         exit();
     }
 
-    $query = "SELECT * FROM `supplier`";
+    // $query = "SELECT * FROM `supplier`";
+    $query = "SELECT supplier.*,COALESCE(sum(amount_given),0) as sold FROM `supplier` LEFT join supplier_details ON supplier.id =supplier_details.supplier_id GROUP BY supplier.id;";
     $res = mysqli_query($cnx,$query);
     return $res;
 }
@@ -2322,8 +2344,24 @@ function updateSupplierSold($id,$sold){
         exit();
     }
 
-    $query = "UPDATE `supplier` SET `sold`='$sold' WHERE `id`='$id'";
+    // $query = "UPDATE `supplier` SET `sold`='$sold' WHERE `id`='$id'";
+    $query = "INSERT INTO `supplier_details`(`id`, `supplier_id`, `amount_given`) VALUES (null,'$id','$sold')";
     mysqli_query($cnx,$query);
+}
+
+function getCaiseDetails($selectedMonth,$selectedYear){
+  $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT
+        (SELECT SUM(montant_paye) FROM devis_payments WHERE pay_method IN ('Check', 'Virement', 'Traite', 'Remis') AND  YEAR(pay_date) = $selectedYear AND MONTH(pay_date) = $selectedMonth) AS montantEspice,
+        (SELECT SUM(price) FROM purchase WHERE YEAR(date) = $selectedYear AND MONTH(date) = $selectedMonth) AS purchasePrice,
+        (select SUM(montant_paye) from devis_payments WHERE YEAR(pay_date) = $selectedYear AND MONTH(pay_date) = $selectedMonth) as totalPaiment";
+    $res= mysqli_query($cnx,$query);  
+    $row = mysqli_fetch_assoc($res);
+    return $row;
 }
 
 ?>
