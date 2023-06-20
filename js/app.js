@@ -2217,7 +2217,7 @@ $(document).on("change","#selectBrokerClient",function(){
     });
     $(document).on("click","#pay_inv",function(){
         if(
-            $(".payment-method").val!=null &&
+            $(".payment-method").val()!=null &&
             $("#paymentClientPrice").val()!="" &&
             $("#payment_giver").val()!="" &&
             $(".CBPaymentByClient").length != 0)

@@ -132,7 +132,7 @@ $clientRes = mysqli_query($cnx, $query);
                                 </div>
                                 <div class="mb-3">
                                     <label for="payment-method" class="form-label">Mode de paiement</label>
-                                    <select name="payment-method"  class="form-select py-1 payment-method" id="payment-method">
+                                    <select name="payment-method"  class="form-select py-1 payment-method" id="payment-method" required>
                                         <option value="" selected disabled>Choisissez un mode de paiement</option>
                                         <option value="Espece">Espéce</option>
                                         <option value="Check">Check</option>

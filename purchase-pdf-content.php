@@ -65,6 +65,10 @@
 
 <body>
     <?php
+    $path1 = 'images/sgn.png';
+    $type1 = pathinfo($path1, PATHINFO_EXTENSION);
+    $data1 = file_get_contents($path1);
+    $base64_1 = 'data:image/' . $type1 . ';base64,' . base64_encode($data1);
 
         if(isset($_GET['p'])){
             $p_id = $_GET['p'];
@@ -102,6 +106,7 @@
             </div><br><br><br><br>
             <div>
                 <p style="float:right;margin-right:10px;font-size:1.3rem" class="underline">Signé par order de directeur général</p><br>
+                <img src="<?php echo $base64_1 ?>" width="240" style="margin-left:330px; margin-top:50px;"/>
             </div>
         </section>
         

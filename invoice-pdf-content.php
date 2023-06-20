@@ -164,7 +164,7 @@
                             </tr>
                             <tr class="text-bold">
                                 <td colspan="5">TOTAL T.T.C</td>
-                                <td>'.$totalTVA.'</td>
+                                <td>'.sprintf('%05.2f', round(floatval($totalTVA),2)).'</td>
                             </tr>';
                     // }
 
