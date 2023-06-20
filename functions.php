@@ -1765,7 +1765,7 @@ function countInvDashSales($period){
     $from = $period[0];
     $to = $period[1];
     
-    $query = "SELECT * FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved' AND `pour`='MO';";
+    $query = "SELECT * FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved'";
 
 
 
@@ -2362,6 +2362,20 @@ function getCaiseDetails($selectedMonth,$selectedYear){
     $res= mysqli_query($cnx,$query);  
     $row = mysqli_fetch_assoc($res);
     return $row;
+}
+function checkpaiment($id){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $query = "SELECT permissions.perm_desc FROM `role_perm` JOIN permissions on permissions.id =role_perm.perm_id LEFT JOIN roles on roles.id = role_perm.role_id WHERE role_perm.perm_id=41 and roles.role_name='$id'";
+    $res= mysqli_query($cnx,$query);  
+    if (mysqli_num_rows($res) > 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 ?>

@@ -109,18 +109,6 @@ function br2nl($string)
                                         <input type="date" class="form-control-plaintext " id="dateTxt" value="<?php echo date('Y-m-d',strtotime($devis['date_creation']));?>">
                                     </div>
                                 </div>
-                                <!-- <div class="row my-1">
-                                    <label for="" class="col-sm-5 col-form-label fw-bold">Description</label>
-                                    <div class="col-sm-7 my-auto">
-                                        <textarea name="" id="" class="form-control border-dashed" rows="1">Projet name...</textarea>
-                                    </div>
-                                </div>
-                                <div class="row my-1">
-                                    <label for="" class="col-sm-5 col-form-label fw-bold">Projet</label>
-                                    <div class="col-sm-7 my-auto">
-                                        <textarea name="" id="" class="form-control border-dashed" rows="1">Projet name...</textarea>
-                                    </div>
-                                </div> -->
                             </div>
 
                             <div class="row my-3">

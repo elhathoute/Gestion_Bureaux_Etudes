@@ -1321,21 +1321,20 @@ $(document).ready(function () {
                   // admin or not
            admin= $('#devis_id').data('admin');
            if(admin==1){
-            devisStatus = $('#devisStatusDropdown').val();
- 
- 
+            devisStatus = $('#devisStatusDropdown').val(); 
            }else{
             devisStatus = $('.devisStatusDropdown').val();
- 
            }
-        //    console.log(devisStatus);
-
+           var tva_checked =tva_checked==true?1:0;
+        //    console.log(tva_checked);
+        //    alert();
             $.ajax({
                 url:'devis-update.php',
                 type:"POST",
                 data:{tableData:tableData,client_id:client_id,devis_comment:devis_comment,labelSubTotal:labelSubTotal,labelDiscount:labelDiscount,labelDevisTotal:labelDevisTotal,devisStatus:devisStatus,devis_id:devis_id,objet_name:objet_name,located_txt:located_txt,tva_checked:tva_checked,brkId:brkId,espace:espace,hauteur:hauteur},
                 success:function(data){
                     // alert(data);
+                    console.log(data);
                     var json = JSON.parse(data);
                     var status = json.status;
                     
@@ -1941,8 +1940,7 @@ $(document).ready(function () {
             return false;
         }
         
-
-
+        var checkpaiment =$("#checkpaiment").val();
         e.preventDefault();
         var clientId = $("#selectClientModal").val();
         if(clientId != null){
@@ -1969,7 +1967,7 @@ $(document).ready(function () {
                             // html += `<td>${row[4]}</td>`;
                             html += `<td class="totalRow">${row[5]} DH</td>`;
                             html += `<td class="soldeRow">${row[6]} DH</td>`;
-                            html += `<td class="text-center">${row[7]}</td>`;
+                            html += `<td class="text-center ${checkpaiment}">${row[7]}</td>`;
                             html += `</tr>`;
                             total += parseFloat(row[5]);
                             solde += parseFloat(row[6]);
@@ -1984,7 +1982,6 @@ $(document).ready(function () {
                     $("#hiddenTotal").val((total - solde).toFixed(2));
                     $("#hiddenTotalValue").val($("#labelClientPaymentTotal").text().split(' ')[0]);
                     $('#paymentByClientModal').modal('hide');
-
                     //Reset client and broker select to initiale value
                     $("#selectClientModal").val($("#selectClientModal option:first").val());
                     $("#selectBrokerModal").val($("#selectClientModal option:first").val());
@@ -3801,6 +3798,7 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
                 $("#brkPhone").val(json.phone);
                 $("#brkAdr").val(json.address);
                 $("#brkSold").val(json.sold);
+                $("#brokerIce").val(json.brokerIce);
                 $("#editBrokerModal").modal('show');
             }
         });
@@ -3858,7 +3856,8 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
         ,brkPrenom = $("#brkPrenom").val()
         ,brkPhone = $("#brkPhone").val()
         ,brkAdr = $("#brkAdr").val()
-        ,brkSold = $("#brkSold").val();
+        ,brkSold = $("#brkSold").val()
+        ,brokerIce =$("#brokerIce").val();
 
 
         if(submitEditBrkForm){
@@ -3867,7 +3866,7 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
         lunchLoader();
         $.ajax({
             url:"broker-edit.php",
-            data:{id:id,brkNom:brkNom,brkPrenom:brkPrenom,brkPhone:brkPhone,brkAdr:brkAdr},
+            data:{id:id,brkNom:brkNom,brkPrenom:brkPrenom,brkPhone:brkPhone,brkAdr:brkAdr,brokerIce:brokerIce},
             type:'post',
             success:function(data){
                 var json = JSON.parse(data);
@@ -3876,12 +3875,13 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
                     var table = $("#brokersTable").DataTable();
                     var button = '<a href="javascript:void(0);" data-id="'+id+'" class="btn btn-primary btn-sm editBrokerBtn" ><span><i class="bi bi-pencil-square"></i></span></a> <a href = "javascript:void(0);" data-id="'+id+'" class=" btn btn-danger btn-sm deleteBrokerBtn"><span><i class="bi bi-trash"></i></span></a><a href = "javascript:void(0);" data-id="'+id+'"  class=" btn btn-success ms-1 btn-sm updateBrokerSold" title="Update Sold" ><span><i class="bi bi-currency-exchange"></i></span></a>';
                     var row = table.row("[id='"+tr_id+"']");
-                    row.row("[id='"+tr_id+"']").data([tr_id,brkNom,brkPrenom,brkPhone,brkAdr,brkSold,button]);
+                    row.row("[id='"+tr_id+"']").data([tr_id,brkNom,brkPrenom,brkPhone,brkAdr,brokerIce,brkSold,button]);
                     // cleaning inputs
                     $("#brkNom").val();
                     $("#brkPrenom").val();
                     $("#brkPhone").val();
                     $("#brkAdr").val();
+                    $("#brokerIce").val();
                     $(".loader-wrapper").addClass("loader-hidden");
                     $("#editBrokerModal").modal('hide');
                 }else{
@@ -3896,11 +3896,10 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
      */
     var broker_deleted_id, broker_deleted_row_id;
     $(document).on('click','.deleteBrokerBtn',function(event){
-         $("#deleteBrokerModal").modal('show');
-         broker_deleted_id = $(this).data('id');
-         broker_deleted_row_id = $(this).parent().closest('tr').attr("id");
+            $("#deleteBrokerModal").modal('show');
+            broker_deleted_id = $(this).data('id');
+            broker_deleted_row_id = $(this).parent().closest('tr').attr("id");
     });
-     
     $(document).on('click','.deleteBrokerModalBtn',function(){
         $.ajax({
             url:'brk-del.php',
@@ -4749,13 +4748,6 @@ function brkRowTotal(){
     // saveInvoicePayment();
 }
 // brkRowTotal();
-
-
-
-
-
-
-
 //------------------------caise
 
 const monthNames = [ "janvier","février", "mars", "avril", "mai", "juin", "juillet", "aout","septembre", "octobre", "novembre", "décembre" ];
@@ -4770,32 +4762,43 @@ $("#SearchField").html(`
     </select>
     <input type="text" id="selectedYear" name="" class="form-control mx-2 placeholder="Years">
     <button id="searchBtn" class="btn btn-outline-primary">Search</button>
-    `);
-$(document).on("click","#searchBtn",function(){
-        var selectedYear=$('#selectedYear').val();
-        var selectedMonth=$('#selectedMonth').val();
-        // console.log(selectedYear);
-        if(selectedYear!='' || selectedMonth!=null){
-            $.ajax({
-                url:"caiseDetails.php",
-                data : {selectedYear:selectedYear,selectedMonth:selectedMonth},
-                type:"POST",
-                success:function(data){
-                    var json = JSON.parse(data)["data"];
-                    var html=``;
-                    if(json.length !=0){
-                        json.forEach(row=>{
-                            html += `<tr>`;
-                            html += `<td>${row[0]}</td>`;
-                            html += `<td>${row[1]}</td>`;
-                            html += `<td>${row[2]}</td>`;
-                            html += `</tr>`;
-                        });
-                    }
-                    $("#caiseTable tbody").html(html);
-                }
+`);
 
-            })
-
+$(document).on("click", "#searchBtn", function () {
+    var selectedYear = $('#selectedYear').val();
+    var selectedMonth = $('#selectedMonth').val();
+    
+    var requestData = {};
+    
+    if (selectedYear != '' && selectedMonth != null) {
+        requestData = { selectedYear: selectedYear, selectedMonth: selectedMonth };
+    } else if (selectedYear != '') {
+        requestData = { selectedYear: selectedYear };
+    } else if (selectedMonth != null) {
+        requestData = { selectedMonth: selectedMonth };
+    }
+    
+    $.ajax({
+        url: "caiseDetails.php",
+        data: requestData,
+        type: "POST",
+        success: function (data) {
+            console.log(data);
+            var json = JSON.parse(data)["data"];
+            var html = '';
+            
+            if (json.length != 0) {
+                json.forEach(row => {
+                    html += '<tr>';
+                    html += `<td>${row[0]}</td>`;
+                    html += `<td>${row[1]}</td>`;
+                    html += `<td>${row[2]}</td>`;
+                    html += '</tr>';
+                });
+            }
+            
+            $("#caiseTable tbody").html(html);
         }
     });
+});
+

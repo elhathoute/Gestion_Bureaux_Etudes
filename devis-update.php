@@ -1,18 +1,11 @@
 <?php
     include 'includes/config.php';
     include 'functions.php';
-
-
-
-
     if($_POST){
-      
         $devis_id= $_POST['devis_id'];
         
-       
         // get all services of devis
         // $originalServices = getDevisAllDetails($devis_id);
-       
         
         //service info 
         // $devisStatus = $_POST['devisStatus'];
@@ -24,8 +17,9 @@
         $label_netTotal = floatval(trim(str_replace('DH',"",$_POST['labelDevisTotal'])));
         $espace = mysqli_real_escape_string($cnx,$_POST['espace']);
         $hauteur = mysqli_real_escape_string($cnx,$_POST['hauteur']);
+        $tva_checked=$_POST['tva_checked'];
         // update devis
-        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='Approved', `status`='accepter', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located',`hauteur`='$hauteur',`espace`='$espace' WHERE id='$devis_id'";
+        $query = "UPDATE `devis` SET  `sub_total`='$label_subTotal', `discount`='$label_discount', `net_total`='$label_netTotal', `type`='Approved', `status`='accepter', `comment`='$devis_comment', `objet`='$objet_name',`located`='$located',`hauteur`='$hauteur',`espace`='$espace',`remove_tva`='$tva_checked' WHERE id='$devis_id'";
         $res = mysqli_query($cnx,$query);
      
         //adding to user_devis for history...

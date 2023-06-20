@@ -42,6 +42,9 @@ if(isset($_SESSION["success"])){
                                                 <a href="#">Address</a>
                                             </th>
                                             <th>
+                                                <a href="#">ICE</a>
+                                            </th>
+                                            <th>
                                                 <a href="#">Sold</a>
                                             </th>
                                             <th>
@@ -64,6 +67,7 @@ if(isset($_SESSION["success"])){
                                                 $html .= '<td>'.$row['prenom'].'</td>';
                                                 $html .= '<td>'.$row['phone'].'</td>';
                                                 $html .= '<td>'.$row['address'].'</td>';
+                                                $html .= '<td>'.$row['brokerIce'].'</td>';
                                                 $html .= '<td>'.$row['sold'].'</td>';
                                                 $html .= '  <td>
                                                                 <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editBrokerBtn '.$check_edit.' " title="Modifier Intermédiaire" ><span><i class="bi bi-pencil-square"></i></span></a>
@@ -116,6 +120,10 @@ if(isset($_SESSION["success"])){
                     <div class="mb-3">
                         <label for="brkAdr" class="form-label">Address</label>
                         <input type="text" class="form-control"  name="brkAdr" id="brkAdr" placeholder="Address" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="brkAdr" class="form-label">ICE</label>
+                        <input type="text" class="form-control"  name="brokerIce" id="brokerIce" placeholder="ICE" >
                     </div>
                     <input type="hidden" name="brkSold" id="brkSold">
                 </div>

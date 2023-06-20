@@ -1,6 +1,8 @@
 <?php
 include 'header.php';
-
+$user_role=getUserRole($_SESSION['user_id']);
+$pay=checkpaiment($user_role['role_name']);
+$checkpaiment=$pay==true?"":"hide-element";
 
 $query = "SELECT * FROM `client` WHERE 'remove'=0";
 $clientRes = mysqli_query($cnx, $query);
@@ -87,12 +89,11 @@ $clientRes = mysqli_query($cnx, $query);
                                                 </th>
                                                 <th>
                                                     <a href="#">Avance</a>
+                                                    <input type="hidden" id="checkpaiment" value="<?= $checkpaiment?>" >
                                                 </th>
-                                                <th>
+                                                <th class="<?= $checkpaiment?>">
                                                     <a href="#">Action</a>
                                                 </th>
-
-
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -161,7 +162,6 @@ $clientRes = mysqli_query($cnx, $query);
                                                 while($row=mysqli_fetch_assoc($res)){
                                                     echo '<option value="'.$row['id'].'">'.ucfirst($row['full_name']).'</option>';
                                                 }
-                                            
                                             ?>
                                         </select>
                                     </div>

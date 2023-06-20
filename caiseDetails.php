@@ -2,14 +2,18 @@
 
 include 'includes/config.php';
 include 'functions.php';
-$selectedMonth = $_POST['selectedMonth'];
-$selectedYear = $_POST['selectedYear'];
 // $query = "SELECT SUM(montant_paye) FROM devis_payments WHERE (pay_method='Check' OR pay_method='Virement' OR pay_method='Traite' OR pay_method='Remis') AND MONTH(pay_date) = $selectedMonth";
-if(isset($_POST['selectedYear'])){
-    $query = "SELECT pay_date from devis_payments WHERE YEAR(pay_date)=$selectedYear GROUP by YEAR(pay_date);";
-}
-if(isset($_POST['selectedMonth'])){
+
+if(isset($_POST['selectedMonth']) && isset($_POST['selectedYear'])){
+    $selectedMonth = $_POST['selectedMonth'];
+    $selectedYear = $_POST['selectedYear'];
+    $query = "SELECT pay_date from devis_payments WHERE MONTH(pay_date)=$selectedMonth AND YEAR(pay_date)=$selectedYear GROUP by YEAR(pay_date);";
+}elseif(isset($_POST['selectedMonth'])){
+    $selectedMonth = $_POST['selectedMonth'];
     $query = "SELECT pay_date from devis_payments WHERE MONTH(pay_date)=$selectedMonth GROUP by YEAR(pay_date);";
+}elseif(isset($_POST['selectedYear'])){
+    $selectedYear = $_POST['selectedYear'];
+    $query = "SELECT pay_date from devis_payments WHERE YEAR(pay_date)=$selectedYear GROUP by YEAR(pay_date);";
 }
 $res = mysqli_query($cnx, $query);
 // $row = mysqli_fetch_assoc($res);
@@ -22,7 +26,7 @@ while($row=mysqli_fetch_assoc($res)){
     $subarray = array();
     $subarray[] = $number;
     $subarray[] = 'Caise '.$month2.'/'.$year;
-    $subarray[] = '<a target="_blank" href="caise_export.php?year='.$year.'&month='.$month.'" class="btn btn-primary btn-sm" title="Afficher Caise" ><span><i class="bi bi-download"></i></span></a>';
+    $subarray[] = '<a target="_blank" href="caise_export.php?year='.$year.'&month='.$month.'" class="btn btn-primary btn-sm" title="Afficher Caise" ><span><i class="bi bi-download"></i> Export PDF</span></a>';
     $data[] = $subarray;
     $number++;
 }

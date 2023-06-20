@@ -8,6 +8,7 @@
         $prenom = mysqli_real_escape_string($cnx,$_POST['brokerPrenom']);
         $phone = mysqli_real_escape_string($cnx,$_POST['brokerTel']);
         $address = mysqli_real_escape_string($cnx,$_POST['brokerAdr']);
+        $brokerIce = mysqli_real_escape_string($cnx,$_POST['brokerIce']);
 
         //Fetching all Brokers Title Data
         $fullBrokerName = $nom.' '.$prenom;
@@ -21,7 +22,6 @@
             }
         }
 
-        
         if($exist)
         {
             $_SESSION['error'] = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -33,7 +33,7 @@
             header("location:broker.php");exit();
         }else{
 
-            $query = "INSERT INTO `broker`( `nom`,`prenom`, `phone`, `address`) VALUES ('$nom','$prenom','$phone','$address')";
+            $query = "INSERT INTO `broker`( `nom`,`prenom`, `phone`, `address`, `brokerIce`) VALUES ('$nom','$prenom','$phone','$address','$brokerIce')";
             $res = mysqli_query($cnx,$query);
     
             // $broker_id = mysqli_insert_id($cnx);

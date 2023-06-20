@@ -31,7 +31,6 @@ if(isset($_SESSION["error"])){
                                     <input type="text" name="brokerPrenom" id="brokerPrenom" class="form-control" required placeholder="Prenom">
                                 </div>
                             </div>
-                            
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -43,6 +42,11 @@ if(isset($_SESSION["error"])){
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" name="brokerIce" id="brokerIce" class="form-control" placeholder="ICE" >
+                                </div>
+                            </div>
+                            <div class="col-md-12">
                                 <div class="input-group">
                                     <input type="text" name="brokerAdr" id="brokerAdr" class="form-control" placeholder="Address" >
                                 </div>

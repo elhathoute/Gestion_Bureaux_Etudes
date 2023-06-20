@@ -86,34 +86,19 @@
                     if(isset($_GET['broker_id'])){
                         $broker=getBrokerById($_GET['broker_id']);
                         echo strtoupper( $broker['nom'].' '.$broker['prenom']);
+                        if($broker['brokerIce']!=''){
+                            echo '<br>ICE '.$broker['brokerIce'];   
+                        }
                     }else{
                         echo strtoupper(getSelectedClientName());
                     }
                     ?></span><br>
-                    <!-- <textarea  value="" name="" id="receiverAdr" style='resize: none;height:auto;border:none;' disabled> -->
-                    <!-- <?php 
-                        $adr_ice = explode('/',getSelectedClientAdr());
-                        if(count($adr_ice) > 1){
-                            $string = $adr_ice[1] . '<br>' . $adr_ice[0];
-                            echo br2nl($string); 
-                        }else{
-                            echo getSelectedClientAdr();
-                        }
-                    ?> -->
-                    <!-- </textarea> -->
                     <span style="text-decoration:underline">Facture N°<?= $invoiceInfo["F_number"]  ?></span>
                 </div>
             </div>
         </section>
 
         <div class="my-5">
-            <?php
-            $MO='';
-            if(isset($_GET['broker_id'])){
-                $MO.='<span style="text-decoration:underline;margin-right:5px;">MO:</span><span> '.strtoupper(getSelectedClientName()).'</span><br><br>';
-                echo $MO;
-            }
-            ?>
             <span style="text-decoration:underline">Objet:</span><br>
             <p style="text-align:center;padding:0 20px"><?=ucfirst($invoiceInfo["objet"]);?>. <span style="font-weight: bold !important;">Sise</span> à <span> <?= $invoiceInfo['located'] ?></span>.</p>
         </div>
@@ -169,8 +154,9 @@
                     <td colspan="5">TOTAL H.T</td>
                     <td>'.$invoiceInfo["sub_total"].'</td>
                 </tr>';
-                
-                    if($invoiceInfo['remove_tva']=="0"){
+                $TVA=floatval($invoiceInfo['sub_total'])*0.2;
+                $totalTVA=$invoiceInfo['sub_total'] + $TVA;
+                    // if($invoiceInfo['remove_tva']=="0"){
                         $html .= '
                             <tr class="text-bold">
                                 <td colspan="5">TVA 20%</td>
@@ -178,9 +164,9 @@
                             </tr>
                             <tr class="text-bold">
                                 <td colspan="5">TOTAL T.T.C</td>
-                                <td>'.$invoiceInfo['net_total'].'</td>
+                                <td>'.$totalTVA.'</td>
                             </tr>';
-                    }
+                    // }
 
 
                     $html .= '</tbody>

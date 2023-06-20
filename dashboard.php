@@ -61,7 +61,7 @@ if(!empty( $_SESSION["user_id"])){
 
                         <div class="card-body">
                             <!-- <h5 class="card-title">Sales <span id="salesPeriodTxt">| This Month</span></h5> -->
-                            <h5 class="card-title">Ventes <span>| </span></h5>
+                            <h5 class="card-title">Facture <span>| </span></h5>
 
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -70,7 +70,7 @@ if(!empty( $_SESSION["user_id"])){
                                 <div class="ps-3">
                                     
                                     <h6 id="salesDashTxt"><?= countInvDashSales($period);?></h6>
-                                    <span class="text-success small pt-1 fw-bold">Total des ventes</span> <span class="text-muted small pt-2 ps-1"></span>
+                                    <span class="text-success small pt-1 fw-bold">Total des Facture</span> <span class="text-muted small pt-2 ps-1"></span>
 
                                 </div>
                             </div>
@@ -154,14 +154,14 @@ if(!empty( $_SESSION["user_id"])){
                     <div class="card info-card income-card">
                         <div class="card-body">
                             <!-- <h5 class="card-title">Customers <span id="cusPeriodTxt">| This Year</span></h5> -->
-                            <h5 class="card-title">Income<span>| </span></h5>
+                            <h5 class="card-title">Total devis<span>| </span></h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-cash-coin"></i>
                                 </div>
                                 <div class="ps-3">
                                     <h6 id="incomeDashTxt"><?= countPayServices($period); ?></h6>
-                                    <span class="text-success small pt-1 fw-bold">Income</span> <span class="text-muted small pt-2 ps-1"></span>
+                                    <span class="text-success small pt-1 fw-bold">Total devis</span> <span class="text-muted small pt-2 ps-1"></span>
                                 </div>
                             </div>
                         </div>

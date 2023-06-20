@@ -17,13 +17,17 @@ if($devis['status']==strtolower('rejeter')){
         $broker_id = getBroker_devisData($devis['id'])['id_broker'];
         $brokerRow = getBrokerById($broker_id);
         $broker_fullName = ucfirst($brokerRow['prenom']) . ' ' . strtoupper($brokerRow['nom']);
-        $isfacture2 =getbrkDevisfactById($_GET['id'])['is_facture']=='0'?"":"disabled"; 
+        $isfacture2 =getbrkDevisfactById($_GET['id'])['is_facture']; 
         $display="";
     }else{
         $display="d-none";
     }
-   
-
+    $visibilty='';
+    $isfacture =getDevisById($_GET['id'])['is_facture']; 
+    if($isfacture==1 || $isfacture2 ==1){
+        $visibilty = "disabled";
+    }
+var_dump($isfacture2);
 
 function br2nl($string)
 {
@@ -41,18 +45,14 @@ function br2nl($string)
         <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&client_id=<?=$_GET['client_id']?>' class="btn btn-primary float-end" title="Imprimer Maîtres d'ouvrage Devis"><i class="bi bi-download"></i> Export MO</a>
         <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&broker_id=<?=$broker_id?>&client_id=<?=$_GET['client_id']?>' class="btn btn-danger float-end me-2" title="Imprimer Intermédiaire Devis"><i class="bi bi-download"></i> Export INT</a>
         <!-- <button class="btn btn-secondary float-end me-2 btnConvertToFacture" disabled>Déjà converti </button>  -->
-        <?php 
-        $isfacture =getDevisById($_GET['id'])['is_facture']=='0'?"":"disabled"; 
-       
-        ?>
         <div class="btn-group dropstart">
             <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             Convertir en Facture
             </button>
             <div class="dropdown-menu">
-                <button class="brkbtnConvertToFacture text-center dropdown-item fw-bold text-danger btn <?= $isfacture2?> <?= $display?>" id="<?= $broker_id?>">Intermédiaire</button>
+                <button class="brkbtnConvertToFacture text-center dropdown-item fw-bold text-danger btn <?= $visibilty?> <?= $display?>" id="<?= $broker_id?>">Intermédiaire</button>
                 <!-- <li><hr class="dropdown-divider"></li> -->
-                <button class="btnConvertToFacture text-center dropdown-item fw-bold text-primary btn <?= $isfacture?>" id="<?= $_GET['client_id']?>">Maître d'ouvrage</button>
+                <button class="btnConvertToFacture text-center dropdown-item fw-bold text-primary btn <?= $visibilty?>" id="<?= $_GET['client_id']?>">Maître d'ouvrage</button>
             </div>
         </div>
     </div>

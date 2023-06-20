@@ -78,7 +78,7 @@ $res= mysqli_query($cnx,$query);
 $suppliersDetails=  mysqli_fetch_all($res);
 
 // var_dump($caisedatails);
-// var_dump($suppliersDetails[0][0]);
+// var_dump($suppliersDetails);
 // die();
 
 $html = '';
@@ -124,7 +124,6 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             $html .= '<td> </td>';
             $html .= '<td> '.$caisedatails['totalPaiment'] .'</td>';
             $html .= '</tr>';
-
             $html .= '<tr>';
             $html .= '<td> Orders de Paiment</td>';
             $html .= '<td></td>';
@@ -132,28 +131,39 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             $html .= '<td> '.($caisedatails['totalPaiment'] -$OrderPaiment ).'</td>';
             $html .= '</tr>';
             $débitTotal+=$OrderPaiment;
-            $solde=0;
-            foreach($suppliersDetails as $index => $row){
-                if($index == 0){
-                    $sold= ($caisedatails['totalPaiment'] -$OrderPaiment )- $row[0];
-                }else{
-                    $sold=$sold - $row[0];
+            $sold=($caisedatails['totalPaiment'] -$OrderPaiment );
+            if($suppliersDetails!=''){
+                foreach($suppliersDetails as $index => $row){
+                    if($index == 0){
+                        $sold= $sold- $row[0];
+                    }else{
+                        $sold=$sold - $row[0];
+                    }
+                    $html .= '<tr>';
+                    $html .= '<td>'.$row[1].'</td>';
+                    $html .= '<td></td>';
+                    $html .= '<td>'.$row[0].'</td>';
+                    $html .= '<td>'.$sold.'</td>';
+                    $html .= '</tr>';
+                    $débitTotal+=$row[0];
                 }
                 $html .= '<tr>';
-                $html .= '<td>'.$row[1].'</td>';
+                $html .= '<td>Beplan</td>';
                 $html .= '<td></td>';
-                $html .= '<td>'.$row[0].'</td>';
                 $html .= '<td>'.$sold.'</td>';
+                $html .= '<td></td>';
                 $html .= '</tr>';
-                $débitTotal+=$row[0];
+                $débitTotal+=$sold;
+            }else{
+                $html .= '<tr>';
+                $html .= '<td>Beplan</td>';
+                $html .= '<td></td>';
+                $html .= '<td>'.$sold.'</td>';
+                $html .= '<td></td>';
+                $html .= '</tr>';
+                $débitTotal+=$sold;
             }
-            $html .= '<tr>';
-            $html .= '<td>Beplan</td>';
-            $html .= '<td></td>';
-            $html .= '<td>'.$sold.'</td>';
-            $html .= '<td></td>';
-            $html .= '</tr>';
-            $débitTotal+=$sold;
+            
             $html .= '<tr>';
             $html .= '<th>Total</th>';
             $html .= '<th>'.$caisedatails['totalPaiment'] .'</th>';
@@ -167,21 +177,13 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             $html .= '<tbody>';
             $html .= '<tr>';
             $html .= '<td > <strong>SOLD AU</strong> </td>';
-            $html .= '<td><strong> </strong> </td>';
+            $html .= '<td><strong>'.($caisedatails['totalPaiment'] -$débitTotal ).'</strong> </td>';
             $html .= '</tbody>';
             $html .= '</table>';
             echo  $html;
                 ?>
         </tbody>
     </table>
-    <!-- <h6>Audits et rapports mensuels (1er Novembre 2016 - 30 Novembre 2016)</h6> -->
-
-    <!--  end of the table  -->
-    <br>
-    <div style="clear:right">
-        <p style="float:right;margin-right:10px;font-size:1.3rem" class="underline">Signé par order de directeur général</p><br>
-    </div>
-
 
     <
   </div>
