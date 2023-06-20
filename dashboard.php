@@ -19,6 +19,12 @@ if(!empty( $_SESSION["user_id"])){
   $user_role = getUserRole($user_id);
   if($user_role['role_name'] != "assistant")
   {
+
+
+//    $payedservices=countInvPayDash($period);
+//    $totalDevis=countPayServices($period);
+//    $nonPayedService=$totalDevis -$payedservices;
+//    var_dump($payedservices);
 ?>
 <div class="pagetitle">
     <div class="row">
@@ -100,7 +106,7 @@ if(!empty( $_SESSION["user_id"])){
 
                         <div class="card-body">
                             <!-- <h5 class="card-title">Revenue <span id="revenuePeriodTxt">| This Week</span></h5> -->
-                            <h5 class="card-title">Revenu <span>| </span></h5>
+                            <h5 class="card-title">Total Payé<span>| </span></h5>
 
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -108,7 +114,7 @@ if(!empty( $_SESSION["user_id"])){
                                 </div>
                                 <div class="ps-3" style="overflow:auto;">
                                     <h6 id="revenueDashTxt"><?= countInvPayDash($period); ?> DH</h6>
-                                    <span class="text-success small pt-1 fw-bold">Revenu total</span> <span class="text-muted small pt-2 ps-1"></span>
+                                    <span class="text-success small pt-1 fw-bold">Total Payé</span> <span class="text-muted small pt-2 ps-1"></span>
 
                                 </div>
                             </div>
@@ -116,12 +122,28 @@ if(!empty( $_SESSION["user_id"])){
 
                     </div>
                 </div><!-- End Revenue Card -->
-
+                <!-- non paye Card -->
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card income-card">
+                        <div class="card-body">
+                            <!-- <h5 class="card-title">Customers <span id="cusPeriodTxt">| This Year</span></h5> -->
+                            <h5 class="card-title">Total non Payé<span>| </span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-cash-coin"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6 id="incomeDashTxt"><?= countPayServices($period); ?></h6>
+                                    <span class="text-danger small pt-1 fw-bold">Total non Payé</span> <span class="text-muted small pt-2 ps-1"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End non paye Card -->
                 <!-- Customers Card -->
                 <div class="col-xxl-3 col-md-6">
-
                     <div class="card info-card customers-card">
-
                         <!-- <div class="filter">
                             <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -149,25 +171,6 @@ if(!empty( $_SESSION["user_id"])){
                         </div>
                     </div>
                 </div><!-- End Customers Card -->
-                <!-- income Card -->
-                <div class="col-xxl-3 col-md-6">
-                    <div class="card info-card income-card">
-                        <div class="card-body">
-                            <!-- <h5 class="card-title">Customers <span id="cusPeriodTxt">| This Year</span></h5> -->
-                            <h5 class="card-title">Total devis<span>| </span></h5>
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-cash-coin"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6 id="incomeDashTxt"><?= countPayServices($period); ?></h6>
-                                    <span class="text-success small pt-1 fw-bold">Total devis</span> <span class="text-muted small pt-2 ps-1"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Customers Card -->
             </div>
         </div>
     </div>

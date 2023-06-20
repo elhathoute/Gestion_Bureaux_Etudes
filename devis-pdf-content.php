@@ -69,10 +69,11 @@
 <!-- TODO Fix the ref in here and in invoice pdf-content -->
 <body>
     <?php
-    // $path = 'images/BeplanLogo.png';
-    // $type = pathinfo($path, PATHINFO_EXTENSION);
-    // $data = file_get_contents($path);
-    // $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+    $path1 = 'images/sgn.png';
+    $type1 = pathinfo($path1, PATHINFO_EXTENSION);
+    $data1 = file_get_contents($path1);
+    $base64_1 = 'data:image/' . $type1 . ';base64,' . base64_encode($data1);
+    $invoiceInfo = getSelectedInvoiceInfo();
     $devisInfo = getSelectedDevisInfo();
 
     function br2nl($string)
@@ -253,6 +254,7 @@
             <p>Acompte de 90% au début des travaux.</p>
             <p>Acompte de 10% à la livraison des travaux</p>
             <p style="float:right;margin-right:10px;font-size:0.9rem">Signé le Directeur général</p><br>
+            <img src="<?php echo $base64_1 ?>" width="240" style="margin-left:330px; margin-top:50px;"/>
         <!-- </div><br><br><br><br> -->
       
         <!-- <div style="z-index:0;position:fixed;left:0;bottom:1;">

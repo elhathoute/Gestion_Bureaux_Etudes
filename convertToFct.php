@@ -57,7 +57,8 @@ if($_POST){
              // update devis set devis is converted to facture
             if(isset($_POST['broker_id'])){
                 $broker_id=$_POST['broker_id'];
-                $query2 = "UPDATE `broker_devis` SET `is_facture`='1' WHERE id_devis=$devis_id";
+                // $query2 = "UPDATE `broker_devis` SET `is_facture`='1' WHERE id_devis=$devis_id";
+                $query2 = "UPDATE `devis` SET `is_facture`='1' WHERE id=$devis_id";
                 $res2 = mysqli_query($cnx,$query2);
                 if($res){
                     $data = array('status'=>'success','invoice_id'=>$last_id,'client_id'=>$client_id,'broker_id'=>$broker_id);

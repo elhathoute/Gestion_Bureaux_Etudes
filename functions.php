@@ -1802,7 +1802,7 @@ function countInvPayDash($period){
     $to = $period[1];
 
     // $query = "SELECT IFNULL(SUM(net_total),0) AS price FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved';";
-    $query = "SELECT IFNULL(SUM(montant_paye),0) AS price FROM `devis_payments` WHERE DATE(pay_date) BETWEEN '$from' AND '$to'";
+    $query = "SELECT IFNULL(SUM(montant_paye),0) AS price FROM `devis_payments` LEFT JOIN devis on devis.id=devis_payments.devis_id WHERE devis.remove=0 AND DATE(pay_date) BETWEEN '$from' AND '$to'";
 
 
     $res = mysqli_query($cnx,$query);
@@ -1820,12 +1820,19 @@ function countPayServices($period){
     $from = $period[0];
     $to = $period[1];
     // $query = "SELECT IFNULL(SUM(net_total),0) AS price FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved';";
-    $query = "SELECT IFNULL(SUM(net_total),0) AS price FROM `devis` WHERE DATE(date_creation) BETWEEN '$from' AND '$to'";
+    // $query = "SELECT IFNULL(SUM(net_total),0) AS price FROM `devis` WHERE DATE(date_creation) BETWEEN '$from' AND '$to'";
+    $query = "SELECT 
+                (SELECT IFNULL(SUM(montant_paye),0) AS price FROM `devis_payments` LEFT JOIN devis on devis.id=devis_payments.devis_id WHERE devis.remove=0 AND DATE(pay_date) BETWEEN '$from' AND '$to') as payed,
+                (SELECT IFNULL(SUM(net_total),0) AS price FROM `devis`  WHERE devis.remove=0 AND id IN ( SELECT id_devis FROM detail_devis WHERE confirmed = 1 ) AND DATE(date_creation) BETWEEN '$from' AND '$to') as total;";
 
     $res = mysqli_query($cnx,$query);
     $priceSum = mysqli_fetch_assoc($res);
     //  var_dump($priceSum['price']);
-    return $priceSum['price'];
+    $payedservices=$priceSum['payed'];
+    $totalDevis=$priceSum['total'];
+    $nonPayedService=$totalDevis -$payedservices;
+    return $nonPayedService;
+    // return $priceSum['price'];
 }
 
 //function to count how many invoice got created on the current week
@@ -1891,7 +1898,7 @@ function weeklyDashRevenue(){
     $weekAgo = date_format($date,"Y-m-d");
 
     // $query = "SELECT DATE(date_creation) AS Day,SUM(net_total) AS somme FROM invoice  WHERE DATE(date_creation) BETWEEN '$weekAgo' AND '$curDate' GROUP BY DATE(date_creation);";
-    $query = "SELECT DATE(pay_date) AS Day,SUM(montant_paye) AS somme FROM devis_payments  WHERE DATE(pay_date) BETWEEN '$weekAgo' AND '$curDate' GROUP BY DATE(pay_date);";
+    $query = "SELECT DATE(pay_date) AS Day,SUM(montant_paye) AS somme FROM devis_payments  LEFT JOIN devis on devis.id=devis_payments.devis_id WHERE devis.remove=0  AND DATE(pay_date) BETWEEN '$weekAgo' AND '$curDate' GROUP BY DATE(pay_date);";
     $res = mysqli_query($cnx, $query);
     $days = array();
     $invs = array();

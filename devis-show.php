@@ -17,17 +17,17 @@ if($devis['status']==strtolower('rejeter')){
         $broker_id = getBroker_devisData($devis['id'])['id_broker'];
         $brokerRow = getBrokerById($broker_id);
         $broker_fullName = ucfirst($brokerRow['prenom']) . ' ' . strtoupper($brokerRow['nom']);
-        $isfacture2 =getbrkDevisfactById($_GET['id'])['is_facture']; 
+        // $isfacture2 =getbrkDevisfactById($_GET['id'])['is_facture']; 
         $display="";
     }else{
         $display="d-none";
     }
     $visibilty='';
     $isfacture =getDevisById($_GET['id'])['is_facture']; 
-    if($isfacture==1 || $isfacture2 ==1){
+    if($isfacture==1){
         $visibilty = "disabled";
     }
-var_dump($isfacture2);
+// var_dump($isfacture2);
 
 function br2nl($string)
 {

@@ -204,15 +204,15 @@ if(isset($_GET['broker_id'])){
                                             <label class="labelTva">0.00 DH</label>
                                         </div>
                                     </div>
-                                    <div class="row my-2">
+                                    <!-- <div class="row my-2">
                                         <div class="col-sm-6">
                                             <label class="form-check-label fw-light" for="tvaCheckbox">Enlever TVA&nbsp</label>
                                             <input type="checkbox" class="form-check-input removeTva invoiceRmTVA" name="" id="tvaCheckbox" <?= $invoice['remove_tva']=='1'?'checked':"";?> disabled>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="row my-2">
                                         <div class="col-sm-6">
-                                            <label class="fw-bold">Total:</label>
+                                            <label class="fw-bold">Total T.T.C:</label>
                                         </div>
                                         <div class="col-sm-6">
                                             <label class="labelDevisTotal">0.00 DH</label>

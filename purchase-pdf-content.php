@@ -68,11 +68,7 @@
 
         if(isset($_GET['p'])){
             $p_id = $_GET['p'];
-            $purchaseInfo = getPurchaseReceit($p_id);
-            
-        
-    
-    
+            $purchaseInfo = getPurchaseReceit($p_id);    
     ?>
     <div class="container">
         

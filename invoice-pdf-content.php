@@ -62,10 +62,10 @@
 
 <body>
     <?php
-    // $path = 'images/testLogo.png';
-    // $type = pathinfo($path, PATHINFO_EXTENSION);
-    // $data = file_get_contents($path);
-    // $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+    $path1 = 'images/sgn.png';
+    $type1 = pathinfo($path1, PATHINFO_EXTENSION);
+    $data1 = file_get_contents($path1);
+    $base64_1 = 'data:image/' . $type1 . ';base64,' . base64_encode($data1);
     $invoiceInfo = getSelectedInvoiceInfo();
     function br2nl($string)
     {
@@ -173,9 +173,6 @@
                             </table>';
                     echo $html;
                 ?>
-                
-                
-            
         <div class="my-3">
             <span>Arrêté la présent Facture à la somme de:</span><br>
             <p class="underline"style="text-align:center;padding:0 20px;font-size:0.9rem;"><strong><?php echo intergerIntoFrenchWords($invoiceInfo['net_total']); ?> <span><?php if(($invoiceInfo['remove_tva']=="0")) {echo('T.T.C.');}else{ echo 'H.T.';} ?></span></strong></p>
@@ -190,6 +187,7 @@
             <p>Acompte de 90% au début des travaux.</p>
             <p>Acompte de 10% à la livraison des travaux</p>
             <p style="float:right;margin-right:10px;font-size:0.9rem">Signé le Directeur général</p><br>
+            <img src="<?php echo $base64_1 ?>" width="240" style="margin-left:350px; margin-top:50px;"/>
         </div><br><br><br><br>
         <!-- <section >
             <div style="text-align:right;font-size:0.7rem;position:fixed;bottom:0;right:0;line-height:0;">

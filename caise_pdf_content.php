@@ -97,7 +97,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                     <img src="<?php echo $base64?>" width="240"/>
                 </div>
                 <div class="">
-                    <h2 class="document-type" style="text-align: center;">Suivi du Caise Date du 01/<?=$selectedMonth.'/'.$selectedYear?></h2>
+                    <h2 class="document-type" style="text-align: center;">Suivi du Caise Date du 1/<?=$selectedMonth.'/'.$selectedYear?></h2>
                     <!-- <p class="reçu_num" style="text-align: center;"><strong><u>N°</u></strong></p> -->
                 </div>
             </div>
@@ -176,7 +176,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             $html .= '<table class="table">';
             $html .= '<tbody>';
             $html .= '<tr>';
-            $html .= '<td > <strong>SOLD AU</strong> </td>';
+            $html .= '<td > <strong>SOLD AU '.$selectedMonth.'/'.$selectedYear.'</strong> </td>';
             $html .= '<td><strong>'.($caisedatails['totalPaiment'] -$débitTotal ).'</strong> </td>';
             $html .= '</tbody>';
             $html .= '</table>';

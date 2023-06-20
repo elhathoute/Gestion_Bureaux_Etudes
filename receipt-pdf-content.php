@@ -95,6 +95,12 @@ $path = 'images/BeplanLogo.png';
 $type = pathinfo($path, PATHINFO_EXTENSION);
 $data = file_get_contents($path);
 $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+
+$path1 = 'images/sgn.png';
+$type1 = pathinfo($path1, PATHINFO_EXTENSION);
+$data1 = file_get_contents($path1);
+$base64_1 = 'data:image/' . $type1 . ';base64,' . base64_encode($data1);
 ?>
     <div class="container">
         <div class="invoice">
@@ -197,6 +203,7 @@ Date de paiement   : <strong><?=date("d/m/Y",strtotime($receiptInfo[0][5])) ;?><
     <br>
     <div style="clear:right">
         <p style="float:right;margin-right:10px;font-size:1.3rem" class="underline">Signé par order de directeur général</p><br>
+        <img src="<?php echo $base64_1 ?>" width="240" style="margin-left:330px; margin-top:50px;"/>
     </div>
 
 
