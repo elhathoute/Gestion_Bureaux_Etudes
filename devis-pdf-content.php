@@ -80,6 +80,9 @@
     {
         return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
     }
+    $clientData= getclientdata();
+    $client =($clientData['type']=='individual')?(strtoupper($clientData['nom'].' '.$clientData['prenom_or_ICE'])):(strtoupper($clientData['nom']).'<br> ICE : '.$clientData['prenom_or_ICE']);
+
     ?>
     <div class="container">
         
@@ -102,9 +105,14 @@
                     <span>A</span><br>
                     <span><?php 
                     if(isset($_GET['broker_id'])){
-                        echo strtoupper( $devisInfo['nom'].' '.$devisInfo['prenom']);
+                        $broker=getBrokerById($_GET['broker_id']);
+                        echo strtoupper( $broker['nom'].' '.$broker['prenom']);
+                        if($broker['brokerIce']!=''){
+                            echo '<br>ICE : '.$broker['brokerIce'];   
+                        }
                     }else{
-                        echo strtoupper(getSelectedClientName());
+                        echo  $client;
+                        // echo strtoupper(getSelectedClientName());
                     }
                     ?></span><br>
                     <span style="text-decoration:underline">Devis N°<?= $devisInfo["number"]  ?></span>
