@@ -43,9 +43,9 @@ function br2nl($string)
     
     <div class="col-md-6 <?= ($role->hasPerm('export devis')) ? "":"hide-element" ?> <?= (strtoupper($devis['type'])==strtoupper("Approved"))? '' :  "hide-element";?>">
         <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&client_id=<?=$_GET['client_id']?>' class="btn btn-primary float-end" title="Imprimer Maîtres d'ouvrage Devis"><i class="bi bi-download"></i> Export MO</a>
-        <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&broker_id=<?=$broker_id?>&client_id=<?=$_GET['client_id']?>' class="btn btn-danger float-end me-2" title="Imprimer Intermédiaire Devis"><i class="bi bi-download"></i> Export INT</a>
+        <a target="_blank" href='devis_export.php?id=<?=$_GET['id']?>&broker_id=<?=$broker_id?>&client_id=<?=$_GET['client_id']?>' class="btn btn-danger float-end me-2 <?= $display?>" title="Imprimer Intermédiaire Devis"><i class="bi bi-download"></i> Export INT</a>
         <div class="btn-group dropstart float-end me-2">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button type="button" class="btn btn-secondary dropdown-toggle <?= $visibilty?>" data-bs-toggle="dropdown" aria-expanded="false">
             Convertir en Facture
             </button>
             <div class="dropdown-menu">
