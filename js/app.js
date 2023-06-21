@@ -1958,6 +1958,8 @@ $(document).ready(function () {
                     solde = 0;
                     if(json.length != 0){
                         json.forEach(row => {
+                            // console.log(row[5]);
+                            var prix =parseFloat(row[5]).toFixed(2)
                             html += `<tr>`;
                             // html += `<td>${row[0]}${row[8]}</td>`;
                             html += `<td>${row[0]}</td>`;
@@ -1965,7 +1967,7 @@ $(document).ready(function () {
                             html += `<td>${row[2]}</td>`;
                             html += `<td>${row[3]}</td>`;
                             // html += `<td>${row[4]}</td>`;
-                            html += `<td class="totalRow">${row[5]} DH</td>`;
+                            html += `<td class="totalRow">${prix} DH</td>`;
                             html += `<td class="soldeRow">${row[6]} DH</td>`;
                             html += `<td class="text-center ${checkpaiment}">${row[7]}</td>`;
                             html += `</tr>`;
@@ -2013,7 +2015,7 @@ $(document).ready(function () {
                             // html += `<td>${row[4]}</td>`;
                             html += `<td class="totalRow">${row[5]} DH</td>`;
                             html += `<td class="soldeRow">${row[6]} DH</td>`;
-                            html += `<td class="text-center">${row[7]}</td>`;
+                            html += `<td class="text-center ${checkpaiment}">${row[7]}</td>`;
                             html += `</tr>`;
                             total += parseFloat(row[5]);
                             solde += parseFloat(row[6]);
@@ -2072,6 +2074,7 @@ $(document).ready(function () {
 
 // for the client filter on the payment-create page borker side 
 $(document).on("change","#selectBrokerClient",function(){
+    var checkpaiment =$("#checkpaiment").val();
     var broker_id = $("#BrokerID").val();
     var clientId = $("#selectBrokerClient").val();
     // console.log(clientid);
@@ -2098,7 +2101,7 @@ $(document).on("change","#selectBrokerClient",function(){
                             // html += `<td>${row[4]}</td>`;
                             html += `<td class="totalRow">${row[5]} DH</td>`;
                             html += `<td class="soldeRow">${row[6]} DH</td>`;
-                            html += `<td class="text-center">${row[7]}</td>`;
+                            html += `<td class="text-center ${checkpaiment}">${row[7]}</td>`;
                             html += `</tr>`;
                             total += parseFloat(row[5]);
                             solde += parseFloat(row[6]);
@@ -3146,6 +3149,8 @@ $.ajax({
         var totalPriceNonPayeView=0;
         if(json.length != 0){
             json.forEach(row => {
+                console.log(row[4]+' service prix');
+                console.log(row[5]+' montant paye');
                 var date =row[8]==null?row[9]+' (ND)':row[8];
                 html += `<tr>`;
                 html += `<td>${row[0]}</td>`;
@@ -3298,6 +3303,7 @@ $.ajax({
 function filterTableByYear(selectedYear, selectedMonth,selectedStatus,selectedService) {
     var totalPricePayeView=0;
     var totalPriceNonPayeView=0;
+    var numRow =1;
     $('#situationTable tbody tr').each(function() {
         var dateCell = $(this).find('td:eq(1)');
         var dateValue = dateCell.text();
@@ -3308,7 +3314,11 @@ function filterTableByYear(selectedYear, selectedMonth,selectedStatus,selectedSe
         var srvCell = $(this).find('td:eq(4)');
         var srvValue = srvCell.text();
         var showRow = (rowYear == selectedYear || selectedYear == ''|| dateValue=='-') && (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == ''|| dateValue=='-') &&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&&(selectedService == null || srvValue == selectedService || selectedService == '');
-        $(this).toggle(showRow);
+        $(this).toggle(showRow).each(function() {
+            if ($(this).is(":visible")) {
+                $(this).find('td:eq(0)').text(numRow++);
+            }
+          });
         var showRow2 = (selectedStatus != ''||selectedStatus != null) && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
         if(showRow2){
             if(statusValue=="Non Payé"){
@@ -3330,6 +3340,7 @@ function filterTableByYear(selectedYear, selectedMonth,selectedStatus,selectedSe
 function filterTableByMonth(selectedMonth, selectedYear,selectedStatus,selectedService) {
     var totalPricePayeView=0;
     var totalPriceNonPayeView=0;
+    var numRow =1;
     $('#situationTable tbody tr').each(function() {
         var dateCell = $(this).find('td:eq(1)');
         var dateValue = dateCell.text();
@@ -3340,7 +3351,11 @@ function filterTableByMonth(selectedMonth, selectedYear,selectedStatus,selectedS
         var srvCell = $(this).find('td:eq(4)');
         var srvValue = srvCell.text();
         var showRow = (rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-') && (selectedYear == null || rowYear == selectedYear || selectedYear == ''|| dateValue=='-')&&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&&(selectedService == null || srvValue == selectedService || selectedService == '');
-        $(this).toggle(showRow);
+        $(this).toggle(showRow).each(function() {
+            if ($(this).is(":visible")) {
+                $(this).find('td:eq(0)').text(numRow++);
+            }
+        });
         var showRow2 = (selectedStatus != ''||selectedStatus != null) && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
         if(showRow2){
             if(statusValue=="Non Payé"){
@@ -3360,8 +3375,9 @@ function filterTableByMonth(selectedMonth, selectedYear,selectedStatus,selectedS
 }
 //---------------------------------filter by status---------------
 function filterTableByStatus(selectedStatus, selectedService,selectedMonth,selectedYear) {
-var totalPricePayeView=0;
-var totalPriceNonPayeView=0;
+    var totalPricePayeView=0;
+    var totalPriceNonPayeView=0;
+    var numRow =1;
     $('#situationTable tbody tr').each(function() {
         var statusCell = $(this).find('td:eq(7)');
         var statusValue = statusCell.text();
@@ -3372,7 +3388,11 @@ var totalPriceNonPayeView=0;
         var rowYear = parseInt(dateValue.split('-')[0]);
         var rowMonth = parseInt(dateValue.split('-')[1]);
         var showRow = (statusValue == selectedStatus || selectedStatus == '') && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
-        $(this).toggle(showRow);
+        $(this).toggle(showRow).each(function() {
+            if ($(this).is(":visible")) {
+              $(this).find('td:eq(0)').text(numRow++);
+            }
+          });
         var showRow2 = (selectedStatus != ''||selectedStatus != null) && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
         if(showRow2){
             if(statusValue=="Non Payé"){
@@ -3394,6 +3414,7 @@ var totalPriceNonPayeView=0;
 function filterTableByService(selectedService, selectedStatus,selectedMonth,selectedYear) {
     var totalPricePayeView=0;
     var totalPriceNonPayeView=0;
+    var numRow =1;
     $('#situationTable tbody tr').each(function() {
         var srvCell = $(this).find('td:eq(4)');
         var srvValue = srvCell.text();
@@ -3404,7 +3425,11 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
         var rowYear = parseInt(dateValue.split('-')[0]);
         var rowMonth = parseInt(dateValue.split('-')[1]);
         var showRow = (srvValue == selectedService || selectedService == '') &&(selectedStatus == null || statusValue == selectedStatus || selectedStatus == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
-        $(this).toggle(showRow);
+        $(this).toggle(showRow).each(function() {
+            if ($(this).is(":visible")) {
+              $(this).find('td:eq(0)').text(numRow++);
+            }
+          });
         var showRow2 = (selectedStatus != ''||selectedStatus != null) && (selectedService == null || srvValue == selectedService || selectedService == '')&& (selectedMonth == null || rowMonth == selectedMonth || selectedMonth == '' || dateValue=='-')&& (selectedYear == null || rowYear == selectedYear || selectedYear == '' || dateValue=='-');
         if(showRow2){
             if(statusValue=="Non Payé"){
@@ -4352,6 +4377,7 @@ function getCurrentDateTime() {
         }
         $.when(makeRequest()).then(function successHandler(data){
             //success message........
+            console.log(data);
             var json = JSON.parse(data);
             var status = json.status;
             if(status == 'success'){

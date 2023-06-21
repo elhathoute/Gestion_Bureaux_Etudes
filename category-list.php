@@ -49,6 +49,7 @@ if(isset($_SESSION["success"])){
                                             $number = 1;
                                             $html = '';
                                             while($row = mysqli_fetch_assoc($res)){
+                                                var_dump($row['title']);
                                                 $html .= '<tr>';
                                                 $html .= '<td>'.$number.'</td>';
                                                 $html .= '<td>'.$row['title'].'</td>';

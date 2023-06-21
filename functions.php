@@ -443,6 +443,21 @@ function getSelectedClientName(){
     }
 
 }
+function getclientdata(){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    if($_GET){
+        $client_id =$_GET['client_id'];
+        $query = "SELECT c.type, CASE WHEN c.type = 'individual' THEN ci.nom WHEN c.type = 'entreprise' THEN ce.nom ELSE NULL END AS nom, CASE WHEN c.type = 'individual' THEN ci.prenom WHEN c.type = 'entreprise' THEN ce.ICE ELSE NULL END AS prenom_or_ICE FROM client c LEFT JOIN client_individual ci ON c.id_client = ci.id LEFT JOIN client_entreprise ce ON c.id_client = ce.id WHERE c.id =$client_id ;";
+        $res = mysqli_query($cnx,$query);
+        $row = mysqli_fetch_assoc($res);
+       return $row;
+    }
+
+}
 
 function fetchClientName($type,$id){
     $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);

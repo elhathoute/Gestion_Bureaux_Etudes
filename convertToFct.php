@@ -15,19 +15,19 @@ if($_POST){
         $net_total = $devis['net_total'];
         $remove_tva = $devis['remove_tva'];
         $objet_name = mysqli_real_escape_string($cnx,$devis['objet']);
-        $located = $devis['located'];
+        $located = mysqli_real_escape_string($cnx, $devis['located']);
         $client_id =$devis['id_client'];
         $user_role=getUserRole($_SESSION['user_id']);
         //insert to invoice
-        if(isset($_POST['broker_id'])){
+            if(isset($_POST['broker_id'])){
                 $devis = getbrkDevisById($devis_id);
                 $devis_discount = $devis['brkdiscount'];
                 $net_total = $devis['brknettotal'];
                 $sub_total = $devis['brkksubtotal'];
                 $broker_id=$_POST['broker_id'];
-                $query = "INSERT INTO `invoice`(`id`, `F_number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`,`pour`,`devis_id`,`broker_id`) VALUES (null,'$invoice_number','$client_id','$sub_total','$devis_discount','$net_total','Approved','accepter','1','$invoice_comment','$objet_name','$located','INT','$devis_id','$broker_id')";
+                $query = "INSERT INTO `invoice`(`id`, `F_number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`,`pour`,`devis_id`,`broker_id`) VALUES (null,'$invoice_number','$client_id','$sub_total','$devis_discount','$net_total','Approved','accepter','0','$invoice_comment','$objet_name','$located','INT','$devis_id','$broker_id')";
             }else{
-                $query = "INSERT INTO `invoice`(`id`, `F_number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`,`pour`,`devis_id`) VALUES (null,'$invoice_number','$client_id','$sub_total','$devis_discount','$net_total','Approved','accepter','$remove_tva','$invoice_comment','$objet_name','$located','MO','$devis_id')";
+                $query = "INSERT INTO `invoice`(`id`, `F_number`, `id_client`, `sub_total`, `discount`, `net_total`, `type`, `status`,`remove_tva`, `comment`,`objet`,`located`,`pour`,`devis_id`) VALUES (null,'$invoice_number','$client_id','$sub_total','$devis_discount','$net_total','Approved','accepter','0','$invoice_comment','$objet_name','$located','MO','$devis_id')";
             }
             $res = mysqli_query($cnx,$query);
             $last_id;

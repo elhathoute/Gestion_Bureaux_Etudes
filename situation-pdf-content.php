@@ -226,8 +226,9 @@
                      foreach($data_rows as $row){
                          $fprice = $row[3] == '0'? $row[7] * 1.2 : $row[7];
                          $lprice = $fprice - ($fprice * ($row[8]) / 100);
+                         $prix = sprintf("%.2f", $lprice);
                          if($row[11] == 0){$status = 'Non Payé';}
-                         elseif($row[11] < $lprice && $row[11] != 0){$status = 'Avance';}
+                         elseif($row[11] < $prix && $row[11] != 0){$status = 'Avance';}
                          else{$status = 'Payé';}
                          if(floatval($row[7])==0){$status = 'Gratuit';}
                          $Dossier = $row[13]==NULL? '-':$row[13];
@@ -325,6 +326,8 @@
                          $html .= '</tr>';
                          for($i=1 ; $i<count($AlltotalPrice);$i++){
                              if($AlltotalPrice[$i]!=0){
+                                $AlltotalPrice[$i]=sprintf("%.2f", $AlltotalPrice[$i]);
+                                $Alltotalavance[$i]=sprintf("%.2f", $Alltotalavance[$i]);
                                  if($AlltotalPrice[$i]==$Alltotalavance[$i]){
                                      $status='Payé';
                                  }else{

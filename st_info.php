@@ -7,7 +7,9 @@ $data = array();
 $number = 1;
 while($row=mysqli_fetch_assoc($result)){
     $prix_t =($row['remove_tva']==1)?$row['prix'] :$row['prix']+($row['prix']*0.2) ;
-    $prix =($row['discount']>0)?$prix_t-($prix_t*($row['discount']/100)):$prix_t;
+    $prix2 =($row['discount']>0)?$prix_t-($prix_t*($row['discount']/100)):$prix_t;
+    // $prix = number_format($prix2,2);
+    $prix = sprintf("%.2f", $prix2);
     if($row['total_montant_paye']==0){
         $status='<span class="badge text-bg-danger">Non Payé</span>';
         $statusValue="Non Payé";
@@ -27,7 +29,7 @@ while($row=mysqli_fetch_assoc($result)){
     $subarray[] = $row['number'];
     $subarray[] = $row['objet'];
     $subarray[] = $row['service_name'];
-    $subarray[] = $prix;
+    $subarray[] = $prix2;
     $subarray[] = $row['total_montant_paye'];
     $subarray[] = $status;
     $subarray[] = '<a target="_blank" href="devis_export.php?id='.$row['id'].'&client_id='.$clientId.'" class="btn btn-secondary btn-sm" title="Afficher Devis" ><span><i class="bi bi-eye"></i></span></a>';
