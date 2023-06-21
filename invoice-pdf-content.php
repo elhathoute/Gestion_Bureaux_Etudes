@@ -72,7 +72,7 @@
         return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
     }
     $clientData= getclientdata();
-    $client =($clientData['type']=='individual')?(strtoupper($clientData['nom'].' '.$clientData['prenom_or_ICE'])):(strtoupper($clientData['nom']).'<br> ICE'.$clientData['prenom_or_ICE']);
+    $client =($clientData['type']=='individual')?(strtoupper($clientData['nom'].' '.$clientData['prenom_or_ICE'])):(strtoupper($clientData['nom']).'<br> ICE : '.$clientData['prenom_or_ICE']);
     ?>
     <div class="container">
         <section>
@@ -89,7 +89,7 @@
                         $broker=getBrokerById($_GET['broker_id']);
                         echo strtoupper( $broker['nom'].' '.$broker['prenom']);
                         if($broker['brokerIce']!=''){
-                            echo '<br>ICE '.$broker['brokerIce'];   
+                            echo '<br>ICE : '.$broker['brokerIce'];   
                         }
                     }else{
                         echo  $client;
