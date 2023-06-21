@@ -97,7 +97,7 @@ if(isset($_GET["sc"])){
                                                     <td>'.$row["objet"].'</td>
                                                     <td >'.$row["date_creation"].'</td>
                                                     <td >'.$row["net_total"].' DH</td>
-                                                    <td >'.number_format($solde,2).' DH</td>
+                                                    <td >'.sprintf("%.2f",$solde).' DH</td>
                                                     <td><span class="'.styleStatus($row["status"]).'">'.$row["status"].'</span></td>
                                                     <td>
                                                         <a href="invoice-view.php?id='.$row['id'].'&client_id='.$row['client_id'].''.$broker_id.'" data-id="'.$row['id'].'" data-id_client="'.$row['client_id'].'" class="btn btn-secondary btn-sm viewInvoiceBtn" title="Afficher Facture" ><span><i class="bi bi-eye"></i></span></a>
