@@ -2,13 +2,16 @@
 
     include 'includes/config.php';
     include 'functions.php';
-
-    
     if($_POST){
+        if(isset($_POST['broker_id'])){
+            $broker_id=$_POST['broker_id'];
+            $MontantPaye=$_POST["purchasePrice"];
+            $query = "UPDATE `broker` SET `sold` = (`sold` - $MontantPaye) WHERE `id`='$broker_id'";
+            $res = mysqli_query($cnx,$query);
+        }
         $P_name = mysqli_real_escape_string($cnx,$_POST["purchaseName"]);
         $P_price = mysqli_real_escape_string($cnx,$_POST["purchasePrice"]);
         $P_note = mysqli_real_escape_string($cnx,$_POST["purchaseNote"]);
-
         $P_number = sprintf("%03d", getPurchaseNumber()) . '/' . date('Y');
 
         $query = "INSERT INTO `purchase`(`id`, `P_number`, `name`, `price`, `note`) VALUES (null,'$P_number','$P_name','$P_price','$P_note');";

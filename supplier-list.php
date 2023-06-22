@@ -59,7 +59,6 @@ if(isset($_SESSION["success"])){
                                             $html = '';
                                             while($row = mysqli_fetch_assoc($res)){
                                                 $category = ucfirst(getSuppCatById($row['cat_id'])['title']);
-                                                // $category = htmlspecialchars($category, ENT_QUOTES, 'UTF-8');
                                                 $html .= '<tr>';
                                                 $html .= '<td>'.$number.'</td>';
                                                 $html .= '<td>'.$row['full_name'].'</td>';

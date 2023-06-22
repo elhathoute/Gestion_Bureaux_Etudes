@@ -4271,3 +4271,10 @@ $(document).on("click", "#searchBtn", function () {
     });
 });
 
+
+$("#purchaseBrokerSelect").on('change',function(){
+    var brokerName= $(this).val();
+    var selectedContent = $("#purchaseBrokerSelect option:selected").text();
+    $(".purcharName").val(selectedContent);
+
+})

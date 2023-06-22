@@ -1,6 +1,6 @@
 <?php
 include 'header.php';
-
+$brokerRes = getBrokerData();
 ?>
 
 
@@ -16,10 +16,23 @@ include 'header.php';
                     <div class="card-body">
                         <h5 class="card-title">Achat information</h5>
                         <div class="row">
+                            <!-- broker filter -->
+                            <div class="col-3 offset-md-9 p-2">
+                                <select name="broker_id" class="form-select" id="purchaseBrokerSelect">
+                                    <option value="" selected disabled>Veuillez choisir un intermédiaire </option>
+                                    <?php
+                                        while ($row = mysqli_fetch_assoc($brokerRes)) {
+                                            $brokerFullName = ucfirst($row["nom"]) .' '. ucfirst($row["prenom"]);
+                                            echo '<option value=' . $row["id"] . '>' . $brokerFullName . '</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        <!-- end of the filter -->
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="serviceText" class="form-label">Nom</label>
-                                    <input type="text" class="form-control" name="purchaseName" id="serviceText" placeholder="Nom" required>
+                                    <input type="text" class="form-control purcharName" name="purchaseName" id="serviceText" placeholder="Nom" required>
                                 </div>
                                 <!-- ********* -->
                                 <div class="mb-3">

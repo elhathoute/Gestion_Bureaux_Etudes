@@ -72,9 +72,9 @@ if(isset($_SESSION["success"])){
                                                 $html .= '  <td>
                                                                 <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editBrokerBtn '.$check_edit.' " title="Modifier Intermédiaire" ><span><i class="bi bi-pencil-square"></i></span></a>
                                                                 <a href = "javascript:void(0);" data-id="'.$row['id'].'" class=" btn btn-danger btn-sm deleteBrokerBtn '.$check_delete.' " title="Supprimer Intermédiaire" ><span><i class="bi bi-trash"></i></span></a>
-                                                                <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-success btn-sm updateBrokerSold" title="Update Sold" ><span><i class="bi bi-currency-exchange"></i></span></a>
-                                                            </td>';
+                                                                </td>';
                                                 $html .= '</tr>';
+                                                                // <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-success btn-sm updateBrokerSold" title="Update Sold" ><span><i class="bi bi-currency-exchange"></i></span></a>
                                                 $number++;
                                             }
                                             echo $html;

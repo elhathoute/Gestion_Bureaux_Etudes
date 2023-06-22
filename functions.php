@@ -2337,9 +2337,12 @@ function getSupplierData(){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-
-    // $query = "SELECT * FROM `supplier`";
-    $query = "SELECT supplier.*,COALESCE(sum(amount_given),0) as sold FROM `supplier` LEFT join supplier_details ON supplier.id =supplier_details.supplier_id GROUP BY supplier.id;";
+    $query = "SELECT supplier.*, COALESCE(SUM(amount_given), 0) AS sold
+    FROM supplier
+    LEFT JOIN supplier_details ON supplier.id = supplier_details.supplier_id
+        AND YEAR(supplier_details.paye_date) = YEAR(CURDATE())
+        AND MONTH(supplier_details.paye_date) = MONTH(CURDATE())
+    GROUP BY supplier.id;";
     $res = mysqli_query($cnx,$query);
     return $res;
 }
@@ -2351,7 +2354,6 @@ function getSupplierById($id){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         exit();
     }
-
     $query = "SELECT * FROM `supplier` WHERE `id`= '$id'";
     $res = mysqli_query($cnx,$query);
     $row = mysqli_fetch_assoc($res);
