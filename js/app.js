@@ -720,7 +720,7 @@ $(document).ready(function () {
                     data:{service_id:service_id},
                     success:function(data){
                         var json = JSON.parse(data);
-                        thisElm.parent().parent().children().eq(4).children('.servicePrice').val(json.prix);
+                        // thisElm.parent().parent().children().eq(4).children('.servicePrice').val(json.prix);
                         // Add ref to services
                         thisElm.parent().parent().children().eq(1).children('.servRefTxt').val(json.ref);
                     }
