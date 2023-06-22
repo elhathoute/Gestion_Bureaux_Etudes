@@ -102,7 +102,7 @@
 
         <div class="my-5">
             <span style="text-decoration:underline">Objet:</span><br>
-            <p style="text-align:center;padding:0 20px"><?=ucfirst($invoiceInfo["objet"]);?>. <span style="font-weight: bold !important;">Sise</span> à <span> <?= $invoiceInfo['located'] ?></span>.</p>
+            <p style="text-align:center;padding:0 20px"><?=ucfirst($invoiceInfo["objet"]);?>. <span style="font-weight: bold !important;">Sis</span> à <span> <?= $invoiceInfo['located'] ?></span>.</p>
         </div>
         <?php 
         if($_GET){

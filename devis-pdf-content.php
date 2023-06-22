@@ -128,7 +128,7 @@
                 echo $MO;
             }
             ?>
-            <span style="text-decoration:underline">Objet:tttt</span><br>
+            <span style="text-decoration:underline">Objet:</span><br>
             <p style="text-align:center;padding:0 20px"><?=$devisInfo['objet'];?>. <span style="font-weight: bold !important;">Sis</span> à <span> <?= $devisInfo['located'] ?></span>.</p>
         </div>
         <?php 

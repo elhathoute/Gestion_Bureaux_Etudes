@@ -48,7 +48,7 @@ if(isset($_POST['ids'])){       //if any of the services is checked
         $dossier_id =$dossiers_id[$index];
         $servicePaymentDetails=getPaymentDetails($dev_id);
         $brokerchecking = checkBroker_devis($devis_id);
-        if($brokerchecking>0 && $payment+$servicePaymentDetails['avanceSum']>=$detail_price){
+        if($brokerchecking>0 && round($payment,1)+$servicePaymentDetails['avanceSum']>=$detail_price){
             $service_UI=$services_UId[$index];
             $brokerdetails= getBrokerdetails($service_UI,$devis_id);
             $brokerSrvP=($brokerdetails['new_discount']===0)?$brokerdetails['new_prix']:$brokerdetails['new_prix']-(($brokerdetails['new_prix']*$brokerdetails['new_discount'])/100);
@@ -154,7 +154,7 @@ if(isset($_POST['ids'])){       //if any of the services is checked
         $dossier_id =$dossiers_id[$index];
         $servicePaymentDetails=getPaymentDetails($dev_id);
         $brokerchecking = checkBroker_devis($devis_id);
-        if($brokerchecking>0 && $payment+$servicePaymentDetails['avanceSum']>=$detail_price){
+        if($brokerchecking>0 && round($payment,1)+$servicePaymentDetails['avanceSum']>=$detail_price){
             $service_UI=$services_UId[$index];
             $brokerdetails= getBrokerdetails($service_UI,$devis_id);
             $brokerSrvP=($brokerdetails['new_discount']===0)?$brokerdetails['new_prix']:$brokerdetails['new_prix']-(($brokerdetails['new_prix']*$brokerdetails['new_discount'])/100);
