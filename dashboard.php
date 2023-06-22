@@ -76,7 +76,7 @@ if(!empty( $_SESSION["user_id"])){
                                 <div class="ps-3">
                                     
                                     <h6 id="salesDashTxt"><?= countInvDashSales($period);?></h6>
-                                    <span class="text-success small pt-1 fw-bold">Total des Facture</span> <span class="text-muted small pt-2 ps-1"></span>
+                                    <span class="text-success small pt-1 fw-bold">Total des Factures</span> <span class="text-muted small pt-2 ps-1"></span>
 
                                 </div>
                             </div>
