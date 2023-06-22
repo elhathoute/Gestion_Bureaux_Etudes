@@ -26,7 +26,7 @@ if(isset($_SESSION["error"])){
                                     <input type="text" name="catTitle" id="catTitle" class="form-control" required placeholder="Nom">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                             <select class="form-select" aria-label="Default select example" name="catType" id="catTypeSelect" required>
                                 <option selected disabled value=''>Sélectionner le type</option>
                                 <option value="Bureau d'étude">Bureau d'étude</option>
@@ -34,7 +34,7 @@ if(isset($_SESSION["error"])){
                                     
                             </select>
                             <span id='catSelectError'></span>
-                            </div>
+                            </div> -->
                             
                         </div>
                         

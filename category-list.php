@@ -32,9 +32,9 @@ if(isset($_SESSION["success"])){
                                             <th>
                                                 <a href="#">Titre</a>
                                             </th>
-                                            <th>
+                                            <!-- <th>
                                                 <a href="#">Type</a>
-                                            </th>
+                                            </th> -->
                                             <th>
                                                 <a href="#">Action</a>
                                             </th>
@@ -49,11 +49,10 @@ if(isset($_SESSION["success"])){
                                             $number = 1;
                                             $html = '';
                                             while($row = mysqli_fetch_assoc($res)){
-                                                var_dump($row['title']);
                                                 $html .= '<tr>';
                                                 $html .= '<td>'.$number.'</td>';
                                                 $html .= '<td>'.$row['title'].'</td>';
-                                                $html .= '<td>'.$row['type'].'</td>';
+                                                // $html .= '<td>'.$row['type'].'</td>';
                                                 $html .= '  <td>
                                                                 <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editSuppCatBtn '.$check_edit.' " title="Modifier Catégorie" ><span><i class="bi bi-pencil-square"></i></span></a>
                                                                 <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteSuppCatBtn '.$check_delete.' " title="Supprimer Catégorie" ><span><i class="bi bi-trash"></i></span></a>
@@ -94,14 +93,14 @@ if(isset($_SESSION["success"])){
                         <label for="catTitle" class="form-label">Nom</label>
                         <input type="text" class="form-control" name="catTitle" id="catTitle" placeholder="Nom" required>
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <select class="form-select" name="catType" id="catTypeSelect" required>
                             <option selected disabled value=''>Sélectionner le type</option>
                             <option value="Bureau d'étude">Bureau d'étude</option>
                             <option value='Bureau de contrôle'>Bureau de contrôle</option>
                                     
                         </select>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

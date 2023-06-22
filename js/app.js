@@ -3933,14 +3933,14 @@ function getCurrentDateTime() {
         
         var id = $("#id").val()
         ,tr_id = $("#tr_id").val()
-        ,catTitle = $("#catTitle").val()
-        ,catType = $("#catTypeSelect").val();
+        ,catTitle = $("#catTitle").val();
+        // ,catType = $("#catTypeSelect").val();
 
 
         lunchLoader();
         $.ajax({
             url:"suppCat-edit.php",
-            data:{id:id,catTitle:catTitle,catType:catType},
+            data:{id:id,catTitle:catTitle},
             type:'POST',
             success:function(data){
                 var json = JSON.parse(data);
@@ -3949,7 +3949,7 @@ function getCurrentDateTime() {
                     var table = $("#suppCatTable").DataTable();
                     var button = '<a href="javascript:void(0);" data-id="'+id+'" class="btn btn-primary btn-sm editSuppCatBtn" ><span><i class="bi bi-pencil-square"></i></span></a> <a href = "javascript:void(0);" data-id="'+id+'" class=" btn btn-danger btn-sm deleteSuppCatBtn"><span><i class="bi bi-trash"></i></span></a>';
                     var row = table.row("[id='"+tr_id+"']");
-                    row.row("[id='"+tr_id+"']").data([tr_id,catTitle,catType,button]);
+                    row.row("[id='"+tr_id+"']").data([tr_id,catTitle,button]);
                     // cleaning inputs
                     $("#catTitle").val();
                     $("#catTypeSelect").val('');
