@@ -305,14 +305,14 @@ if(!empty( $_SESSION["user_id"])){
     const data = {
         labels: labels,
         datasets: [{
-                label: 'Sales',
+                label: 'Facture',
                 data: salesDataArr,
                 borderColor: '#4154f1',
                 backgroundColor: '#f6f6fe',
 
             },
             {
-                label: 'Customers',
+                label: "Maitres d'ouvrage",
                 data: cusDataArr,
                 borderColor: '#ff771d',
                 backgroundColor: '#ffecdf',
@@ -372,7 +372,7 @@ if(!empty( $_SESSION["user_id"])){
     const revData = {
         labels: labels,
         datasets: [{
-            label: 'Sales',
+            label: 'Revenu',
             data: revDataArr,
             borderColor: '#2eca6a',
             backgroundColor: '#e0f8e9',
