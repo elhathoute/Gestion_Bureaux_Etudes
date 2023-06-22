@@ -430,12 +430,12 @@ $(document).ready(function () {
         var tr_id = $("#tr_id").val();
         var title = $("#title").val();
         var servRef = $("#servRef").val();
-        var prix = $("#prix").val();
-        var hiddenPrix = $("#hiddenPrix").val();
+        // var prix = $("#prix").val();
+        // var hiddenPrix = $("#hiddenPrix").val();
         
         $.ajax({
             url:"service-edit.php",
-            data:{id:id,title:title,servRef:servRef,prix:prix},
+            data:{id:id,title:title,servRef:servRef},
             type:'post',
             success:function(data){
                 var json = JSON.parse(data);
@@ -445,11 +445,11 @@ $(document).ready(function () {
                     var button = '<a href="javascript:void(0);" data-id="'+id+'" class="btn btn-primary btn-sm editServiceBtn" ><span><i class="bi bi-pencil-square"></i></span></a> <a href = "javascript:void(0);" data-id="'+id+'" class=" btn btn-danger btn-sm deleteServiceBtn"><span><i class="bi bi-trash"></i></span></a>';
                     var row = table.row("[id='"+tr_id+"']");
                     // row.row("[id='"+tr_id+"']").data([tr_id,title,servRef,prix,button]);
-                    row.row("[id='"+tr_id+"']").data([tr_id,title,servRef,hiddenPrix,button]);
+                    row.row("[id='"+tr_id+"']").data([tr_id,title,servRef,button]);
                     // cleaning inputs
                     $("#title").val('');
                     $("#servRef").val('');
-                    $("#prix").val('');
+                    // $("#prix").val('');
                     $("#editServiceModal").modal('hide');
                 }else{
                     alert('Failed: connecting with Database error');
@@ -3935,8 +3935,6 @@ function getCurrentDateTime() {
         ,tr_id = $("#tr_id").val()
         ,catTitle = $("#catTitle").val();
         // ,catType = $("#catTypeSelect").val();
-
-
         lunchLoader();
         $.ajax({
             url:"suppCat-edit.php",

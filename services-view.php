@@ -34,9 +34,9 @@ if(isset($_SESSION["success"])){
                                             <th>
                                                 <a href="#">Référence</a>
                                             </th>
-                                            <th>
+                                            <!-- <th>
                                                 <a href="#">Prix</a>
-                                            </th>
+                                            </th> -->
                                             <th>
                                                 <a href="#">Action</a>
                                             </th>
@@ -54,7 +54,7 @@ if(isset($_SESSION["success"])){
                                             $html .= '<td>'.$number.'</td>';
                                             $html .= '<td>'.$row['title'].'</td>';
                                             $html .= '<td>'.$row['ref'].'</td>';
-                                            $html .= '<td>'.$row['prix'].'</td>';
+                                            // $html .= '<td>'.$row['prix'].'</td>';
                                             $html .= '  <td>
                                                             <a href="javascript:void(0);" data-id="'.$row['id'].'" class="btn btn-primary btn-sm editServiceBtn '.$check_edit.' " title="Modifier Service" ><span><i class="bi bi-pencil-square"></i></span></a>
                                                             <a href = "javascript:void(0);" data-id="'.$row['id'].'"  class=" btn btn-danger btn-sm deleteServiceBtn '.$check_delete.' " title="Supprimer Service" ><span><i class="bi bi-trash"></i></span></a>
