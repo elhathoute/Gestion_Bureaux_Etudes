@@ -76,11 +76,6 @@ $caisedatails= getCaiseDetails($selectedMonth,$selectedYear);
 $query = "SELECT SUM(amount_given) , supplier.full_name  FROM supplier_details JOIN supplier ON supplier.id =supplier_details.supplier_id WHERE YEAR(paye_date) = $selectedYear AND MONTH(paye_date) = $selectedMonth GROUP by supplier_details.supplier_id;";
 $res= mysqli_query($cnx,$query);  
 $suppliersDetails=  mysqli_fetch_all($res);
-
-// var_dump($caisedatails);
-// var_dump($suppliersDetails);
-// die();
-
 $html = '';
 ?>
 <?php

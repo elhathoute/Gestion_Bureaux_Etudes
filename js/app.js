@@ -31,7 +31,6 @@ $(document).ready(function () {
         // el.push($(this));
         $(this).remove();
     });
-    // console.log(el);
 
     /**
      * fetching data to individual customer table
@@ -74,9 +73,7 @@ $(document).ready(function () {
 
     $(document).on('click','.editBtn',function(){
         var id = $(this).data('id');
-        // console.log(id);
         var tr_id = $(this).closest('tr').attr('id');
-        // console.log(tr_id);
         $.ajax({
             url:'get_selected_cus.php',
             data:{id:id},
@@ -168,7 +165,6 @@ $(document).ready(function () {
     });
     
     $(document).on('click','.deleteModalBtn',function(){
-        // console.log(indv_deleted_id);
         $.ajax({
             url:'customer-delete.php',
             data:{id:indv_deleted_id},
@@ -227,9 +223,7 @@ $(document).ready(function () {
 //fill the entreprise model with data 
     $(document).on('click','.editEntrepBtn',function(){
         var id = $(this).data('id');
-        // console.log(id);
         var tr_id = $(this).closest('tr').attr('id');
-        // console.log(tr_id);
         $.ajax({
             url:'get_selected_entrepCus.php',
             data:{id:id},
@@ -322,7 +316,6 @@ $(document).ready(function () {
     });
     
     $(document).on('click','.deleteEntrepModalBtn',function(){
-        // console.log(indv_deleted_id);
         $.ajax({
             url:'customer_entrep-delete.php',
             data:{id:entrep_deleted_id},
@@ -492,7 +485,6 @@ $(document).ready(function () {
     let serviceRefArr = [];
     let service_ref_Obj = [];
     if($("#serRef").length>0 || $("#addServiceRowBtn").length>0){
-        // console.log('lenght service : '+$(".servRef").length)
 
         $.ajax({
             url:"srf.php",
@@ -503,7 +495,6 @@ $(document).ready(function () {
                 service_ref_Obj = {...json};
 
                 serviceRefArr = [...Object.values(json)];
-                // console.log(serviceRefArr);
                 
             }
         })
@@ -534,7 +525,6 @@ $(document).ready(function () {
             const existRef = serviceRefArr.some((ref)=>{
                 return ref.replace(" ", "").toLowerCase() === $(this).val().replace(" ", "").toLowerCase();
             });
-            // console.log(existRef);
             // alert(existRef);
             if(existRef && $(this).val().length != 0){
                 throw "Ce référentiel existe déjà.";
@@ -681,7 +671,6 @@ $(document).ready(function () {
             type:"post",
             success:function(data){
                 var json = JSON.parse(data);
-                // console.log(json.customer);
 
                 $('#client_id').val(json.customer.id);
                 $("#client_type").val("entreprise");
@@ -744,7 +733,6 @@ $(document).ready(function () {
     // function checkForRefServiceExist(thisElement){
     //     const srvVal = thisElement.val().trim();
     //     const refVal = thisElement.parent().children().closest('.servRefTxt');
-    //     // console.log(thisServiceObj);
 
     //     //check if service exist in DB
     //     const existService = [...Object.keys(service_ref_Obj)].some((srv)=>{
@@ -843,14 +831,11 @@ $(document).ready(function () {
      // broker
      $(document).on("input",".rowBrkServiceQte",function(){    
         brkRowTotal();
-        // console.log('hi');
     });
     $(document).on("input",".serviceBrkPrice",function(){    
-        // console.log('hi');
         brkRowTotal();
     });
     $(document).on("input",".serviceBrkDiscount",function(){    
-        // console.log('hi');
         brkRowTotal();
     });
     // calculate row price function and Total price For "devis"
@@ -966,7 +951,6 @@ $(document).ready(function () {
             espace=$("#espace").val(),
             hauteur=$("#hauteur").val(),
             located_txt = $("#sisTxt").val();
-            // console.log(labelDevisTotal);
             let brkId;
             if(selectedDevisBroker && $("#selectedBrkId").val()!=""){
                 brkId = $("#selectedBrkId").val();
@@ -1023,17 +1007,14 @@ $(document).ready(function () {
                         // alert(devis_id);
                    
                         // $(".labelSubTotal_broker");
-                        // console.log($(".labelSubTotal_broker").text())
                         
                        
 
                         //insert data in service table
                         let html = ``;
                         let devisTableData = JSON.parse(tableData);
-                        // console.log(devisTableData);
                         for (let i = 0; i < devisTableData.length; i++) {
                             if(devisTableData[i]["srvRef"] != ""){
-                                // console.log(devisTableData[i]["unit"]);
                                 html += `<tr>`;
                                 html += `<td></td>`;
                                 html += `<td class="input-group"><input type="text" class="input-group-text w-25 servRefTxt" id="srvRT" value="${devisTableData[i]["srvRef"]}" placeholder="Reference" autocomplete="off" required data-bs-placement="bottom" data-bs-content="Cette référence existe déjà" data-bs-trigger="manual" data-bs-custom-class="error-popover" disabled><input type="text" id="servicesListId" list="servicesList"  autocomplete="off" value="${devisTableData[i]["serviceName"]}" class="form-control serviceDropdown" aria-describedby="srvRT" disabled><datalist id="servicesList"></datalist></td>`;
@@ -1185,7 +1166,6 @@ $(document).ready(function () {
         
     //     var devis_id = $(this).data('id'),
     //     client_id = $(this).data("id_client");
-    //     // console.log(client_id);
         
     //     $.ajax({
     //         url:'devis-show.php',
@@ -1196,7 +1176,6 @@ $(document).ready(function () {
                 
                 
     //             // var json = JSON.parse(data);
-    //             // // console.log(json);
     //             // json.forEach(row => {
     //             //     html = '';
     //             //     html += '<tr>';
@@ -1294,7 +1273,6 @@ $(document).ready(function () {
         // alert(0);
         if($("#devis_id").val()!="" && tableData.length != 0){
             tableData = JSON.stringify(tableData);
-            // console.log(tableData);
             var client_id = $('#client_id').val(),
             devis_id = $('#devis_id').val(),
             devis_comment = $("#devis_comment").val(),
@@ -1312,10 +1290,8 @@ $(document).ready(function () {
             let brkId;
             if($("#selectedBrkId").val()!=""){
                 brkId = $("#selectedBrkId").val();
-                // console.log(brkId);
             }
             // alert(located_txt);
-            // console.log(1);
             // alert(1);
             lunchLoader();
                   // admin or not
@@ -1367,14 +1343,6 @@ $(document).ready(function () {
                     $("#brkespace").val($("#espace").val());
                     $("#brkhauteur").val($("#hauteur").val());
                     $("#brkDevis_comment").val($("#devis_comment").val());
-                    // devis_id
-                    
-                    // alert(devis_id);
-               
-                    // $(".labelSubTotal_broker");
-                    // console.log($(".labelSubTotal_broker").text())
-                    
-                   
 
                     //insert data in service table
                     let html = ``;
@@ -4252,7 +4220,6 @@ $(document).on("click", "#searchBtn", function () {
         data: requestData,
         type: "POST",
         success: function (data) {
-            console.log(data);
             var json = JSON.parse(data)["data"];
             var html = '';
             

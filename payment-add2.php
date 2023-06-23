@@ -57,6 +57,7 @@ if(isset($_POST['ids'])){       //if any of the services is checked
                 $broker_commission= -($detail_price - $brokerSrvP);
             }else{
                 $broker_commission= $detail_price - $brokerSrvP;
+                updateBrokerSold($brokerdetails['id_broker'],$broker_commission);
             }
         }else{
             $broker_commission=0;
@@ -177,7 +178,6 @@ if(isset($_POST['ids'])){       //if any of the services is checked
             if($filter_type=='broker'){
                 $broker_commission= -($detail_price - $brokerSrvP);
             }else{
-                // die(var_dump($brokerdetails['id_broker']));
                 $broker_commission= $detail_price - $brokerSrvP;
                 updateBrokerSold($brokerdetails['id_broker'],$broker_commission);
             }
