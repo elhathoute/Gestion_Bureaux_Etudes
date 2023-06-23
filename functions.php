@@ -2381,7 +2381,7 @@ function getCaiseDetails($selectedMonth,$selectedYear){
     }
     $query = "SELECT
         (SELECT SUM(montant_paye) FROM devis_payments WHERE pay_method IN ('Check', 'Virement', 'Traite', 'Remis') AND  YEAR(pay_date) = $selectedYear AND MONTH(pay_date) = $selectedMonth) AS montantEspice,
-        (SELECT SUM(price) FROM purchase WHERE YEAR(date) = $selectedYear AND MONTH(date) = $selectedMonth) AS purchasePrice,
+        (SELECT SUM(price) FROM purchase WHERE YEAR(date) = $selectedYear AND MONTH(date) = $selectedMonth AND remove =0) AS purchasePrice,
         (select SUM(montant_paye) from devis_payments WHERE YEAR(pay_date) = $selectedYear AND MONTH(pay_date) = $selectedMonth) as totalPaiment";
     $res= mysqli_query($cnx,$query);  
     $row = mysqli_fetch_assoc($res);
