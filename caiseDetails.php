@@ -26,7 +26,7 @@ while($row=mysqli_fetch_assoc($res)){
     $subarray = array();
     $subarray[] = $number;
     $subarray[] = 'Caise '.$month2.'/'.$year;
-    $subarray[] = '<a target="_blank" href="caise_export.php?year='.$year.'&month='.$month.'" class="btn btn-primary btn-sm" title="Afficher Caise" ><span><i class="bi bi-download"></i> Export PDF</span></a>';
+    $subarray[] = '<a target="_blank" href="caise_export.php?year='.$year.'&month='.$month.'" class="btn btn-primary btn-sm ms-5" title="Afficher Caise" ><span><i class="bi bi-download"></i> Export PDF</span></a>';
     $data[] = $subarray;
     $number++;
 }
