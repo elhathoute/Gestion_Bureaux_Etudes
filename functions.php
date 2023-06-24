@@ -1757,30 +1757,10 @@ function countInvDashSales($period){
         exit();
     }
 
-    // $query = "";
-    // if(strtolower($period) == 'week'){
-    //     $curDate = date('Y-m-d');
-    //     $date=date_create(date("Y-m-d"));
-    //     date_add($date,date_interval_create_from_date_string("1 week ago"));
-    //     $weekAgo = date_format($date,"Y-m-d");
-    //     $query = "SELECT * FROM `invoice` WHERE DATE(date_creation) BETWEEN '$weekAgo' AND '$curDate';";
-    // }elseif(strtolower($period) == 'month'){
-    //     $curMonth = date('m');
-    //     $query = "SELECT * FROM `invoice` WHERE MONTH(date_creation) = '$curMonth' ;";
-    // }elseif(strtolower($period) == 'year'){
-    //     $curYear = date('Y');
-    //     $query = "SELECT * FROM `invoice` WHERE YEAR(date_creation) = '$curYear' ;";
-    // }
-
-
-
-    // $period_arr = explode("-",$period);
-    // $trimedTo = strtotime(trim($period_arr[1]));
-    // $to = $period_arr[1];
     $from = $period[0];
     $to = $period[1];
     
-    $query = "SELECT * FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved'";
+    $query = "SELECT * FROM `invoice` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `type`='Approved' AND `remove`=0";
 
 
 
