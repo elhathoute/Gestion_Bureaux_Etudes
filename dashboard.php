@@ -133,7 +133,7 @@ if(!empty( $_SESSION["user_id"])){
                                     <i class="bi bi-cash-coin"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6 id="incomeDashTxt"><?= countPayServices($period); ?></h6>
+                                    <h6 id="incomeDashTxt"><?= countPayServices($period); ?> DH</h6>
                                     <span class="text-danger small pt-1 fw-bold">Total non Payé</span> <span class="text-muted small pt-2 ps-1"></span>
                                 </div>
                             </div>
