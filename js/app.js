@@ -1203,6 +1203,10 @@ $(document).ready(function () {
         let qte = ($(this).val());
         let devis_id = $('#devis_id').val();
         let unique_service_id = $(this).closest('tr').find('.serviceUniqueId').val();
+        // Check if devis_id and unique_service_id are undefined for devis add
+        if (typeof devis_id === 'undefined' || typeof unique_service_id === 'undefined') {
+                return; // Exit the code if either variable is undefined
+            }
     //    console.log(unique_service_id);
     let input = $(this);
         $.ajax({
@@ -1210,6 +1214,7 @@ $(document).ready(function () {
             type:"POST",
             data:{qte:qte,devis_id:devis_id,unique_service_id:unique_service_id},
             success:function(data){
+                console.log(data);
                 let json = JSON.parse(data);
                 if(json.status=="success"){
                     if(qte < json.count || qte==0){
