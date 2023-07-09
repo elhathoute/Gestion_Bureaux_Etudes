@@ -1826,8 +1826,69 @@ function countPayServices($period){
     $payedservices=$priceSum['payed'];
     $totalDevis=$priceSum['total'];
     $nonPayedService=$totalDevis -$payedservices;
+    // $nonPayedService=number_format($nonPayedService,2);
     return $nonPayedService;
     // return $priceSum['price'];
+}
+
+// count deossiers
+function countDossier($period){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $from = $period[0];
+    $to = $period[1];
+    $query = "SELECT * FROM `dossier` WHERE DATE(date) BETWEEN '$from' AND '$to'";
+    $res = mysqli_query($cnx,$query);
+    $rows = mysqli_num_rows($res);
+    return $rows;
+}
+
+// count devis
+function countDevis($period){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $from = $period[0];
+    $to = $period[1];
+    $query = "SELECT * FROM `devis` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `remove`=0";
+    $res = mysqli_query($cnx,$query);
+    $rows = mysqli_num_rows($res);
+    return $rows;
+}
+// count devis prix
+function countDevisPrix($period){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $from = $period[0];
+    $to = $period[1];
+    $query = "SELECT IFNULL(SUM(net_total),0) as devisTP  FROM `devis` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' AND `remove`=0";
+    $res = mysqli_query($cnx,$query);
+    $devisP = mysqli_fetch_assoc($res);
+    $devisP =$devisP['devisTP'] ;
+    // var_dump($devisP);
+    return $devisP;
+}
+// count broker
+function countBrokertDash($period){
+    $cnx = new mysqli(DATABASE_HOST,DATABASE_USER, DATABASE_PASS,DATABASE_NAME);
+    if(mysqli_connect_errno()){
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+    $from = $period[0];
+    $to = $period[1];
+    $query = "SELECT * FROM `broker` WHERE DATE(date_creation) BETWEEN '$from' AND '$to' ";
+    $res = mysqli_query($cnx,$query);
+    $rows = mysqli_num_rows($res);
+    return $rows;
 }
 
 //function to count how many invoice got created on the current week

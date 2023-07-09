@@ -49,43 +49,24 @@ if(!empty( $_SESSION["user_id"])){
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
-                <div class="col-xxl-3 col-md-6">
+                 <!-- devis Card -->
+                 <div class="col-xxl-3 col-md-6">
                     <div class="card info-card sales-card">
-
-                        <!-- <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-
-                                <li><a class="dropdown-item" id="btn-sales-week" href="javascript:void(0)">This Week</a></li>
-                                <li><a class="dropdown-item" id="btn-sales-month" href="javascript:void(0)">This Month</a></li>
-                                <li><a class="dropdown-item" id="btn-sales-year" href="javascript:void(0)">This Year</a></li>
-                            </ul>
-                        </div> -->
-
                         <div class="card-body">
-                            <!-- <h5 class="card-title">Sales <span id="salesPeriodTxt">| This Month</span></h5> -->
-                            <h5 class="card-title">Facture <span>| </span></h5>
-
+                            <h5 class="card-title">Devis<span>| </span></h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-cart"></i>
+                                    <i class="bi bi-journal"></i>
                                 </div>
                                 <div class="ps-3">
-                                    
-                                    <h6 id="salesDashTxt"><?= countInvDashSales($period);?></h6>
-                                    <span class="text-success small pt-1 fw-bold">Total des Factures</span> <span class="text-muted small pt-2 ps-1"></span>
-
+                                    <h6 id="devDashTxt"><?= countDevis($period); ?></h6>
+                                    <span class="text-primary small pt-1 fw-bold">Total des Devis</span> <span class="text-muted small pt-2 ps-1"></span>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                </div><!-- End Sales Card -->
-
-
+                </div>
+                <!-- End devis Card -->
 
                 <!-- Revenue Card -->
                 <div class="col-xxl-3 col-md-6">
@@ -133,7 +114,7 @@ if(!empty( $_SESSION["user_id"])){
                                     <i class="bi bi-cash-coin"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6 id="incomeDashTxt"><?= countPayServices($period); ?> DH</h6>
+                                    <h6 id="incomeDashTxt">0.00 DH</h6>
                                     <span class="text-danger small pt-1 fw-bold">Total non Payé</span> <span class="text-muted small pt-2 ps-1"></span>
                                 </div>
                             </div>
@@ -141,23 +122,93 @@ if(!empty( $_SESSION["user_id"])){
                     </div>
                 </div>
                 <!-- End non paye Card -->
-                <!-- Customers Card -->
+                <!-- devis prix Card -->
                 <div class="col-xxl-3 col-md-6">
                     <div class="card info-card customers-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total  <span>| </span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-currency-exchange"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6 id="devPDashTxt"><?= countDevisPrix($period); ?> DH</h6>
+                                    <span class="text-warning small pt-1 fw-bold">Total devis Prix</span> <span class="text-muted small pt-2 ps-1"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End devis prix Card -->
+                <!--  Sales Card -->
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card sales-card">
                         <!-- <div class="filter">
                             <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                 <li class="dropdown-header text-start">
                                     <h6>Filter</h6>
                                 </li>
-
-                                <li><a class="dropdown-item" id="btn-client-week" href="javascript:void(0)">This Week</a></li>
-                                <li><a class="dropdown-item" id="btn-client-month" href="javascript:void(0)">This Month</a></li>
-                                <li><a class="dropdown-item" id="btn-client-year" href="javascript:void(0)">This Year</a></li>
+                                <li><a class="dropdown-item" id="btn-sales-week" href="javascript:void(0)">This Week</a></li>
+                                <li><a class="dropdown-item" id="btn-sales-month" href="javascript:void(0)">This Month</a></li>
+                                <li><a class="dropdown-item" id="btn-sales-year" href="javascript:void(0)">This Year</a></li>
                             </ul>
                         </div> -->
                         <div class="card-body">
-                            <!-- <h5 class="card-title">Customers <span id="cusPeriodTxt">| This Year</span></h5> -->
+                            <!-- <h5 class="card-title">Sales <span id="salesPeriodTxt">| This Month</span></h5> -->
+                            <h5 class="card-title">Facture <span>| </span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-cart"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6 id="salesDashTxt"><?= countInvDashSales($period);?></h6>
+                                    <span class="text-primary small pt-1 fw-bold">Total des Factures</span> <span class="text-muted small pt-2 ps-1"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Sales Card -->
+                <!-- Dossier Card -->
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card revenue-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Dossier<span>| </span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-folder"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6 id="DossDashTxt"><?= countDossier($period); ?></h6>
+                                    <span class="text-success small pt-1 fw-bold">Nombre total de Dossier</span> <span class="text-muted small pt-2 ps-1"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Dossier Card -->
+                <!-- Broker Card -->
+                <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card broker-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Intermédiaire <span>| </span></h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6 id="IntDashTxt"><?= countBrokertDash($period); ?></h6>
+                                    <span class="text-info small pt-1 fw-bold">Nombre total de intermédiaire</span> <span class="text-muted small pt-2 ps-1"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Broker Card -->
+                 <!-- Customers Card -->
+                 <div class="col-xxl-3 col-md-6">
+                    <div class="card info-card customers-card">
+                        <div class="card-body">
                             <h5 class="card-title">Maitres d'ouvrage <span>| </span></h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -165,12 +216,13 @@ if(!empty( $_SESSION["user_id"])){
                                 </div>
                                 <div class="ps-3">
                                     <h6 id="cusDashTxt"><?= countClientDash($period); ?></h6>
-                                    <span class="text-danger small pt-1 fw-bold">Nombre total de clients</span> <span class="text-muted small pt-2 ps-1"></span>
+                                    <span class="text-warning small pt-1 fw-bold">Total MO</span> <span class="text-muted small pt-2 ps-1"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div><!-- End Customers Card -->
+                </div>
+                <!-- End Customers Card -->
             </div>
         </div>
     </div>

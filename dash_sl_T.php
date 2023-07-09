@@ -10,7 +10,11 @@
     $clients = countClientDash($period);
     //revenue
     $revenue = countInvPayDash($period);
-    $payservices=countPayServices($period);
-    $output = array("sales"=>$sales,"clients"=>$clients,"revenue"=>$revenue,"payservices"=>$payservices);
+    $nonpayservices=countPayServices($period);
+    $dossier=countDossier($period);
+    $devis=countDevis($period);
+    $devisPrix=countDevisPrix($period);
+    $brokers=countBrokertDash($period);
+    $output = array("sales"=>$sales,"clients"=>$clients,"revenue"=>$revenue,"nonpayservices"=>$nonpayservices,"dossier"=>$dossier,"devis"=>$devis,"devisPrix"=>$devisPrix,"brokers"=>$brokers);
     echo json_encode($output);
 ?>

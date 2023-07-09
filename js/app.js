@@ -2751,8 +2751,8 @@ $.ajax({
         var totalPriceNonPayeView=0;
         if(json.length != 0){
             json.forEach(row => {
-                console.log(row[4]+' service prix');
-                console.log(row[5]+' montant paye');
+                // console.log(row[4]+' service prix');
+                // console.log(row[5]+' montant paye');
                 let dateOnly = row[9].split(' ')[0];
                 var date =row[8]==null?dateOnly+' (ND)':row[8];
                 html += `<tr>`;
@@ -3086,11 +3086,20 @@ function filterTableByService(selectedService, selectedStatus,selectedMonth,sele
                 //revenue
                 $("#revenueDashTxt").html(`${parseFloat(json.revenue).toLocaleString("fr-FR")} DH`)
                 //income
-                $("#incomeDashTxt").html(`${parseFloat(json.payservices).toLocaleString("fr-FR")} DH`)
+                $("#incomeDashTxt").html(`${parseFloat(json.nonpayservices).toLocaleString("fr-FR")} DH`)
                 //client
                 $("#cusDashTxt").html(json.clients);
                 //sales
                 $("#salesDashTxt").html(json.sales);
+                //brokers
+                $("#IntDashTxt").html(json.brokers);
+                //dossier
+                $("#DossDashTxt").html(json.dossier);
+                //devis
+                $("#devDashTxt").html(json.devis);
+                //devis prix
+                $("#devPDashTxt").html(`${parseFloat(json.devisPrix).toLocaleString("fr-FR")} DH`);
+
                 // $(`#revenuePeriodTxt,#cusDashTxt,#salesDashTxt`).html(`| This ${timeRange[0]} - ${timeRange[1]}`);
                 // $(`#${eleDashTxt}`).html(`${parseFloat(data).toLocaleString("fr-FR")} ${currency}`);
                 $(".loader-wrapper").addClass("loader-hidden");

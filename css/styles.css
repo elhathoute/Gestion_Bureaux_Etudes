@@ -597,6 +597,14 @@ h6 {
     color: #ff771d;
     background: #ffecdf;
 }
+.dashboard .broker-card .card-icon {
+    color: #00cce3;
+    background: #dffaff;
+}
+.dashboard .dossier-card .card-icon {
+    color: #ff771d;
+    background: #ffecdf;
+}
 
 /*--------------------------------------------------------------
 # datatable
